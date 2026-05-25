@@ -86,11 +86,12 @@ body::after{
 .create-form{
   flex:1;overflow-y:auto;overflow-x:hidden;
   width:100%;max-width:540px;
-  padding-bottom:8px;
+  padding-bottom:4px;
   display:flex;flex-direction:column;gap:10px;
 }
 .create-form::-webkit-scrollbar{width:4px}
 .create-form::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.create-actions{flex-shrink:0;width:100%;max-width:540px;display:flex;align-items:flex-end;gap:16px;padding-bottom:8px}
 
 /* Cards */
 .card{
@@ -268,7 +269,7 @@ body::after{
 
 /* CTA button */
 .create-btn{
-  width:100%;padding:16px;
+  flex:1;padding:16px;
   background:var(--accent);border:none;
   border-radius:var(--r);
   color:#18181b;
@@ -626,9 +627,11 @@ body::after{
       </div>
     </div>
 
-    <button id="create-btn" class="create-btn">Create Event &nbsp;&#8594;</button>
   </main>
-  <p class="dev-footer" style="position:absolute;bottom:8px;left:22px;width:220px;text-align:left;padding:8px 0 0;border-right:none;margin-top:0">Avi Klayman &mdash; <a href="mailto:avi@meteor.co.il">avi@meteor.co.il</a><br><a href="terms.html">Terms &amp; Privacy</a></p>
+  <div class="create-actions">
+    <p class="dev-footer" style="flex-shrink:0;width:220px;text-align:left;padding:0;border:none;margin:0">Avi Klayman &mdash; <a href="mailto:avi@meteor.co.il">avi@meteor.co.il</a><br><a href="terms.html">Terms &amp; Privacy</a></p>
+    <button id="create-btn" class="create-btn">Create Event &nbsp;&#8594;</button>
+  </div>
 </div>
 
 <!-- ═══════════════════════════════════════
