@@ -595,7 +595,7 @@ body::after{
 ═══════════════════════════════════════ -->
 <div id="screen-create">
   <header class="site-header">
-    <div class="logo">Meet Scheduler</div>
+    <div class="logo" data-i18n="appName">Meet Scheduler</div>
     <p class="tagline" data-i18n-html="tagline">by <em>Meteor</em> — Find the time. Finally.</p>
   </header>
 
@@ -671,7 +671,7 @@ body::after{
   <!-- Name entry overlay -->
   <div id="name-overlay" class="name-overlay">
     <div class="name-panel">
-      <div class="name-panel-logo">Meet Scheduler</div>
+      <div class="name-panel-logo" data-i18n="appName">Meet Scheduler</div>
       <h2 class="name-panel-title" data-i18n="markAvail">Mark your availability</h2>
       <p class="name-panel-sub" data-i18n="markSub">Enter your name, then drag across the grid<br>to show when you're free.</p>
       <input type="text" id="participant-name" class="text-input"
@@ -687,7 +687,7 @@ body::after{
 
   <!-- Sidebar -->
   <aside class="sidebar">
-    <div class="sidebar-logo">Meet Scheduler</div>
+    <div class="sidebar-logo" data-i18n="appName">Meet Scheduler</div>
     <div class="sidebar-section">
       <div class="sidebar-sec-label" style="display:flex;align-items:center;gap:7px"><span data-i18n="people">People</span> <span id="people-count" class="people-count">0</span></div>
       <div id="participant-list" class="participant-list"></div>
@@ -783,6 +783,7 @@ const S = {
 // ══════════════════════════════════════
 const LANGS = {
   en: {
+    appName:'מתאם הפגישות',
     pageTitle:'Meteor — Find the time. Finally.',
     tagline:'by <em>Meteor</em> — Find the time. Finally.',
     step1:'Name your event', namePlaceholder:'Team lunch, Project kickoff…',
@@ -815,6 +816,7 @@ const LANGS = {
     dir:'ltr', locale:'en-US', ampm:true,
   },
   he: {
+    appName:'מתאם הפגישות',
     pageTitle:'מטאור — מוצאים זמן. סוף סוף.',
     tagline:'מאת <em>Meteor</em> — מוצאים זמן. סוף סוף.',
     step1:'שם האירוע', namePlaceholder:'ארוחת צוות, קיק-אוף…',
@@ -1548,6 +1550,7 @@ function resumeAsExisting(name) {
   const existing = S.participants.find(p => p.name.toLowerCase() === name.toLowerCase());
   if (!existing) return;
   S.currentUser = existing;
+  S.participants = S.participants.filter(p => p.name.toLowerCase() !== name.toLowerCase());
   sessionStorage.setItem('meteor-user-' + S.eventSlug, existing.name);
   const overlay = document.getElementById('name-overlay');
   overlay.style.transition = 'opacity 0.4s ease';
