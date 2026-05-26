@@ -267,10 +267,11 @@ body::after{
 .time-picker-btn:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow);outline:none}
 [dir="rtl"] .time-picker-btn{text-align:right;background-position:left 12px center;padding:11px 12px 11px 32px}
 .time-picker-list{
-  position:absolute;top:calc(100% + 4px);left:0;right:0;
-  background:var(--surface2);border:1px solid var(--border2);
-  border-radius:var(--r-sm);overflow-y:auto;max-height:200px;
-  z-index:200;scrollbar-width:thin;
+  position:fixed;
+  background:#2a2a2f;
+  border:1px solid rgba(255,255,255,0.25);
+  border-radius:6px;overflow-y:auto;max-height:200px;
+  z-index:9999;scrollbar-width:thin;
 }
 .time-picker-list[hidden]{display:none}
 .tp-option{
@@ -1204,8 +1205,13 @@ function buildTimeSelect(listId, btnId, hiddenId, def) {
     const wasHidden = list.hidden;
     closeAllTimePickers();
     if (wasHidden) {
+      const r = btn.getBoundingClientRect();
+      list.style.top   = (r.bottom + 4) + 'px';
+      list.style.left  = r.left + 'px';
+      list.style.width = r.width + 'px';
       list.hidden = false;
-      list.querySelector('.tp-option.selected')?.scrollIntoView({ block: 'center' });
+      const sel = list.querySelector('.tp-option.selected');
+      if (sel) list.scrollTop = sel.offsetTop - (list.clientHeight - sel.offsetHeight) / 2;
     }
   };
 }
