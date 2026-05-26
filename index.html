@@ -588,6 +588,9 @@ body::after{
 [dir="rtl"] .step-num{margin-right:0;margin-left:8px}
 [dir="rtl"] .you-badge{margin-right:4px;margin-left:0}
 
+/* ─── Past grid cells ─── */
+.grid-cell.past{opacity:0.3;cursor:not-allowed;pointer-events:none}
+
 /* ─── Sidebar email panel ─── */
 .email-panel{display:flex;flex-direction:column;gap:6px;margin-top:6px}
 .email-panel-row{display:flex;gap:6px}
@@ -1052,6 +1055,7 @@ function renderCalendar() {
     el.className = 'cal-cell';
     if (S.selectedDates.has(dateStr)) el.classList.add('selected');
     if (dateStr === todayStr) el.classList.add('today');
+    if (dateStr < todayStr) el.classList.add('past');
     el.textContent = d;
     el.dataset.date = dateStr;
     el.addEventListener('mousedown', onCalDown);
@@ -1063,6 +1067,19 @@ function renderCalendar() {
 
 function isoDate(d) {
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+function nowInEventTz() {
+  const fmt = new Intl.DateTimeFormat('en-CA', {
+    timeZone: S.timezone,
+    year:'numeric', month:'2-digit', day:'2-digit',
+    hour:'2-digit', minute:'2-digit', hour12: false,
+  });
+  const p = Object.fromEntries(fmt.formatToParts(new Date()).map(x => [x.type, x.value]));
+  const dateStr   = `${p.year}-${p.month}-${p.day}`;
+  const totalMins = (+p.hour % 24) * 60 + +p.minute;
+  const dow       = new Date(`${dateStr}T12:00:00`).getDay();
+  return { dateStr, totalMins, dow };
 }
 
 function onCalDown(e) {
@@ -1081,6 +1098,7 @@ function onCalEnter(e) {
 document.addEventListener('mouseup', () => { calDragging = false; gridDragging = false; });
 
 function applyCalCell(dt) {
+  if (dt < isoDate(new Date())) return;
   if (calDragMode === 'add') S.selectedDates.add(dt);
   else S.selectedDates.delete(dt);
   renderCalendar();
@@ -1342,8 +1360,10 @@ function getRows() {
 }
 
 function buildGrid() {
-  const cols = getCols();
-  const rows = getRows();
+  const cols    = getCols();
+  const rows    = getRows();
+  const colDows = S.mode === 'days' ? [...S.selectedDays].sort((a,b)=>a-b) : null;
+  const { dateStr: todayStr, totalMins: nowMins, dow: todayDow } = nowInEventTz();
   const grid = document.getElementById('avail-grid');
   grid.innerHTML = '';
 
@@ -1375,12 +1395,18 @@ function buildGrid() {
     if (r % 2 === 0) tl.textContent = minsToLabel(mins);
     grid.appendChild(tl);
 
-    cols.forEach((_, c) => {
+    cols.forEach((col, c) => {
       const cell = document.createElement('div');
       cell.className = 'grid-cell';
       if (mins % 60 !== 0) cell.dataset.half = '1';
       cell.dataset.col = c; cell.dataset.row = r;
       cell.dataset.id = cid(c, r);
+
+      const isPast = S.mode === 'specific'
+        ? (col < todayStr || (col === todayStr && mins < nowMins))
+        : (colDows[c] === todayDow && mins < nowMins);
+      if (isPast) cell.classList.add('past');
+
       cell.addEventListener('mousedown', onGridDown);
       cell.addEventListener('mouseenter', onGridEnter);
       cell.addEventListener('mouseleave', hideTooltip);
