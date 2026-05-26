@@ -244,7 +244,7 @@ body::after{
 
 /* Time + timezone */
 .time-row{display:flex;align-items:flex-end;gap:10px}
-.time-field{flex:1}
+.time-field{flex:1;position:relative}
 .time-sep{color:var(--muted);font-size:22px;font-weight:300;margin-bottom:7px;flex-shrink:0}
 .field-label{
   display:block;
@@ -252,6 +252,34 @@ body::after{
   letter-spacing:0.08em;text-transform:uppercase;
   color:var(--muted);margin-bottom:6px;
 }
+/* Custom time picker */
+.time-picker-btn{
+  width:100%;
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--border);border-radius:var(--r-sm);
+  padding:11px 32px 11px 12px;
+  color:var(--text);font-family:var(--font-body);font-size:14px;font-weight:300;
+  text-align:left;cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7'%3E%3Cpath d='M1 1l4 4 4-4' stroke='rgba(240,236,228,0.35)' fill='none' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center;
+  transition:border-color 0.15s;
+}
+.time-picker-btn:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow);outline:none}
+[dir="rtl"] .time-picker-btn{text-align:right;background-position:left 12px center;padding:11px 12px 11px 32px}
+.time-picker-list{
+  position:absolute;top:calc(100% + 4px);left:0;right:0;
+  background:var(--surface2);border:1px solid var(--border2);
+  border-radius:var(--r-sm);overflow-y:auto;max-height:200px;
+  z-index:200;scrollbar-width:thin;
+}
+.time-picker-list[hidden]{display:none}
+.tp-option{
+  padding:9px 14px;font-size:13px;font-weight:300;color:var(--text);
+  cursor:pointer;transition:background 0.1s;
+}
+.tp-option:hover{background:rgba(255,255,255,0.06)}
+.tp-option.selected{color:var(--accent);font-weight:500;background:rgba(0,214,143,0.08)}
+/* Styled select — timezone only */
 .styled-select{
   width:100%;
   background:rgba(255,255,255,0.04);
@@ -681,13 +709,17 @@ body::after{
       <div class="step-label"><span class="step-num">03</span><span data-i18n="step3">Set time range</span></div>
       <div class="time-row">
         <div class="time-field">
-          <label class="field-label" for="time-from" data-i18n="noEarlier">No earlier than</label>
-          <select id="time-from" class="styled-select"></select>
+          <label class="field-label" data-i18n="noEarlier">No earlier than</label>
+          <button type="button" class="time-picker-btn" id="tp-from-btn"></button>
+          <div class="time-picker-list" id="tp-from-list" hidden></div>
+          <input type="hidden" id="time-from" value="540">
         </div>
         <div class="time-sep">—</div>
         <div class="time-field">
-          <label class="field-label" for="time-to" data-i18n="noLater">No later than</label>
-          <select id="time-to" class="styled-select"></select>
+          <label class="field-label" data-i18n="noLater">No later than</label>
+          <button type="button" class="time-picker-btn" id="tp-to-btn"></button>
+          <div class="time-picker-list" id="tp-to-list" hidden></div>
+          <input type="hidden" id="time-to" value="1020">
         </div>
       </div>
       <div class="tz-row">
@@ -1140,23 +1172,49 @@ function buildDOW() {
 // ══════════════════════════════════════
 // SCREEN A: TIME DROPDOWNS
 // ══════════════════════════════════════
-function buildTimeSelect(el, def) {
-  el.innerHTML = '';
-  for (let m = 0; m < 24*60; m += 30) {
-    const o = document.createElement('option');
-    o.value = m; o.textContent = minsToLabel(m);
-    if (m === def) o.selected = true;
-    el.appendChild(o);
+function closeAllTimePickers() {
+  document.querySelectorAll('.time-picker-list').forEach(l => { l.hidden = true; });
+}
+
+function buildTimeSelect(listId, btnId, hiddenId, def) {
+  const list   = document.getElementById(listId);
+  const btn    = document.getElementById(btnId);
+  const hidden = document.getElementById(hiddenId);
+
+  list.innerHTML = '';
+  for (let m = 0; m < 24 * 60; m += 30) {
+    const row = document.createElement('div');
+    row.className = 'tp-option' + (m === def ? ' selected' : '');
+    row.dataset.value = m;
+    row.textContent = minsToLabel(m);
+    row.addEventListener('click', () => {
+      list.querySelectorAll('.tp-option').forEach(r => r.classList.remove('selected'));
+      row.classList.add('selected');
+      hidden.value = m;
+      btn.textContent = minsToLabel(m);
+      list.hidden = true;
+    });
+    list.appendChild(row);
   }
+
+  hidden.value = def;
+  btn.textContent = minsToLabel(def);
+
+  btn.onclick = () => {
+    const wasHidden = list.hidden;
+    closeAllTimePickers();
+    if (wasHidden) {
+      list.hidden = false;
+      list.querySelector('.tp-option.selected')?.scrollIntoView({ block: 'center' });
+    }
+  };
 }
 
 function buildTimeSelects() {
-  const fe = document.getElementById('time-from');
-  const te = document.getElementById('time-to');
-  const fv = fe.value ? parseInt(fe.value) : 9*60;
-  const tv = te.value ? parseInt(te.value) : 17*60;
-  buildTimeSelect(fe, fv);
-  buildTimeSelect(te, tv);
+  const fv = parseInt(document.getElementById('time-from').value) || 9 * 60;
+  const tv = parseInt(document.getElementById('time-to').value)   || 17 * 60;
+  buildTimeSelect('tp-from-list', 'tp-from-btn', 'time-from', fv);
+  buildTimeSelect('tp-to-list',   'tp-to-btn',   'time-to',   tv);
 }
 
 function buildTZSelect() {
@@ -1726,12 +1784,12 @@ function initScreenA() {
   });
   initModeToggle();
   buildDOW();
-  buildTimeSelect(document.getElementById('time-from'), 9*60);
-  buildTimeSelect(document.getElementById('time-to'), 17*60);
+  buildTimeSelect('tp-from-list', 'tp-from-btn', 'time-from', 9 * 60);
+  buildTimeSelect('tp-to-list',   'tp-to-btn',   'time-to',   17 * 60);
   buildTZSelect();
   document.getElementById('create-btn').addEventListener('click', createEvent);
   document.getElementById('event-name').addEventListener('keydown', e => {
-    if (e.key === 'Enter') document.getElementById('time-from').focus();
+    if (e.key === 'Enter') document.getElementById('tp-from-btn').focus();
   });
 }
 
@@ -1739,6 +1797,11 @@ function initScreenA() {
 // INIT
 // ══════════════════════════════════════
 document.addEventListener('DOMContentLoaded', async () => {
+  // Close time pickers when clicking outside
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.time-field')) closeAllTimePickers();
+  });
+
   // Wire up always-present buttons
   document.getElementById('join-btn').addEventListener('click', joinEvent);
   document.getElementById('participant-name').addEventListener('keydown', e => {
