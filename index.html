@@ -1591,14 +1591,29 @@ function renderBestTimes() {
   }
   scores.sort((a,b) => b.count - a.count || a.r - b.r);
 
-  // Keep only the first slot of each consecutive same-count run per column
+  // Step 1: keep only the first slot of each consecutive same-count run per column
   const seen = new Set();
-  const top = scores.filter(s => {
+  const candidates = scores.filter(s => {
     const prev = scores.find(x => x.c === s.c && x.r === s.r - 1 && x.count === s.count);
     if (prev && seen.has(`${s.c}:${s.r-1}`)) return false;
     seen.add(`${s.c}:${s.r}`);
     return true;
-  }).slice(0, 3);
+  });
+
+  // Step 2: pick top 3, skipping any whose extended range overlaps an already-selected slot
+  const covered = new Set();
+  const top = [];
+  for (const s of candidates) {
+    if (top.length >= 3) break;
+    const endRow = getRunEndRow(s.c, s.r, s.count, scores);
+    let overlaps = false;
+    for (let r = s.r; r <= endRow; r++) {
+      if (covered.has(`${s.c}:${r}`)) { overlaps = true; break; }
+    }
+    if (overlaps) continue;
+    for (let r = s.r; r <= endRow; r++) covered.add(`${s.c}:${r}`);
+    top.push(s);
+  }
 
   container.innerHTML = '';
 
