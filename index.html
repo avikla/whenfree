@@ -412,7 +412,7 @@ body::after{
 .you-badge{font-size:10px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:var(--accent);opacity:0.75;margin-left:2px}
 .people-count{font-size:11px;font-weight:600;background:var(--accent-glow);border:1px solid var(--accent-dim);color:var(--accent);border-radius:10px;padding:1px 7px;letter-spacing:0.03em}
 .grid-top-row{display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-.clear-inline-btn{display:block;width:100%;background:transparent;border:1px solid var(--border2);border-radius:var(--r-sm);font-family:var(--font-body);font-size:12px;font-weight:500;letter-spacing:0.04em;color:var(--muted);cursor:pointer;text-align:left;padding:6px 10px;margin-top:8px;transition:color 0.15s,border-color 0.15s,background 0.15s}
+.clear-inline-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;background:transparent;border:1px solid var(--border);border-radius:var(--r-sm);font-family:var(--font-body);font-size:12px;font-weight:500;letter-spacing:0.04em;color:var(--muted);cursor:pointer;padding:10px 12px;margin-top:8px;transition:color 0.15s,border-color 0.15s,background 0.15s}
 .clear-inline-btn:hover{color:#f87171;border-color:rgba(248,113,113,0.35);background:rgba(248,113,113,0.05)}
 .rejoin-prompt{margin-top:10px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--r-sm);text-align:center}
 .rejoin-prompt p{font-size:12px;color:var(--muted);margin-bottom:8px}
@@ -428,7 +428,7 @@ body::after{
 /* Grid area */
 .grid-area{
   flex:1;display:flex;flex-direction:column;
-  overflow:hidden;padding:16px 24px 16px 20px;gap:16px;
+  overflow:hidden;padding:28px 24px 16px 20px;gap:16px;
 }
 .grid-hint{
   font-size:13px;font-weight:400;
@@ -523,8 +523,21 @@ body::after{
   #screen-create{padding:0 16px}
   .logo{font-size:30px}
   .mobile-notice{display:block}
-  .sidebar{width:180px;min-width:180px;padding:20px 16px}
-  .grid-area{padding:16px}
+  .time-row{flex-direction:column;gap:8px}
+  .time-sep{display:none}
+  .time-field{width:100%}
+  #screen-event{flex-direction:column}
+  .sidebar{order:2;width:100%;min-width:unset;border-right:none;border-top:1px solid var(--border);border-bottom:none;padding:12px 16px;gap:12px;overflow-y:unset}
+  .grid-area{order:1;padding:10px 12px}
+}
+@media(max-width:430px){
+  #screen-create{padding:0 12px}
+  .logo{font-size:26px}
+  .tagline{font-size:13px}
+  .card{padding:12px}
+  .create-form{gap:8px}
+  .create-actions{padding-bottom:4px}
+  .site-header{padding:8px 0 4px}
 }
 
 /* Tooltip */
@@ -554,21 +567,16 @@ body::after{
   animation:fadeUp 0.2s ease;
 }
 .sidebar-btn{
-  width:100%;padding:9px 12px;
-  background:var(--accent);border:none;
+  width:100%;padding:10px 12px;
+  background:transparent;border:1px solid var(--border);
   border-radius:var(--r-sm);
-  color:#18181b;font-family:var(--font-body);
+  color:var(--muted);font-family:var(--font-body);
   font-size:12px;font-weight:500;letter-spacing:0.04em;
-  cursor:pointer;text-align:center;
-  transition:opacity 0.15s,transform 0.15s;
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  transition:color 0.15s,border-color 0.15s;
 }
-.sidebar-btn:hover{opacity:0.88;transform:translateY(-1px)}
-.sidebar-btn-outline{
-  background:transparent;
-  border:1px solid var(--accent-dim);
-  color:var(--accent);
-}
-.sidebar-btn-outline:hover{background:var(--accent-glow);opacity:1}
+.sidebar-btn:hover{color:var(--accent);border-color:var(--accent-dim)}
 .share-confirm{
   font-size:11px;font-weight:500;
   color:var(--accent);letter-spacing:0.04em;
@@ -579,9 +587,14 @@ body::after{
   border-radius:6px;padding:8px 12px;
   color:var(--muted);font-family:var(--font-body);
   font-size:12px;font-weight:500;cursor:pointer;
-  transition:color 0.15s,border-color 0.15s;text-align:left;
+  transition:color 0.15s,border-color 0.15s;
+  display:flex;align-items:center;justify-content:center;gap:6px;width:100%;
+  letter-spacing:0.04em;
 }
-.new-event-btn:hover{color:var(--text);border-color:var(--border2)}
+.new-event-btn:hover{color:var(--accent);border-color:var(--accent-dim)}
+.new-event-btn .nav-arrow{font-size:2.1em;line-height:1}
+.new-event-wrap{border-top:1px solid var(--border);padding-top:10px;margin-top:4px}
+.btn-icon{font-variant-emoji:text}
 .dev-footer{flex-shrink:0;text-align:center;font-size:12px;font-weight:400;color:var(--muted);padding:12px 0 6px;letter-spacing:0.02em;line-height:1.6;border-top:1px solid rgba(255,255,255,0.35);margin-top:6px}
 .dev-footer a{color:var(--muted);text-decoration:none;border-bottom:1px solid transparent;transition:color 0.15s,border-color 0.15s}
 .dev-footer a:hover{color:var(--accent);border-bottom-color:var(--accent)}
@@ -602,15 +615,15 @@ body::after{
 .lang-toggle button:not(.active):hover{color:var(--text)}
 
 /* RTL overrides — browser handles most automatically; these cover explicit directional values */
-[dir="rtl"] .dev-footer{left:auto;right:22px;text-align:right}
+[dir="rtl"] .dev-footer{text-align:right}
 [dir="rtl"] .sidebar{border-right:none;border-left:1px solid var(--border)}
 [dir="rtl"] .participant-row,[dir="rtl"] .participant-item{flex-direction:row-reverse}
 [dir="rtl"] .step-header{justify-content:flex-start;gap:12px}
-[dir="rtl"] .clear-inline-btn{text-align:right}
+[dir="rtl"] .clear-inline-btn{flex-direction:row-reverse}
 [dir="rtl"] .bt-card{text-align:right}
 [dir="rtl"] .cal-nav{flex-direction:row-reverse}
 [dir="rtl"] .chips-container{justify-content:flex-end}
-[dir="rtl"] .new-event-btn{text-align:right}
+[dir="rtl"] .new-event-btn{flex-direction:row}
 [dir="rtl"] .lang-toggle{right:auto;left:16px}
 [dir="rtl"] .step-num{margin-right:0;margin-left:8px}
 [dir="rtl"] .you-badge{margin-right:4px;margin-left:0}
@@ -713,8 +726,8 @@ body::after{
   </main>
   <div class="create-actions">
     <button id="create-btn" class="create-btn">Create Event &nbsp;&#8594;</button>
+    <p class="dev-footer">Avi Klayman &mdash; <a href="mailto:avi@meteor.co.il">avi@meteor.co.il</a><br><a href="terms.html">Terms &amp; Privacy</a></p>
   </div>
-  <p class="dev-footer" style="position:absolute;bottom:4px;left:22px;width:220px;text-align:left;padding:0;border:none;margin:0">Avi Klayman &mdash; <a href="mailto:avi@meteor.co.il">avi@meteor.co.il</a><br><a href="terms.html">Terms &amp; Privacy</a></p>
 </div>
 
 <!-- ═══════════════════════════════════════
@@ -747,9 +760,9 @@ body::after{
       <div id="participant-list" class="participant-list"></div>
     </div>
     <div style="margin-top:auto;display:flex;flex-direction:column;gap:6px">
-      <button id="share-btn" class="sidebar-btn">&#128279; Copy meeting link</button>
+      <button id="share-btn" class="sidebar-btn"><span class="btn-icon">🔗</span> Copy meeting link</button>
       <span id="share-confirm" class="share-confirm" style="display:none">&#10003; Copied!</span>
-      <button id="email-btn" class="sidebar-btn sidebar-btn-outline" data-i18n="sendEmail">&#9993; Send via email</button>
+      <button id="email-btn" class="sidebar-btn sidebar-btn-outline" data-i18n="sendEmail">&#9993; Email meeting link</button>
       <div id="email-panel" style="display:none" class="email-panel">
         <div class="email-panel-row">
           <input type="email" id="email-panel-input" class="text-input email-panel-input"
@@ -759,7 +772,9 @@ body::after{
         <div id="email-panel-status" class="link-banner-status"></div>
       </div>
     </div>
-    <button id="new-event-btn" class="new-event-btn">&#8592; New event</button>
+    <div class="new-event-wrap">
+      <button id="new-event-btn" class="new-event-btn"><span class="nav-arrow">⬅</span><span class="nav-label">New event</span></button>
+    </div>
     <p class="dev-footer" style="font-size:11px;text-align:left">Avi Klayman &mdash; <a href="mailto:avi@meteor.co.il">avi@meteor.co.il</a><br><a href="terms.html">Terms &amp; Privacy</a></p>
   </aside>
 
@@ -862,8 +877,8 @@ const LANGS = {
     markAvail:'Mark your availability',
     markSub:"Enter your name, then drag across the grid to show when you're free.",
     namePH:'Your name', continueBtn:'Continue &#8594;', joinBtn:'Join the event &nbsp;&#8594;', joining:'Joining…',
-    people:'People', copyLink:'&#128279; Copy meeting link', copied:'&#10003; Copied!',
-    sendEmail:'&#9993; Send via email', newEvent:'&#8592; New event', editTitle:'Edit meeting name',
+    people:'People', copyLink:'<span class="btn-icon">🔗</span> Copy meeting link', copied:'&#10003; Copied!',
+    sendEmail:'&#9993; Email meeting link', newEvent:'<span class="nav-arrow">⬅</span><span class="nav-label">New event</span>', editTitle:'Edit meeting name',
     gridHint:'Drag to mark your free times.', bestTimes:'Best times',
     bestEmpty:'Mark your availability to see best times',
     mobileNotice:'Best experienced on a wider screen', loading:'Loading…',
@@ -899,8 +914,8 @@ const LANGS = {
     markAvail:'סמן זמינות',
     markSub:'הכנס שם וגרור על הלוח כדי לסמן מתי אתה פנוי.',
     namePH:'השם שלך', continueBtn:'&#8592; המשך', joinBtn:'&#8592; הצטרף לאירוע &nbsp;', joining:'מצטרף…',
-    people:'משתתפים', copyLink:'&#128279; העתק קישור', copied:'&#10003; הועתק!',
-    sendEmail:'&#9993; שלח במייל', newEvent:'אירוע חדש &#8594;', editTitle:'עריכת שם הפגישה',
+    people:'משתתפים', copyLink:'<span class="btn-icon">🔗</span> העתק קישור', copied:'&#10003; הועתק!',
+    sendEmail:'&#9993; שלח קישור למייל', newEvent:'<span class="nav-arrow">➡</span><span class="nav-label">אירוע חדש</span>', editTitle:'עריכת שם הפגישה',
     gridHint:'גרור כדי לסמן זמינות.', bestTimes:'זמנים מומלצים',
     bestEmpty:'סמן זמינות כדי לראות את הזמנים הטובים ביותר',
     mobileNotice:'מומלץ לצפות במסך רחב יותר', loading:'טוען…',
