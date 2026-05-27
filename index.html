@@ -13,19 +13,19 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
 :root{
-  --bg:#18181b;
-  --surface:#222226;
-  --surface2:#2a2a2f;
-  --border:rgba(255,255,255,0.15);
-  --border2:rgba(255,255,255,0.25);
-  --text:#ffffff;
-  --muted:#b8b8c8;
-  --muted2:#7e7e90;
+  --bg:#0f1623;
+  --surface:#161f30;
+  --surface2:#1e2a40;
+  --border:rgba(255,255,255,0.13);
+  --border2:rgba(255,255,255,0.22);
+  --text:#e8edf5;
+  --muted:#7a8fab;
+  --muted2:#4e607a;
   --accent:#00d68f;
   --accent-glow:rgba(0,214,143,0.12);
-  --accent-dim:rgba(0,214,143,0.3);
+  --accent-dim:rgba(0,214,143,0.28);
   --accent-text:#00d68f;
-  --cell-empty:#26262b;
+  --cell-empty:#161f30;
   --font-display:'Outfit',system-ui,sans-serif;
   --font-body:'Manrope',system-ui,sans-serif;
   --r:12px;
@@ -268,7 +268,7 @@ body::after{
 [dir="rtl"] .time-picker-btn{text-align:right;background-position:left 12px center;padding:11px 12px 11px 32px}
 .time-picker-list{
   position:fixed;display:none;
-  background:#2a2a2f;
+  background:var(--surface2);
   border:1px solid rgba(255,255,255,0.25);
   border-radius:6px;overflow-y:auto;
   z-index:9999;scrollbar-width:thin;
@@ -281,7 +281,7 @@ body::after{
 .tp-option.selected{color:var(--accent);font-weight:500;background:rgba(0,214,143,0.08)}
 .tp-search-wrap{
   padding:6px 8px;position:sticky;top:0;
-  background:#2a2a2f;border-bottom:1px solid rgba(255,255,255,0.12);z-index:1;
+  background:var(--surface2);border-bottom:1px solid rgba(255,255,255,0.12);z-index:1;
 }
 .tp-search-input{
   width:100%;background:rgba(255,255,255,0.06);
