@@ -34,6 +34,22 @@
   --r-xs:4px;
 }
 
+[data-theme="dark"]{
+  --bg:#0f1623;
+  --surface:#1a2332;
+  --surface2:#1e2a3a;
+  --border:rgba(255,255,255,0.08);
+  --border2:rgba(255,255,255,0.14);
+  --text:#e2e8f0;
+  --muted:#94a3b8;
+  --muted2:#64748b;
+  --accent:#00d68f;
+  --accent-glow:rgba(0,214,143,0.15);
+  --accent-dim:rgba(0,214,143,0.25);
+  --accent-text:#00d68f;
+  --cell-empty:#1e2a3a;
+}
+
 html,body{height:100%;-webkit-font-smoothing:antialiased}
 body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflow-x:hidden}
 
@@ -618,6 +634,25 @@ body::after{
 .lang-toggle button.active{background:var(--accent);color:#18181b;border-radius:20px}
 .lang-toggle button:not(.active):hover{color:var(--text)}
 
+.theme-toggle{
+  position:fixed;top:16px;right:100px;z-index:9999;
+  display:flex;gap:4px;
+}
+.theme-toggle button{
+  background:var(--surface);
+  border:1.5px solid var(--border2);
+  color:var(--text);
+  border-radius:var(--r-sm);
+  padding:5px 10px;
+  font-size:16px;
+  cursor:pointer;
+  transition:background 0.15s,border-color 0.15s;
+  line-height:1;
+}
+.theme-toggle button:hover{
+  background:var(--surface2);
+}
+
 /* RTL overrides — browser handles most automatically; these cover explicit directional values */
 [dir="rtl"] .dev-footer{text-align:center}
 [dir="rtl"] .sidebar{border-right:none;border-left:1px solid var(--border)}
@@ -820,6 +855,11 @@ body::after{
 <!-- Hover tooltip -->
 <div id="grid-tooltip" class="grid-tooltip" style="display:none"></div>
 
+<!-- Theme toggle -->
+<div class="theme-toggle" id="theme-toggle">
+  <button id="theme-btn" onclick="toggleTheme()" title="Toggle dark mode">☀️</button>
+</div>
+
 <!-- Language toggle -->
 <div class="lang-toggle" id="lang-toggle">
   <button id="lang-en" onclick="setLang('en')">EN</button>
@@ -961,6 +1001,7 @@ const LANGS = {
 };
 
 let currentLang = localStorage.getItem('lang') || 'en';
+let currentTheme = localStorage.getItem('theme') || 'light';
 const t = () => LANGS[currentLang];
 
 function applyLang() {
@@ -1002,6 +1043,17 @@ function applyLang() {
 
 // Re-render data (stored so setLang can refresh Screen B live)
 let lastBestTimesData = null;
+
+function applyTheme() {
+  document.documentElement.setAttribute('data-theme', currentTheme);
+  const btn = document.getElementById('theme-btn');
+  if (btn) btn.textContent = currentTheme === 'dark' ? '🌙' : '☀️';
+}
+function toggleTheme() {
+  currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('theme', currentTheme);
+  applyTheme();
+}
 
 function setLang(code) {
   currentLang = code;
@@ -2154,6 +2206,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   initScreenA();
   applyLang();
+  applyTheme();
 });
 </script>
 </body>
