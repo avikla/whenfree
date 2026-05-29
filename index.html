@@ -1196,6 +1196,28 @@ function buildTimeSelect(listId, btnId, hiddenId, def) {
       hidden.value = m;
       btn.textContent = minsToLabel(m);
       list.style.display = 'none';
+      // Cross-validate: keep from < to
+      const fromVal = parseInt(document.getElementById('time-from').value);
+      const toVal   = parseInt(document.getElementById('time-to').value);
+      if (toVal <= fromVal) {
+        const fromHid = document.getElementById('time-from');
+        const toHid   = document.getElementById('time-to');
+        const fromBtn = document.getElementById('tp-from-btn');
+        const toBtn   = document.getElementById('tp-to-btn');
+        if (hiddenId === 'time-from') {
+          const newTo = Math.min(fromVal + 30, 23 * 60 + 30);
+          toHid.value = newTo;
+          toBtn.textContent = minsToLabel(newTo);
+          document.querySelectorAll('#tp-to-list .tp-option').forEach(r =>
+            r.classList.toggle('selected', +r.dataset.value === newTo));
+        } else {
+          const newFrom = Math.max(toVal - 30, 0);
+          fromHid.value = newFrom;
+          fromBtn.textContent = minsToLabel(newFrom);
+          document.querySelectorAll('#tp-from-list .tp-option').forEach(r =>
+            r.classList.toggle('selected', +r.dataset.value === newFrom));
+        }
+      }
     });
     list.appendChild(row);
   }
