@@ -126,6 +126,14 @@ body::after{
   to{opacity:1;transform:translateY(0)}
 }
 
+.step-dot{
+  width:8px;height:8px;
+  border-radius:50%;
+  background:var(--border);
+  transition:background 0.25s;
+}
+.step-dot.active{background:var(--accent)}
+
 .step-num{
   display:inline-block;
   font-size:12px;font-weight:500;
@@ -700,15 +708,23 @@ body::after{
   </header>
 
   <main class="create-form">
+    <!-- Step progress indicator -->
+    <div id="step-progress" style="display:flex;justify-content:center;gap:8px;padding:4px 0 8px">
+      <span class="step-dot active" data-step="1"></span>
+      <span class="step-dot" data-step="2"></span>
+      <span class="step-dot" data-step="3"></span>
+      <span class="step-dot" data-step="4"></span>
+    </div>
+
     <!-- Step 1: Name -->
-    <div class="card" style="--d:.08s">
+    <div class="card" style="--d:.08s" data-step="1">
       <div class="step-label"><span class="step-num">01</span><span data-i18n="step1">Name your event</span></div>
       <input type="text" id="event-name" class="text-input"
         placeholder="Team lunch, Project kickoff…" data-i18n-ph="namePlaceholder" autocomplete="off" spellcheck="false">
     </div>
 
     <!-- Step 2: Dates -->
-    <div class="card" style="--d:.18s">
+    <div class="card" style="--d:.18s;display:none" data-step="2">
       <div class="step-header">
         <div class="step-label" style="margin-bottom:0"><span class="step-num">02</span><span data-i18n="step2">Pick dates</span></div>
         <div class="mode-toggle">
@@ -737,7 +753,7 @@ body::after{
     </div>
 
     <!-- Step 3: Times -->
-    <div class="card" style="--d:.28s">
+    <div class="card" style="--d:.28s;display:none" data-step="3">
       <div class="step-label"><span class="step-num">03</span><span data-i18n="step3">Set time range</span></div>
       <div class="time-row">
         <div class="time-field">
@@ -763,7 +779,7 @@ body::after{
     </div>
 
     <!-- Step 4: Organizer details -->
-    <div class="card" style="--d:.38s">
+    <div class="card" style="--d:.38s;display:none" data-step="4">
       <div class="step-label"><span class="step-num">04</span><span data-i18n="step4">Who's organizing this?</span></div>
       <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px">
         <input type="text" id="creator-name" class="text-input"
@@ -778,7 +794,10 @@ body::after{
 
   </main>
   <div class="create-actions">
-    <button id="create-btn" class="create-btn">Create Event &nbsp;&#8594;</button>
+    <div style="display:flex;gap:8px">
+      <button id="back-btn" class="create-btn" style="display:none;background:var(--surface);color:var(--text);border:1px solid var(--border);flex:0 0 auto;width:52px">&#8592;</button>
+      <button id="create-btn" class="create-btn" style="flex:1">Next &nbsp;&#8594;</button>
+    </div>
     <p class="dev-footer">Avi Klayman &mdash; <a href="mailto:avi@meteor.co.il">avi@meteor.co.il</a><br><a href="terms.html">Terms &amp; Privacy</a></p>
   </div>
 </div>
@@ -928,6 +947,7 @@ const S = {
   earlierThan: 9 * 60,      // minutes from midnight
   laterThan: 17 * 60,
   timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+  currentStep: 1,           // wizard step (1-4)
   // Screen B
   eventSlug: '',
   participants: [],          // [{name, color, availability: Set<cellId>}]
@@ -974,6 +994,7 @@ const LANGS = {
     step4:"Who's organizing this?", creatorNamePH:'Your name', creatorEmailPH:'Your email',
     creatorEmailHint:"We'll send you a link so you can return to check responses anytime.",
     creatorNameErr:'Please enter your name.', creatorEmailErr:'Please enter a valid email address.',
+    nextBtn:'Next &nbsp;&#8594;',
     creatorEmailSubject:(name)=>`Your meeting link — ${name}`,
     creatorEmailHtml:(creatorName,eventName,url)=>`<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.6;color:#222"><p>Hi ${creatorName},</p><p>Your meeting <strong>${eventName}</strong> is ready.</p><p><a href="${url}" style="display:inline-block;padding:10px 20px;background:#4f46e5;color:#fff;border-radius:6px;text-decoration:none">Open Meeting</a></p><p style="color:#888;font-size:13px">${url}</p></div>`,
     emailFailMsg:"We couldn't send the confirmation email. Copy this link to save it:", emailRetrying:'Retrying…', emailRetryFail:'Still couldn\'t send — please copy the link above.',
@@ -1021,6 +1042,7 @@ const LANGS = {
     step4:'מי מארגן?', creatorNamePH:'השם שלך', creatorEmailPH:'המייל שלך',
     creatorEmailHint:'נשלח לך קישור כדי שתוכל לחזור לבדוק תשובות בכל עת.',
     creatorNameErr:'יש להזין שם.', creatorEmailErr:'יש להזין כתובת מייל תקינה.',
+    nextBtn:'&#8592;&nbsp; הבא',
     creatorEmailSubject:(name)=>`קישור לפגישה שלך — ${name}`,
     creatorEmailHtml:(creatorName,eventName,url)=>`<div dir="rtl" style="text-align:right;font-family:Arial,sans-serif;font-size:15px;line-height:1.6;color:#222"><p>שלום ${creatorName},</p><p>הפגישה שלך <strong>${eventName}</strong> נוצרה בהצלחה.</p><p><a href="${url}" style="display:inline-block;padding:10px 20px;background:#4f46e5;color:#fff;border-radius:6px;text-decoration:none">פתח פגישה</a></p><p style="color:#888;font-size:13px">${url}</p></div>`,
     emailFailMsg:'לא הצלחנו לשלוח את המייל. העתק את הקישור כדי לשמור אותו:', emailRetrying:'שולח מחדש…', emailRetryFail:'עדיין לא הצלחנו לשלוח — העתק את הקישור למעלה.',
@@ -1058,7 +1080,7 @@ function applyLang() {
     const v = lang[el.dataset.i18nTitle]; if (v) el.title = v;
   });
   const cb = document.getElementById('create-btn');
-  if (cb) cb.innerHTML = lang.createBtn;
+  if (cb) cb.innerHTML = (S.currentStep === 4) ? lang.createBtn : lang.nextBtn;
   const jb = document.getElementById('join-btn');
   if (jb) jb.innerHTML = lang.joinBtn;
   const rb = document.getElementById('rejoin-btn');
@@ -1183,6 +1205,13 @@ function renderCalendar() {
     el.addEventListener('mousedown', onCalDown);
     el.addEventListener('mouseenter', onCalEnter);
     grid.appendChild(el);
+  }
+  // Hide rows that are entirely past or empty
+  const allCells = [...grid.querySelectorAll('.cal-cell:not(.cal-header)')];
+  for (let i = 0; i < allCells.length; i += 7) {
+    const row = allCells.slice(i, i + 7);
+    const allPastOrEmpty = row.every(c => c.classList.contains('past') || c.classList.contains('empty'));
+    if (allPastOrEmpty) row.forEach(c => c.style.display = 'none');
   }
   renderChips();
 }
@@ -1456,59 +1485,15 @@ function initModeToggle() {
 // SCREEN A: VALIDATION + CREATE
 // ══════════════════════════════════════
 async function createEvent() {
-  const nameEl = document.getElementById('event-name');
-  S.eventName = nameEl.value.trim();
-  if (!S.eventName) {
-    nameEl.classList.add('shake');
-    nameEl.addEventListener('animationend', () => nameEl.classList.remove('shake'), {once:true});
-    nameEl.focus(); return;
-  }
-
-  // Validate creator name and email
+  // Capture creator details from form (already validated by handleNextOrCreate())
   const creatorNameEl  = document.getElementById('creator-name');
   const creatorEmailEl = document.getElementById('creator-email');
   const creatorName    = creatorNameEl.value.trim();
   const creatorEmail   = creatorEmailEl.value.trim();
-  const nameErr        = document.getElementById('creator-name-err');
-  const emailErr       = document.getElementById('creator-email-err');
-  nameErr.style.display  = 'none';
-  emailErr.style.display = 'none';
-  let creatorValid = true;
-  if (!creatorName) {
-    nameErr.textContent = t().creatorNameErr;
-    nameErr.style.display = 'block';
-    creatorNameEl.classList.add('shake');
-    creatorNameEl.addEventListener('animationend', () => creatorNameEl.classList.remove('shake'), {once:true});
-    creatorValid = false;
-  }
-  if (!creatorEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(creatorEmail)) {
-    emailErr.textContent = t().creatorEmailErr;
-    emailErr.style.display = 'block';
-    creatorEmailEl.classList.add('shake');
-    creatorEmailEl.addEventListener('animationend', () => creatorEmailEl.classList.remove('shake'), {once:true});
-    creatorValid = false;
-  }
-  if (!creatorValid) return;
 
-  if (S.mode === 'specific' && S.selectedDates.size === 0) {
-    const err = document.getElementById('cal-error');
-    err.textContent = t().errorDate;
-    err.style.display = 'block';
-    const c = document.getElementById('calendar-view');
-    c.classList.add('shake');
-    c.addEventListener('animationend', () => c.classList.remove('shake'), {once:true});
-    return;
-  }
-  document.getElementById('cal-error').style.display = 'none';
-  if (S.mode === 'days' && S.selectedDays.size === 0) {
-    const err = document.getElementById('dow-error');
-    err.style.display = 'block';
-    const c = document.getElementById('dow-view');
-    c.classList.add('shake');
-    c.addEventListener('animationend', () => c.classList.remove('shake'), {once:true});
-    return;
-  }
-  document.getElementById('dow-error').style.display = 'none';
+  // Capture event name
+  const nameEl = document.getElementById('event-name');
+  S.eventName = nameEl.value.trim();
 
   S.earlierThan = parseInt(document.getElementById('time-from').value);
   S.laterThan   = parseInt(document.getElementById('time-to').value);
@@ -2120,6 +2105,92 @@ async function clearMyTimes() {
   }).catch(() => {});
 }
 
+function goToStep(n) {
+  const steps = [null,
+    document.querySelector('.card[data-step="1"]'),
+    document.querySelector('.card[data-step="2"]'),
+    document.querySelector('.card[data-step="3"]'),
+    document.querySelector('.card[data-step="4"]'),
+  ];
+  steps.slice(1).forEach((c, i) => c.style.display = (i + 1 === n) ? '' : 'none');
+  document.querySelectorAll('.step-dot').forEach((d, i) => d.classList.toggle('active', (i + 1 === n)));
+  document.getElementById('back-btn').style.display = (n === 1) ? 'none' : '';
+  document.getElementById('create-btn').innerHTML = (n === 4) ? t().createBtn : t().nextBtn;
+  S.currentStep = n;
+  document.querySelector('.create-form').scrollTop = 0;
+}
+
+function handleNextOrCreate() {
+  const lang = t();
+  if (S.currentStep === 1) {
+    // Validate event name
+    const nameErr = document.getElementById('event-name-err') || document.createElement('div');
+    if (!S.eventName.trim()) {
+      nameErr.id = 'event-name-err';
+      nameErr.textContent = lang.errorName || 'Please enter an event name.';
+      nameErr.style.color = 'var(--error,#e53e3e)';
+      nameErr.style.fontSize = '13px';
+      nameErr.style.marginTop = '4px';
+      const nameInput = document.getElementById('event-name');
+      if (!nameInput.nextElementSibling?.id === 'event-name-err') {
+        nameInput.parentNode.insertBefore(nameErr, nameInput.nextSibling);
+      }
+      nameInput.classList.add('shake');
+      setTimeout(() => nameInput.classList.remove('shake'), 500);
+      return;
+    }
+    if (nameErr.parentNode) nameErr.parentNode.removeChild(nameErr);
+    goToStep(2);
+  } else if (S.currentStep === 2) {
+    // Validate date selection
+    const hasSelection = S.mode === 'specific' ? S.selectedDates.size > 0 : S.selectedDays.size > 0;
+    const errId = S.mode === 'specific' ? 'cal-error' : 'dow-error';
+    const errEl = document.getElementById(errId);
+    if (!hasSelection) {
+      errEl.style.display = '';
+      return;
+    }
+    errEl.style.display = 'none';
+    goToStep(3);
+  } else if (S.currentStep === 3) {
+    // No validation needed for time range (always valid)
+    goToStep(4);
+  } else if (S.currentStep === 4) {
+    // Validate creator name and email, then create
+    const creatorName = document.getElementById('creator-name').value.trim();
+    const creatorEmail = document.getElementById('creator-email').value.trim();
+    const nameErrEl = document.getElementById('creator-name-err');
+    const emailErrEl = document.getElementById('creator-email-err');
+    let valid = true;
+    if (!creatorName) {
+      nameErrEl.textContent = lang.creatorNameErr;
+      nameErrEl.style.display = '';
+      valid = false;
+    } else {
+      nameErrEl.style.display = 'none';
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(creatorEmail)) {
+      emailErrEl.textContent = lang.creatorEmailErr;
+      emailErrEl.style.display = '';
+      valid = false;
+    } else {
+      emailErrEl.style.display = 'none';
+    }
+    if (!valid) {
+      document.getElementById('creator-name').classList.add('shake');
+      document.getElementById('creator-email').classList.add('shake');
+      setTimeout(() => {
+        document.getElementById('creator-name').classList.remove('shake');
+        document.getElementById('creator-email').classList.remove('shake');
+      }, 500);
+      return;
+    }
+    // Validation passed, proceed to create event
+    createEvent();
+  }
+}
+
 // ══════════════════════════════════════
 // SCREEN A: INIT
 // ══════════════════════════════════════
@@ -2138,7 +2209,10 @@ function initScreenA() {
   buildTimeSelect('tp-from-list', 'tp-from-btn', 'time-from', 9 * 60);
   buildTimeSelect('tp-to-list',   'tp-to-btn',   'time-to',   17 * 60);
   buildTZSelect();
-  document.getElementById('create-btn').addEventListener('click', createEvent);
+  document.getElementById('create-btn').addEventListener('click', handleNextOrCreate);
+  document.getElementById('back-btn').addEventListener('click', () => {
+    if (S.currentStep > 1) goToStep(S.currentStep - 1);
+  });
   document.getElementById('event-name').addEventListener('keydown', e => {
     if (e.key === 'Enter') document.getElementById('tp-from-btn').focus();
   });
