@@ -312,7 +312,7 @@ body::after{
 .tp-search-input{
   width:100%;background:rgba(15,22,35,0.04);
   border:1px solid rgba(255,255,255,0.15);border-radius:4px;
-  padding:6px 10px;color:#0f1623;
+  padding:6px 10px;color:var(--text);
   font-family:var(--font-body);font-size:12px;outline:none;
 }
 .tp-search-input::placeholder{color:var(--muted2)}
@@ -458,7 +458,7 @@ body::after{
 .grid-hint{
   font-size:13px;font-weight:400;
   color:var(--muted);letter-spacing:0.02em;
-  flex-shrink:0;
+  flex-shrink:0;text-align:center;
 }
 .best-times-section{flex-shrink:0;border-top:1px solid var(--border);padding-top:12px;max-height:35vh;overflow-y:auto;display:flex;flex-direction:column;align-items:center;padding-left:8px;padding-right:8px}
 .bt-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;width:100%;justify-content:center}
@@ -605,6 +605,8 @@ body::after{
   transition:color 0.15s,border-color 0.15s;
 }
 .sidebar-btn:hover{color:var(--accent);border-color:var(--accent-dim)}
+.sidebar-btn-outline{background:transparent;border:1px solid var(--border2);color:var(--text)}
+.sidebar-btn-outline:hover{background:var(--surface2)}
 .share-confirm{
   font-size:11px;font-weight:500;
   color:var(--accent);letter-spacing:0.04em;
@@ -626,6 +628,7 @@ body::after{
 .dev-footer{flex-shrink:0;text-align:center;font-size:12px;font-weight:400;color:var(--muted);padding:12px 0 6px;letter-spacing:0.02em;line-height:1.6;border-top:1px solid rgba(15,22,35,0.18);margin-top:6px}
 .dev-footer a{color:var(--muted);text-decoration:none;border-bottom:1px solid transparent;transition:color 0.15s,border-color 0.15s}
 .dev-footer a:hover{color:var(--accent);border-bottom-color:var(--accent)}
+.sidebar .dev-footer{text-align:left;font-size:11px}
 
 /* Language toggle */
 .lang-toggle{
@@ -643,23 +646,18 @@ body::after{
 .lang-toggle button:not(.active):hover{color:var(--text)}
 
 .theme-toggle{
-  position:fixed;top:58px;right:16px;z-index:9999;
-  display:flex;gap:4px;
+  position:fixed;top:14px;right:62px;z-index:1000;
+  display:flex;align-items:center;
+  background:var(--surface);border:1px solid var(--border2);border-radius:20px;
+  overflow:hidden;font-family:var(--font-body);font-size:12px;font-weight:500;
 }
 .theme-toggle button{
-  background:var(--accent);
-  border:1.5px solid var(--accent);
-  color:#0f1623;
-  border-radius:var(--r-sm);
-  padding:5px 10px;
-  font-size:16px;
-  cursor:pointer;
-  transition:background 0.15s,border-color 0.15s;
-  line-height:1;
+  background:none;border:none;cursor:pointer;
+  padding:5px 11px;color:var(--muted2);line-height:1;
+  transition:color 0.15s,background 0.15s;font-size:16px;
 }
-.theme-toggle button:hover{
-  background:#00c478;opacity:0.9;
-}
+.theme-toggle button.active{background:var(--accent);color:#0f1623;border-radius:20px}
+.theme-toggle button:not(.active):hover{color:var(--text)}
 
 /* RTL overrides — browser handles most automatically; these cover explicit directional values */
 [dir="rtl"] .dev-footer{text-align:center}
@@ -862,7 +860,7 @@ body::after{
     <div class="new-event-wrap">
       <button id="new-event-btn" class="new-event-btn"><span class="nav-arrow">⬅</span><span class="nav-label">New event</span></button>
     </div>
-    <p class="dev-footer" style="font-size:11px;text-align:left">Avi Klayman &mdash; <a href="mailto:avi@meteor.co.il">avi@meteor.co.il</a><br><a href="terms.html">Terms &amp; Privacy</a></p>
+    <p class="dev-footer">Avi Klayman &mdash; <a href="mailto:avi@meteor.co.il">avi@meteor.co.il</a><br><a href="terms.html">Terms &amp; Privacy</a></p>
   </aside>
 
   <!-- Main content: grid + best times -->
@@ -896,7 +894,8 @@ body::after{
 
 <!-- Theme toggle -->
 <div class="theme-toggle" id="theme-toggle">
-  <button id="theme-btn" onclick="toggleTheme()" title="Toggle dark mode">☀️</button>
+  <button id="theme-btn-light" onclick="setTheme('light')" title="Light mode">☀️</button>
+  <button id="theme-btn-dark" onclick="setTheme('dark')" title="Dark mode">🌙</button>
 </div>
 
 <!-- Language toggle -->
@@ -1100,13 +1099,20 @@ let lastBestTimesData = null;
 
 function applyTheme() {
   document.documentElement.setAttribute('data-theme', currentTheme);
-  const btn = document.getElementById('theme-btn');
-  if (btn) btn.textContent = currentTheme === 'dark' ? '🌙' : '☀️';
+  const lightBtn = document.getElementById('theme-btn-light');
+  const darkBtn = document.getElementById('theme-btn-dark');
+  if (lightBtn && darkBtn) {
+    lightBtn.classList.toggle('active', currentTheme === 'light');
+    darkBtn.classList.toggle('active', currentTheme === 'dark');
+  }
 }
-function toggleTheme() {
-  currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+function setTheme(mode) {
+  currentTheme = mode;
   localStorage.setItem('theme', currentTheme);
   applyTheme();
+}
+function toggleTheme() {
+  setTheme(currentTheme === 'dark' ? 'light' : 'dark');
 }
 
 function setLang(code) {
