@@ -486,7 +486,7 @@ body::after{
 .bt-bar-fill{height:100%;background:var(--accent);border-radius:2px;transition:width 0.4s ease}
 .bt-card-avail{font-size:11px;font-weight:500;color:var(--accent)}
 
-.grid-scroll{flex:1;overflow:auto;position:relative}
+.grid-scroll{flex:1;overflow:auto;position:relative;display:flex;justify-content:center;align-items:flex-start;padding:0 8px}
 .grid-scroll::-webkit-scrollbar{width:6px;height:6px}
 .grid-scroll::-webkit-scrollbar-track{background:transparent}
 .grid-scroll::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
@@ -555,7 +555,7 @@ body::after{
   #screen-event{flex-direction:column;height:auto;min-height:100svh;overflow-y:visible}
   .sidebar{order:2;width:100%;min-width:unset;border-right:none;border-top:1px solid var(--border);border-bottom:none;padding:12px 16px;gap:12px;max-height:none;overflow-y:visible}
   .grid-area{order:1;padding:10px 12px;height:auto;overflow:visible}
-  .grid-scroll{flex:none;height:auto;overflow-x:auto;overflow-y:visible}
+  .grid-scroll{flex:none;height:auto;overflow-x:auto;overflow-y:visible;display:flex;justify-content:center;align-items:flex-start;padding:0 4px}
   .best-times-section{max-height:none;overflow-y:visible;padding-top:6px}
 }
 @media(max-width:430px){
