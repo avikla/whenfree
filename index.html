@@ -762,6 +762,20 @@ body::after{
       </div>
     </div>
 
+    <!-- Step 4: Organizer details -->
+    <div class="card" style="--d:.38s">
+      <div class="step-label"><span class="step-num">04</span><span data-i18n="step4">Who's organizing this?</span></div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px">
+        <input type="text" id="creator-name" class="text-input"
+          placeholder="Your name" data-i18n-ph="creatorNamePH" autocomplete="name">
+        <input type="email" id="creator-email" class="text-input"
+          placeholder="Your email" data-i18n-ph="creatorEmailPH" autocomplete="email">
+        <span id="creator-email-hint" class="field-label" style="color:var(--muted2);font-size:13px" data-i18n="creatorEmailHint"></span>
+        <span id="creator-name-err"  style="display:none;color:var(--error,#e53e3e);font-size:13px"></span>
+        <span id="creator-email-err" style="display:none;color:var(--error,#e53e3e);font-size:13px"></span>
+      </div>
+    </div>
+
   </main>
   <div class="create-actions">
     <button id="create-btn" class="create-btn">Create Event &nbsp;&#8594;</button>
@@ -818,6 +832,14 @@ body::after{
           <button id="best-times-email-send" class="link-banner-btn" data-i18n="linkBannerSend">Send</button>
         </div>
         <div id="best-times-email-status" class="link-banner-status"></div>
+      </div>
+      <div id="creator-email-fail" style="display:none" class="link-banner">
+        <span id="creator-email-fail-msg" data-i18n="emailFailMsg"></span>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button id="creator-copy-link-btn" class="sidebar-btn" style="flex:1"></button>
+          <button id="creator-retry-btn"     class="sidebar-btn sidebar-btn-outline" style="flex:1"></button>
+        </div>
+        <span id="creator-retry-status" style="font-size:12px;color:var(--muted2);margin-top:4px;display:none"></span>
       </div>
     </div>
     <div class="new-event-wrap">
@@ -949,6 +971,12 @@ const LANGS = {
     dateCount:(n)=>n===1?'1 date':`${n} dates`,
     emailSubject:(name)=>`You're invited: ${name}`,
     emailBody:(name,url)=>`Hi,\n\nI'd like to find a time for: ${name}\n\nMark your availability:\n${url}\n\nThanks!`,
+    step4:"Who's organizing this?", creatorNamePH:'Your name', creatorEmailPH:'Your email',
+    creatorEmailHint:"We'll send you a link so you can return to check responses anytime.",
+    creatorNameErr:'Please enter your name.', creatorEmailErr:'Please enter a valid email address.',
+    creatorEmailSubject:(name)=>`Your meeting link — ${name}`,
+    creatorEmailHtml:(creatorName,eventName,url)=>`<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.6;color:#222"><p>Hi ${creatorName},</p><p>Your meeting <strong>${eventName}</strong> is ready.</p><p><a href="${url}" style="display:inline-block;padding:10px 20px;background:#4f46e5;color:#fff;border-radius:6px;text-decoration:none">Open Meeting</a></p><p style="color:#888;font-size:13px">${url}</p></div>`,
+    emailFailMsg:"We couldn't send the confirmation email. Copy this link to save it:", emailRetrying:'Retrying…', emailRetryFail:'Still couldn\'t send — please copy the link above.',
     notFound:'Event not found. Create a new one below.',
     firebaseErr:'Could not create event — check your Firebase config.',
     months:['January','February','March','April','May','June','July','August','September','October','November','December'],
@@ -990,6 +1018,12 @@ const LANGS = {
     emailSubject:(name)=>`הוזמנת: ${name}`,
     emailBody:(name,url)=>`שלום,\n\nאני מחפש זמן שמתאים לכולם עבור: ${name}\n\nלחץ כאן לסימון זמינות:\n${url}\n\nתודה!`,
     emailHtmlBody:(name,url)=>`<div dir="rtl" style="text-align:right;font-family:Arial,sans-serif;font-size:15px;line-height:1.6;color:#222"><p>שלום,</p><p>אני מחפש זמן שמתאים לכולם עבור: <strong>${name}</strong></p><p>לחץ כאן לסימון זמינות:<br><a href="${url}" style="color:#4f46e5">${url}</a></p><p>תודה!</p></div>`,
+    step4:'מי מארגן?', creatorNamePH:'השם שלך', creatorEmailPH:'המייל שלך',
+    creatorEmailHint:'נשלח לך קישור כדי שתוכל לחזור לבדוק תשובות בכל עת.',
+    creatorNameErr:'יש להזין שם.', creatorEmailErr:'יש להזין כתובת מייל תקינה.',
+    creatorEmailSubject:(name)=>`קישור לפגישה שלך — ${name}`,
+    creatorEmailHtml:(creatorName,eventName,url)=>`<div dir="rtl" style="text-align:right;font-family:Arial,sans-serif;font-size:15px;line-height:1.6;color:#222"><p>שלום ${creatorName},</p><p>הפגישה שלך <strong>${eventName}</strong> נוצרה בהצלחה.</p><p><a href="${url}" style="display:inline-block;padding:10px 20px;background:#4f46e5;color:#fff;border-radius:6px;text-decoration:none">פתח פגישה</a></p><p style="color:#888;font-size:13px">${url}</p></div>`,
+    emailFailMsg:'לא הצלחנו לשלוח את המייל. העתק את הקישור כדי לשמור אותו:', emailRetrying:'שולח מחדש…', emailRetryFail:'עדיין לא הצלחנו לשלוח — העתק את הקישור למעלה.',
     notFound:'האירוע לא נמצא. צור אירוע חדש.',
     firebaseErr:'לא ניתן ליצור אירוע — בדוק את הגדרות Firebase.',
     months:['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'],
@@ -1429,6 +1463,33 @@ async function createEvent() {
     nameEl.addEventListener('animationend', () => nameEl.classList.remove('shake'), {once:true});
     nameEl.focus(); return;
   }
+
+  // Validate creator name and email
+  const creatorNameEl  = document.getElementById('creator-name');
+  const creatorEmailEl = document.getElementById('creator-email');
+  const creatorName    = creatorNameEl.value.trim();
+  const creatorEmail   = creatorEmailEl.value.trim();
+  const nameErr        = document.getElementById('creator-name-err');
+  const emailErr       = document.getElementById('creator-email-err');
+  nameErr.style.display  = 'none';
+  emailErr.style.display = 'none';
+  let creatorValid = true;
+  if (!creatorName) {
+    nameErr.textContent = t().creatorNameErr;
+    nameErr.style.display = 'block';
+    creatorNameEl.classList.add('shake');
+    creatorNameEl.addEventListener('animationend', () => creatorNameEl.classList.remove('shake'), {once:true});
+    creatorValid = false;
+  }
+  if (!creatorEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(creatorEmail)) {
+    emailErr.textContent = t().creatorEmailErr;
+    emailErr.style.display = 'block';
+    creatorEmailEl.classList.add('shake');
+    creatorEmailEl.addEventListener('animationend', () => creatorEmailEl.classList.remove('shake'), {once:true});
+    creatorValid = false;
+  }
+  if (!creatorValid) return;
+
   if (S.mode === 'specific' && S.selectedDates.size === 0) {
     const err = document.getElementById('cal-error');
     err.textContent = t().errorDate;
@@ -1470,11 +1531,15 @@ async function createEvent() {
       earlierThan: S.earlierThan, laterThan: S.laterThan,
       timezone: S.timezone,
       creatorToken,
+      creatorName,
+      creatorEmail,
       lang: currentLang,
       participants: {},
     });
     location.hash = S.eventSlug;
+    sessionStorage.setItem('meteor-creator-name-' + S.eventSlug, creatorName);
     transitionToB();
+    sendCreatorConfirmationEmail(creatorName, creatorEmail, S.eventName, window.location.href);
   } catch(e) {
     btn.innerHTML = t().createBtn;
     btn.disabled = false;
@@ -1519,6 +1584,12 @@ function renderEventTitle() {
 // ══════════════════════════════════════
 function initScreenB() {
   renderEventTitle();
+  // Pre-fill creator name if returning to their own meeting
+  const savedName = sessionStorage.getItem('meteor-creator-name-' + S.eventSlug);
+  if (savedName) {
+    const nameInput = document.getElementById('participant-name');
+    if (nameInput) nameInput.value = savedName;
+  }
   S.participants = [];
   buildGrid();
   renderParticipants();
@@ -1770,6 +1841,75 @@ function renderBestTimes() {
       <div class="bt-card-avail">${availLabel}</div>`;
     container.appendChild(card);
   });
+}
+
+async function sendCreatorConfirmationEmail(creatorName, toEmail, eventName, meetingUrl) {
+  const attemptSend = async () => {
+    const res = await fetch(GAS_MAILER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({
+        to_email:  toEmail,
+        event_name: eventName,
+        meeting_url: meetingUrl,
+        subject:   t().creatorEmailSubject(eventName),
+        html_body: t().creatorEmailHtml(creatorName, eventName, meetingUrl),
+      }),
+    });
+    const json = await res.json();
+    if (!json.ok) throw new Error(json.error || 'send failed');
+  };
+
+  try {
+    await attemptSend();
+  } catch(e) {
+    showCreatorEmailError(toEmail, eventName, meetingUrl, creatorName);
+  }
+}
+
+function showCreatorEmailError(toEmail, eventName, meetingUrl, creatorName) {
+  const banner = document.getElementById('creator-email-fail');
+  document.getElementById('creator-email-fail-msg').textContent = t().emailFailMsg;
+  const copyBtn  = document.getElementById('creator-copy-link-btn');
+  const retryBtn = document.getElementById('creator-retry-btn');
+  const status   = document.getElementById('creator-retry-status');
+  copyBtn.innerHTML  = t().copyLink;
+  retryBtn.textContent = 'Retry';
+
+  copyBtn.onclick = () => {
+    navigator.clipboard.writeText(meetingUrl);
+    copyBtn.innerHTML = t().copied;
+    setTimeout(() => { copyBtn.innerHTML = t().copyLink; }, 2000);
+  };
+
+  retryBtn.onclick = async () => {
+    retryBtn.textContent = t().emailRetrying;
+    retryBtn.disabled = true;
+    status.style.display = 'none';
+    try {
+      const res = await fetch(GAS_MAILER_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify({
+          to_email: toEmail,
+          event_name: eventName,
+          meeting_url: meetingUrl,
+          subject:   t().creatorEmailSubject(eventName),
+          html_body: t().creatorEmailHtml(creatorName, eventName, meetingUrl),
+        }),
+      });
+      const json = await res.json();
+      if (!json.ok) throw new Error();
+      banner.style.display = 'none';
+    } catch {
+      status.textContent = t().emailRetryFail;
+      status.style.display = 'block';
+      retryBtn.textContent = 'Retry';
+      retryBtn.disabled = false;
+    }
+  };
+
+  banner.style.display = 'block';
 }
 
 function buildBestTimesEmailHtml() {
