@@ -2124,14 +2124,15 @@ function handleNextOrCreate() {
   const lang = t();
   if (S.currentStep === 1) {
     // Validate event name
+    const nameInput = document.getElementById('event-name');
+    const eventName = nameInput.value.trim();
     const nameErr = document.getElementById('event-name-err') || document.createElement('div');
-    if (!S.eventName.trim()) {
+    if (!eventName) {
       nameErr.id = 'event-name-err';
       nameErr.textContent = lang.errorName || 'Please enter an event name.';
       nameErr.style.color = 'var(--error,#e53e3e)';
       nameErr.style.fontSize = '13px';
       nameErr.style.marginTop = '4px';
-      const nameInput = document.getElementById('event-name');
       if (!nameInput.nextElementSibling?.id === 'event-name-err') {
         nameInput.parentNode.insertBefore(nameErr, nameInput.nextSibling);
       }
