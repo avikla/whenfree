@@ -406,7 +406,7 @@ body::after{
 }
 .sidebar-logo{
   font-family:var(--font-display);
-  font-size:22px;font-weight:300;letter-spacing:0.1em;
+  font-size:22px;font-weight:600;letter-spacing:0.1em;
   color:var(--accent);
 }
 .grid-event-header{
@@ -631,8 +631,10 @@ body::after{
 .sidebar .dev-footer{text-align:left;font-size:11px}
 
 /* Language toggle */
+.top-controls{position:fixed;top:14px;right:16px;z-index:1001;display:flex;align-items:center;gap:6px}
+[dir="rtl"] .top-controls{right:auto;left:16px}
+
 .lang-toggle{
-  position:fixed;top:14px;right:16px;z-index:1000;
   display:flex;align-items:center;
   background:var(--surface);border:1px solid var(--border2);border-radius:20px;
   overflow:hidden;font-family:var(--font-body);font-size:12px;font-weight:500;
@@ -646,7 +648,6 @@ body::after{
 .lang-toggle button:not(.active):hover{color:var(--text)}
 
 .theme-toggle{
-  position:fixed;top:14px;right:62px;z-index:1000;
   display:flex;align-items:center;
   background:var(--surface);border:1px solid var(--border2);border-radius:20px;
   overflow:hidden;font-family:var(--font-body);font-size:12px;font-weight:500;
@@ -669,7 +670,6 @@ body::after{
 [dir="rtl"] .cal-nav{flex-direction:row-reverse}
 [dir="rtl"] .chips-container{justify-content:flex-end}
 [dir="rtl"] .new-event-btn{flex-direction:row}
-[dir="rtl"] .lang-toggle{right:auto;left:16px}
 [dir="rtl"] .step-num{margin-right:0;margin-left:8px}
 [dir="rtl"] .you-badge{margin-right:4px;margin-left:0}
 
@@ -892,16 +892,19 @@ body::after{
 <!-- Hover tooltip -->
 <div id="grid-tooltip" class="grid-tooltip" style="display:none"></div>
 
-<!-- Theme toggle -->
-<div class="theme-toggle" id="theme-toggle">
-  <button id="theme-btn-light" onclick="setTheme('light')" title="Light mode">☀️</button>
-  <button id="theme-btn-dark" onclick="setTheme('dark')" title="Dark mode">🌙</button>
-</div>
+<!-- Top controls: theme + language toggles -->
+<div class="top-controls">
+  <!-- Theme toggle -->
+  <div class="theme-toggle" id="theme-toggle">
+    <button id="theme-btn-light" onclick="setTheme('light')" title="Light mode">&#x2600;</button>
+    <button id="theme-btn-dark" onclick="setTheme('dark')" title="Dark mode">&#x263E;</button>
+  </div>
 
-<!-- Language toggle -->
-<div class="lang-toggle" id="lang-toggle">
-  <button id="lang-en" onclick="setLang('en')">EN</button>
-  <button id="lang-he" onclick="setLang('he')">עב</button>
+  <!-- Language toggle -->
+  <div class="lang-toggle" id="lang-toggle">
+    <button id="lang-en" onclick="setLang('en')">EN</button>
+    <button id="lang-he" onclick="setLang('he')">עב</button>
+  </div>
 </div>
 
 <!-- Loading overlay (shown while fetching event from Firestore) -->
