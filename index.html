@@ -109,7 +109,7 @@ body::after{
 }
 .create-form::-webkit-scrollbar{width:4px}
 .create-form::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
-.create-actions{flex-shrink:0;width:100%;max-width:540px;padding-bottom:8px}
+.create-actions{width:100%;max-width:540px}
 
 /* Cards */
 .card{
@@ -724,7 +724,7 @@ body::after{
     <!-- Step 2: Dates -->
     <div class="card" style="--d:.18s;display:none" data-step="2">
       <div class="step-header">
-        <div class="step-label" style="margin-bottom:0"><span class="step-num">02</span><span data-i18n="step2">Pick dates</span></div>
+        <div class="step-label" style="margin-bottom:0"><span class="step-num">03</span><span data-i18n="step2">Pick dates</span></div>
         <div class="mode-toggle">
           <button id="mode-specific" class="toggle-btn active" data-i18n="modeSpecific">Specific Dates</button>
           <button id="mode-days" class="toggle-btn" data-i18n="modeDays">Days of Week</button>
@@ -752,7 +752,7 @@ body::after{
 
     <!-- Step 3: Times -->
     <div class="card" style="--d:.28s;display:none" data-step="3">
-      <div class="step-label"><span class="step-num">03</span><span data-i18n="step3">Set time range</span></div>
+      <div class="step-label"><span class="step-num">04</span><span data-i18n="step3">Set time range</span></div>
       <div class="time-row">
         <div class="time-field">
           <label class="field-label" data-i18n="noEarlier">No earlier than</label>
@@ -778,7 +778,7 @@ body::after{
 
     <!-- Step 4: Organizer details -->
     <div class="card" style="--d:.38s" data-step="4">
-      <div class="step-label"><span class="step-num">04</span><span data-i18n="step4">Who's organizing this?</span></div>
+      <div class="step-label"><span class="step-num">02</span><span data-i18n="step4">Who's organizing this?</span></div>
       <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px">
         <input type="text" id="creator-name" class="text-input"
           placeholder="Your name" data-i18n-ph="creatorNamePH" autocomplete="name">
@@ -790,14 +790,14 @@ body::after{
       </div>
     </div>
 
-  </main>
-  <div class="create-actions">
-    <div style="display:flex;gap:8px">
-      <button id="back-btn" class="create-btn" style="display:none;background:var(--surface);color:var(--text);border:1px solid var(--border);flex:0 0 auto;width:52px">&#8592;</button>
-      <button id="create-btn" class="create-btn" style="flex:1">Next &nbsp;&#8594;</button>
+    <div class="create-actions">
+      <div style="display:flex;gap:8px">
+        <button id="back-btn" class="create-btn" style="display:none;background:var(--surface);color:var(--text);border:1px solid var(--border);flex:0 0 auto;width:52px">&#8592;</button>
+        <button id="create-btn" class="create-btn" style="flex:1">Next &nbsp;&#8594;</button>
+      </div>
+      <p class="dev-footer">Avi Klayman &mdash; <a href="mailto:avi@meteor.co.il">avi@meteor.co.il</a><br><a href="terms.html">Terms &amp; Privacy</a></p>
     </div>
-    <p class="dev-footer">Avi Klayman &mdash; <a href="mailto:avi@meteor.co.il">avi@meteor.co.il</a><br><a href="terms.html">Terms &amp; Privacy</a></p>
-  </div>
+  </main>
 </div>
 
 <!-- ═══════════════════════════════════════
@@ -994,7 +994,7 @@ const LANGS = {
     creatorNameErr:'Please enter your name.', creatorEmailErr:'Please enter a valid email address.',
     nextBtn:'Next &nbsp;&#8594;',
     creatorEmailSubject:(name)=>`Your meeting link — ${name}`,
-    creatorEmailHtml:(creatorName,eventName,url)=>`<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.6;color:#222"><p>Hi ${creatorName},</p><p>Your meeting <strong>${eventName}</strong> is ready.</p><p><a href="${url}" style="display:inline-block;padding:10px 20px;background:#4f46e5;color:#fff;border-radius:6px;text-decoration:none">Open Meeting</a></p><p style="color:#888;font-size:13px">${url}</p></div>`,
+    creatorEmailHtml:(creatorName,eventName,url)=>`<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.6;color:#222"><p>Hi ${creatorName},</p><p>Your meeting <strong>${eventName}</strong> is ready.</p><p><a href="${url}" style="display:inline-block;padding:10px 20px;background:#00d68f;color:#0f1623;border-radius:6px;text-decoration:none">Open Meeting</a></p><p style="color:#888;font-size:13px">${url}</p></div>`,
     emailFailMsg:"We couldn't send the confirmation email. Copy this link to save it:", emailRetrying:'Retrying…', emailRetryFail:'Still couldn\'t send — please copy the link above.',
     notFound:'Event not found. Create a new one below.',
     firebaseErr:'Could not create event — check your Firebase config.',
@@ -1042,7 +1042,7 @@ const LANGS = {
     creatorNameErr:'יש להזין שם.', creatorEmailErr:'יש להזין כתובת מייל תקינה.',
     nextBtn:'&#8592;&nbsp; הבא',
     creatorEmailSubject:(name)=>`קישור לפגישה שלך — ${name}`,
-    creatorEmailHtml:(creatorName,eventName,url)=>`<div dir="rtl" style="text-align:right;font-family:Arial,sans-serif;font-size:15px;line-height:1.6;color:#222"><p>שלום ${creatorName},</p><p>הפגישה שלך <strong>${eventName}</strong> נוצרה בהצלחה.</p><p><a href="${url}" style="display:inline-block;padding:10px 20px;background:#4f46e5;color:#fff;border-radius:6px;text-decoration:none">פתח פגישה</a></p><p style="color:#888;font-size:13px">${url}</p></div>`,
+    creatorEmailHtml:(creatorName,eventName,url)=>`<div dir="rtl" style="text-align:right;font-family:Arial,sans-serif;font-size:15px;line-height:1.6;color:#222"><p>שלום ${creatorName},</p><p>הפגישה שלך <strong>${eventName}</strong> נוצרה בהצלחה.</p><p><a href="${url}" style="display:inline-block;padding:10px 20px;background:#00d68f;color:#0f1623;border-radius:6px;text-decoration:none">פתח פגישה</a></p><p style="color:#888;font-size:13px">${url}</p></div>`,
     emailFailMsg:'לא הצלחנו לשלוח את המייל. העתק את הקישור כדי לשמור אותו:', emailRetrying:'שולח מחדש…', emailRetryFail:'עדיין לא הצלחנו לשלוח — העתק את הקישור למעלה.',
     notFound:'האירוע לא נמצא. צור אירוע חדש.',
     firebaseErr:'לא ניתן ליצור אירוע — בדוק את הגדרות Firebase.',
@@ -1158,7 +1158,7 @@ function lerpRGB(a, b, t) {
     Math.round(a[2] + (b[2]-a[2]) * t),
   ];
 }
-const CELL_EMPTY = [38, 38, 43];
+const CELL_EMPTY = [218, 227, 238];
 const CELL_FULL  = [0, 214, 143];
 
 // ══════════════════════════════════════
