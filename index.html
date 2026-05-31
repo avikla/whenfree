@@ -1649,7 +1649,7 @@ function getCols() {
 
 function getRows() {
   const rows = [];
-  for (let m = S.earlierThan; m < S.laterThan; m += 30) rows.push(m);
+  for (let m = S.earlierThan; m <= S.laterThan; m += 30) rows.push(m);
   return rows;
 }
 
