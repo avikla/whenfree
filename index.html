@@ -63,6 +63,7 @@ body::after{
   pointer-events:none;
   z-index:9999;
   animation:grain 9s steps(10) infinite;
+  will-change:transform;
 }
 @keyframes grain{
   0%{transform:translate(0,0)}10%{transform:translate(-5%,-10%)}20%{transform:translate(-15%,5%)}
@@ -120,6 +121,7 @@ body::after{
   box-shadow:0 2px 16px rgba(15,22,35,0.07);
   animation:fadeUp 0.55s cubic-bezier(.16,1,.3,1) both;
   animation-delay:var(--d,0s);
+  will-change:opacity,transform;
 }
 @keyframes fadeUp{
   from{opacity:0;transform:translateY(18px)}
@@ -473,6 +475,7 @@ body::after{
   padding:12px 14px;
   display:flex;flex-direction:column;gap:3px;
   animation:fadeUp 0.3s cubic-bezier(.16,1,.3,1) both;
+  will-change:opacity,transform;
 }
 .bt-card-top{
   border-color:var(--accent-dim);
@@ -1097,8 +1100,6 @@ function applyLang() {
   document.getElementById('lang-he')?.classList.toggle('active', currentLang === 'he');
 }
 
-// Re-render data (stored so setLang can refresh Screen B live)
-let lastBestTimesData = null;
 
 function applyTheme() {
   document.documentElement.setAttribute('data-theme', currentTheme);
@@ -1446,22 +1447,19 @@ function buildTZSelect() {
     input.className = 'tp-search-input';
     input.setAttribute('data-i18n-ph', 'tzSearch');
     input.placeholder = t().tzSearch;
-    input.addEventListener('input', () => renderTZOptions(input.value));
+    input.addEventListener('input', (e) => filterTZOptions(e.target.value));
     input.addEventListener('click', e => e.stopPropagation());
     wrap.appendChild(input);
     list.appendChild(wrap);
-  }
 
-  function renderTZOptions(filter) {
-    list.querySelectorAll('.tp-option').forEach(el => el.remove());
+    // Pre-render all timezone options (once)
     const frag = document.createDocumentFragment();
-    const q = filter.toLowerCase();
     tzs.forEach(tz => {
-      if (q && !tz.toLowerCase().includes(q)) return;
       const row = document.createElement('div');
       row.className = 'tp-option' + (tz === hidden.value ? ' selected' : '');
       row.textContent = tz.replace(/_/g, ' ');
       row.dataset.value = tz;
+      row.dataset.tz = tz;
       row.addEventListener('click', e => {
         e.stopPropagation();
         list.querySelectorAll('.tp-option').forEach(r => r.classList.remove('selected'));
@@ -1475,9 +1473,18 @@ function buildTZSelect() {
     list.appendChild(frag);
   }
 
+  function filterTZOptions(query) {
+    const q = query.toLowerCase();
+    list.querySelectorAll('.tp-option').forEach(row => {
+      const tz = row.dataset.tz;
+      const matches = !q || tz.toLowerCase().includes(q);
+      row.style.display = matches ? '' : 'none';
+    });
+  }
+
   hidden.value = S.timezone;
   btn.textContent = S.timezone.replace(/_/g, ' ');
-  renderTZOptions('');
+  filterTZOptions('');
 
   btn.onclick = e => {
     e.stopPropagation();
@@ -1497,7 +1504,7 @@ function buildTZSelect() {
       list.style.display   = 'block';
       const search = document.getElementById('tp-tz-search');
       search.value = '';
-      renderTZOptions('');
+      filterTZOptions('');
       requestAnimationFrame(() => {
         search.focus();
         const sel = list.querySelector('.tp-option.selected');
@@ -1693,6 +1700,10 @@ function buildGrid() {
   const grid = document.getElementById('avail-grid');
   grid.innerHTML = '';
 
+  // Cache for renderHeatmap & renderBestTimes to avoid recalculating
+  S.cachedCols = cols;
+  S.cachedRows = rows;
+
   const timeW = '54px';
   grid.style.gridTemplateColumns = `${timeW} repeat(${cols.length}, 62px)`;
 
@@ -1789,8 +1800,8 @@ function getRunEndRow(col, startRow, minCount, scores) {
 function renderBestTimes() {
   const all   = allParticipants();
   const total = all.length;
-  const cols  = getCols();
-  const rows  = getRows();
+  const cols  = S.cachedCols || getCols();
+  const rows  = S.cachedRows || getRows();
   const container = document.getElementById('best-times');
   const emptyEl   = document.getElementById('bt-empty');
 
@@ -1875,25 +1886,33 @@ function renderBestTimes() {
   });
 }
 
-async function sendCreatorConfirmationEmail(creatorName, toEmail, eventName, meetingUrl) {
-  const attemptSend = async () => {
-    const res = await fetch(GAS_MAILER_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify({
-        to_email:  toEmail,
-        event_name: eventName,
-        meeting_url: meetingUrl,
-        subject:   t().creatorEmailSubject(eventName),
-        html_body: t().creatorEmailHtml(creatorName, eventName, meetingUrl),
-      }),
-    });
-    const json = await res.json();
-    if (!json.ok) throw new Error(json.error || 'send failed');
-  };
+async function sendEmailViaGAS(toEmail, subject, body, htmlBody, eventName, meetingUrl) {
+  const res = await fetch(GAS_MAILER_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify({
+      to_email: toEmail,
+      event_name: eventName,
+      meeting_url: meetingUrl,
+      subject,
+      ...(body && { body }),
+      ...(htmlBody && { html_body: htmlBody }),
+    }),
+  });
+  const json = await res.json();
+  if (!json.ok) throw new Error(json.error || 'send failed');
+}
 
+async function sendCreatorConfirmationEmail(creatorName, toEmail, eventName, meetingUrl) {
   try {
-    await attemptSend();
+    await sendEmailViaGAS(
+      toEmail,
+      t().creatorEmailSubject(eventName),
+      null,
+      t().creatorEmailHtml(creatorName, eventName, meetingUrl),
+      eventName,
+      meetingUrl
+    );
   } catch(e) {
     showCreatorEmailError(toEmail, eventName, meetingUrl, creatorName);
   }
@@ -1919,19 +1938,14 @@ function showCreatorEmailError(toEmail, eventName, meetingUrl, creatorName) {
     retryBtn.disabled = true;
     status.style.display = 'none';
     try {
-      const res = await fetch(GAS_MAILER_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify({
-          to_email: toEmail,
-          event_name: eventName,
-          meeting_url: meetingUrl,
-          subject:   t().creatorEmailSubject(eventName),
-          html_body: t().creatorEmailHtml(creatorName, eventName, meetingUrl),
-        }),
-      });
-      const json = await res.json();
-      if (!json.ok) throw new Error();
+      await sendEmailViaGAS(
+        toEmail,
+        t().creatorEmailSubject(eventName),
+        null,
+        t().creatorEmailHtml(creatorName, eventName, meetingUrl),
+        eventName,
+        meetingUrl
+      );
       banner.style.display = 'none';
     } catch {
       status.textContent = t().emailRetryFail;
@@ -2027,7 +2041,7 @@ function toggleCell(id) {
     : firebase.firestore.FieldValue.arrayRemove(id);
   db.collection('events').doc(S.eventSlug).update({
     [`participants.${S.currentUser.name}.availability`]: op,
-  }).catch(() => {});
+  }).catch(e => console.error('Failed to update availability:', e));
 }
 
 // ══════════════════════════════════════
@@ -2092,6 +2106,7 @@ async function joinEvent() {
       [`participants.${name}`]: { color: S.currentUser.color, availability: [] },
     });
   } catch(e) {
+    console.error('Failed to join event:', e);
     joinBtn.innerHTML = t().joinBtn;
     joinBtn.disabled = false;
     return;
@@ -2149,7 +2164,7 @@ async function clearMyTimes() {
   renderHeatmap();
   await db.collection('events').doc(S.eventSlug).update({
     [`participants.${S.currentUser.name}.availability`]: [],
-  }).catch(() => {});
+  }).catch(e => console.error('Failed to clear times:', e));
 }
 
 function goToStep(n) {
@@ -2206,7 +2221,7 @@ function handleNextOrCreate() {
     } else {
       creatorNameErrEl.style.display = 'none';
     }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i;
     if (!emailRegex.test(creatorEmail)) {
       creatorEmailErrEl.textContent = lang.creatorEmailErr;
       creatorEmailErrEl.style.display = '';
@@ -2305,7 +2320,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const newName = inp.value.trim() || S.eventName;
     if (newName !== S.eventName) {
       S.eventName = newName;
-      await db.collection('events').doc(S.eventSlug).update({ name: newName }).catch(() => {});
+      await db.collection('events').doc(S.eventSlug).update({ name: newName }).catch(e => console.error('Failed to update title:', e));
     }
     h1.textContent    = S.eventName;
     inp.style.display = 'none';
@@ -2357,27 +2372,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     btn.textContent = t().linkBannerSending;
 
     try {
-      const res = await fetch(GAS_MAILER_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify({
-          to_email:    email,
-          event_name:  S.eventName,
-          meeting_url: window.location.href,
-          subject:     t().emailSubject(S.eventName),
-          body:        t().emailBody(S.eventName, window.location.href),
-          ...(t().emailHtmlBody ? { html_body: t().emailHtmlBody(S.eventName, window.location.href) } : {}),
-        }),
-      });
-      const json = await res.json();
-      if (json.ok) {
-        status.innerHTML = t().linkBannerSent;
-        btn.textContent = '✓';
-      } else throw new Error(json.error);
-    } catch {
+      await sendEmailViaGAS(
+        email,
+        t().emailSubject(S.eventName),
+        t().emailBody(S.eventName, window.location.href),
+        t().emailHtmlBody ? t().emailHtmlBody(S.eventName, window.location.href) : null,
+        S.eventName,
+        window.location.href
+      );
+      status.innerHTML = t().linkBannerSent;
+      btn.textContent = '✓';
+    } catch(e) {
       status.textContent = t().linkBannerError;
       btn.disabled = false;
       btn.textContent = t().linkBannerSend;
+      console.error('Email send failed:', e);
     }
   });
   // Best times email
@@ -2395,25 +2404,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     btn.disabled = true;
     btn.textContent = t().linkBannerSending;
     try {
-      const res = await fetch(GAS_MAILER_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify({
-          to_email:    email,
-          event_name:  S.eventName,
-          meeting_url: window.location.href,
-          subject:     t().bestTimesSubject(S.eventName),
-          body:        t().bestTimesBody(S.eventName, window.location.href),
-          html_body:   buildBestTimesEmailHtml(),
-        }),
-      });
-      const json = await res.json();
-      if (json.ok) { status.innerHTML = t().linkBannerSent; btn.textContent = '✓'; }
-      else throw new Error(json.error);
-    } catch {
+      await sendEmailViaGAS(
+        email,
+        t().bestTimesSubject(S.eventName),
+        t().bestTimesBody(S.eventName, window.location.href),
+        buildBestTimesEmailHtml(),
+        S.eventName,
+        window.location.href
+      );
+      status.innerHTML = t().linkBannerSent;
+      btn.textContent = '✓';
+    } catch(e) {
       status.textContent = t().linkBannerError;
       btn.disabled = false;
       btn.textContent = t().linkBannerSend;
+      console.error('Email send failed:', e);
     }
   });
 
