@@ -718,6 +718,10 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
 .link-banner-btn:hover{opacity:0.85}
 .link-banner-btn:disabled{opacity:0.5;cursor:default}
 .link-banner-status{font-size:12px;color:var(--muted);min-height:16px}
+
+/* ─── Notify toggle checkbox ─── */
+.notify-toggle{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--text);cursor:pointer;margin-top:4px}
+.notify-toggle input[type="checkbox"]{cursor:pointer;accent-color:var(--accent)}
 </style>
 </head>
 <body>
@@ -809,6 +813,10 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
         <input type="email" id="creator-email" class="text-input"
           placeholder="Your email" data-i18n-ph="creatorEmailPH" autocomplete="email">
         <span id="creator-email-hint" class="field-label" style="color:var(--muted2);font-size:13px;text-transform:none;white-space:pre-line;line-height:1.5" data-i18n="creatorEmailHint"></span>
+        <label class="notify-toggle">
+          <input type="checkbox" id="notify-responses" checked>
+          <span data-i18n="notifyResponses">Email me when someone responds</span>
+        </label>
         <span id="creator-name-err"  style="display:none;color:var(--error,#e53e3e);font-size:13px"></span>
         <span id="creator-email-err" style="display:none;color:var(--error,#e53e3e);font-size:13px"></span>
       </div>
@@ -1030,6 +1038,9 @@ const LANGS = {
     emailBody:(name,url)=>`Hi,\n\nI'd like to find a time for: ${name}\n\nMark your availability:\n${url}\n\nThanks!`,
     step4:"Who's organizing this?", creatorNamePH:'Your name', creatorEmailPH:'Your email',
     creatorEmailHint:"We'll send you a link so you can return\nto check responses anytime.",
+    notifyResponses:'Email me when someone responds',
+    notifySubject:(name,event)=>`${name} responded to: ${event}`,
+    notifyBody:(name,event,url)=>`Hi,\n\n${name} just updated their availability for: ${event}\n\n${url}\n\nThanks!`,
     creatorNameErr:'Please enter your name.', creatorEmailErr:'Please enter a valid email address.',
     nextBtn:'Next &nbsp;&#8594;',
     creatorEmailSubject:(name)=>`Your meeting link — ${name}`,
@@ -1078,6 +1089,9 @@ const LANGS = {
     emailHtmlBody:(name,url)=>`<div dir="rtl" style="text-align:right;font-family:Arial,sans-serif;font-size:15px;line-height:1.6;color:#222"><p>שלום,</p><p>אני מחפש זמן שמתאים לכולם עבור: <strong>${name}</strong></p><p>לחץ כאן לסימון זמינות:<br><a href="${url}" style="color:#4f46e5">${url}</a></p><p>תודה!</p></div>`,
     step4:'מי מארגן?', creatorNamePH:'השם שלך', creatorEmailPH:'המייל שלך',
     creatorEmailHint:'נשלח לך קישור כדי שתוכל לחזור לבדוק תשובות בכל עת.',
+    notifyResponses:'שלח לי מייל כשמישהו עדכן',
+    notifySubject:(name,event)=>`${name} עדכן את הזמינות שלו עבור: ${event}`,
+    notifyBody:(name,event,url)=>`שלום,\n\n${name} זה עתה עדכן את הזמינות שלו עבור: ${event}\n\n${url}\n\nתודה!`,
     creatorNameErr:'יש להזין שם.', creatorEmailErr:'יש להזין כתובת מייל תקינה.',
     nextBtn:'&#8592;&nbsp; הבא',
     creatorEmailSubject:(name)=>`קישור לפגישה שלך — ${name}`,
@@ -1125,6 +1139,9 @@ const LANGS = {
     emailBody:(name,url)=>`Bonjour,\n\nJe cherche un créneau pour : ${name}\n\nIndiquez vos disponibilités :\n${url}\n\nCordialement !`,
     step4:'Qui organise ?', creatorNamePH:'Votre nom', creatorEmailPH:'Votre e-mail',
     creatorEmailHint:'Nous vous enverrons un lien pour revenir\nconsulter les réponses à tout moment.',
+    notifyResponses:'M\'avertir quand quelqu\'un répond',
+    notifySubject:(name,event)=>`${name} a répondu à : ${event}`,
+    notifyBody:(name,event,url)=>`Bonjour,\n\n${name} vient de mettre à jour sa disponibilité pour : ${event}\n\n${url}\n\nCordialement !`,
     creatorNameErr:'Veuillez entrer votre nom.', creatorEmailErr:'Veuillez entrer une adresse e-mail valide.',
     nextBtn:'Suivant &nbsp;&#8594;',
     creatorEmailSubject:(name)=>`Votre lien de réunion — ${name}`,
@@ -1638,6 +1655,8 @@ async function createEvent() {
   if (S.laterThan <= S.earlierThan) S.laterThan = S.earlierThan + 60;
   S.timezone    = document.getElementById('tz-select').value;
   S.eventSlug   = genEventId();
+  S.creatorEmail = creatorEmail;
+  S.creatorName = creatorName;
   const creatorToken = Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
   sessionStorage.setItem('meteor-creator-' + S.eventSlug, creatorToken);
   S.isCreator = true;
@@ -1645,6 +1664,8 @@ async function createEvent() {
   const btn = document.getElementById('create-btn');
   btn.innerHTML = t().creating;
   btn.disabled = true;
+
+  const notifyOnResponse = document.getElementById('notify-responses').checked;
 
   try {
     await db.collection('events').doc(S.eventSlug).set({
@@ -1656,6 +1677,7 @@ async function createEvent() {
       creatorToken,
       creatorName,
       creatorEmail,
+      notifyOnResponse,
       lang: currentLang,
       participants: {},
     });
@@ -2009,6 +2031,18 @@ async function sendCreatorConfirmationEmail(creatorName, toEmail, eventName, mee
   }
 }
 
+let _notifyTimer = null;
+function scheduleNotifyOrganizer(participantName) {
+  if (S.isCreator || !S.notifyOnResponse || !S.creatorEmail) return;
+  clearTimeout(_notifyTimer);
+  _notifyTimer = setTimeout(() => {
+    const subject = t().notifySubject(participantName, S.eventName);
+    const body    = t().notifyBody(participantName, S.eventName, window.location.href);
+    sendEmailViaGAS(S.creatorEmail, subject, body, null, S.eventName, window.location.href)
+      .catch(() => {});
+  }, 60000);
+}
+
 function showCreatorEmailError(toEmail, eventName, meetingUrl, creatorName) {
   const banner = document.getElementById('creator-email-fail');
   document.getElementById('creator-email-fail-msg').textContent = t().emailFailMsg;
@@ -2126,6 +2160,7 @@ function toggleCell(id) {
   if (gridDragMode === 'add') S.currentUser.availability.add(id);
   else S.currentUser.availability.delete(id);
   renderHeatmap();
+  scheduleNotifyOrganizer(S.currentUser.name);
   // Persist to Firestore atomically
   const op = gridDragMode === 'add'
     ? firebase.firestore.FieldValue.arrayUnion(id)
@@ -2208,6 +2243,7 @@ async function joinEvent() {
   overlay.style.opacity = '0';
   setTimeout(() => { overlay.style.display = 'none'; }, 400);
 
+  scheduleNotifyOrganizer(S.currentUser.name);
   renderParticipants();
   renderHeatmap();
 }
@@ -2550,6 +2586,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         S.laterThan     = data.laterThan;
         S.timezone      = data.timezone;
         S.eventSlug     = hashId;
+        S.notifyOnResponse = data.notifyOnResponse || false;
+        S.creatorEmail  = data.creatorEmail || '';
+        S.creatorName   = data.creatorName || '';
         const storedToken = sessionStorage.getItem('meteor-creator-' + hashId);
         S.isCreator = !!(storedToken && storedToken === data.creatorToken);
         // Apply meeting language as default if user has no stored preference
