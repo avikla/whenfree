@@ -93,14 +93,24 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
 }
 .logo-dot{color:var(--accent)}
 .logo-mark{
-  display:inline-block;
-  width:12px;height:12px;
-  border-radius:50%;
-  background:var(--accent);
-  box-shadow:0 0 0 4px var(--primary-ctr);
-  margin-inline-end:9px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:28px;height:28px;
+  border-radius:7px;
+  margin-inline-end:12px;
   vertical-align:middle;
   flex-shrink:0;
+  background:#C7F4E2;
+  color:#00382A;
+  font-family:var(--font-display);
+  font-size:16px;
+  font-weight:700;
+  line-height:1;
+}
+[data-theme="dark"] .logo-mark{
+  background:#1A4D38;
+  color:#7FDBBA;
 }
 
 .tagline{
@@ -717,7 +727,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
 ═══════════════════════════════════════ -->
 <div id="screen-create">
   <header class="site-header">
-    <div class="logo"><span class="logo-mark"></span><span data-i18n="appName">Meet Scheduler</span></div>
+    <div class="logo"><span class="logo-mark">M</span><span data-i18n="appName">Meet Scheduler</span></div>
     <p class="tagline" data-i18n-html="tagline">by <em>Meteor</em> — Find the time. Finally.</p>
   </header>
 
@@ -822,7 +832,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
   <!-- Name entry overlay -->
   <div id="name-overlay" class="name-overlay">
     <div class="name-panel">
-      <div class="name-panel-logo"><span class="logo-mark"></span><span data-i18n="appName">Meet Scheduler</span></div>
+      <div class="name-panel-logo"><span class="logo-mark">M</span><span data-i18n="appName">Meet Scheduler</span></div>
       <h2 class="name-panel-title" data-i18n="markAvail">Mark your availability</h2>
       <p class="name-panel-sub" data-i18n="markSub">Enter your name, then drag across the grid<br>to show when you're free.</p>
       <input type="text" id="participant-name" class="text-input"
@@ -838,7 +848,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
 
   <!-- Sidebar -->
   <aside class="sidebar">
-    <div class="sidebar-logo"><span class="logo-mark"></span><span data-i18n="appName">Meet Scheduler</span></div>
+    <div class="sidebar-logo"><span class="logo-mark">M</span><span data-i18n="appName">Meet Scheduler</span></div>
     <div class="sidebar-section">
       <div class="sidebar-sec-label" style="display:flex;align-items:center;gap:7px"><span data-i18n="people">People</span> <span id="people-count" class="people-count">0</span></div>
       <div id="participant-list" class="participant-list"></div>
