@@ -798,6 +798,19 @@ body.a11y-adhd .a11y-panel{opacity:1 !important;pointer-events:auto !important}
 @media (max-width:600px){
   .a11y-widget-btn{bottom:16px;right:16px}
   .a11y-panel{bottom:72px;right:16px;width:calc(100vw - 32px);max-width:300px}
+
+  /* Move controls into page flow on mobile — no more overlap with title */
+  .top-controls{
+    position:static;
+    display:flex;
+    justify-content:center;
+    padding:12px 16px 0;
+    gap:8px;
+  }
+  [dir="rtl"] .top-controls{
+    left:auto;
+    right:auto;
+  }
 }
 </style>
 </head>
