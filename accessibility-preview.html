@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Accessibility Features Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #D6EDE4;
+  --surface: #E9F6F0;
+  --text: #0B2018;
+  --muted: #3E5750;
+  --accent: #00C281;
+  --accent-glow: rgba(0, 194, 129, 0.12);
+  --font-display: 'Figtree', system-ui, sans-serif;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+  --font-size: 16px;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  font-size: var(--font-size);
+  line-height: 1.6;
+  padding: 20px;
+}
+
+.container { max-width: 1200px; margin: 0 auto; }
+
+.header {
+  text-align: center;
+  margin-bottom: 40px;
+  padding: 20px;
+  border-bottom: 2px solid var(--accent);
+}
+
+.header h1 {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.subheader {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* FEATURE CONTROLS */
+.feature-controls {
+  background: var(--surface);
+  padding: 20px;
+  border-radius: 16px;
+  margin-bottom: 40px;
+  border: 2px solid var(--accent-glow);
+}
+
+.feature-controls h2 {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--text);
+}
+
+.control-group {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.control-label {
+  font-weight: 500;
+  min-width: 120px;
+}
+
+.size-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.size-btn {
+  padding: 6px 12px;
+  background: white;
+  border: 1px solid var(--muted);
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.size-btn:hover {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+.size-btn.active {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.3s;
+  border-radius: 26px;
+}
+
+.toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.3s;
+  border-radius: 50%;
+}
+
+input:checked + .toggle-slider {
+  background-color: var(--accent);
+}
+
+input:checked + .toggle-slider:before {
+  transform: translateX(24px);
+}
+
+/* FEATURE SECTIONS */
+.feature-section {
+  margin-bottom: 50px;
+}
+
+.feature-title {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--accent);
+  color: var(--text);
+}
+
+.feature-desc {
+  background: var(--surface);
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  border-left: 4px solid var(--accent);
+  color: var(--text);
+}
+
+/* SKIP LINK DEMO */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--accent);
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+  border-radius: 0 0 6px 0;
+  font-weight: 600;
+  font-size: 14px;
+  transition: top 0.3s;
+}
+
+.skip-link:focus {
+  top: 0;
+  z-index: 1000;
+}
+
+/* DEMO INTERFACE */
+.demo-interface {
+  background: var(--surface);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+.demo-title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+/* KEYBOARD NAVIGATION DEMO */
+.keyboard-demo {
+  display: grid;
+  gap: 12px;
+}
+
+.demo-button {
+  padding: 12px 20px;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: var(--font-size);
+  font-family: var(--font-body);
+  transition: all 0.2s;
+  outline: none;
+}
+
+.demo-button:hover {
+  opacity: 0.9;
+}
+
+.demo-button:focus {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 6px var(--accent-glow);
+}
+
+.demo-button:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 6px var(--accent-glow);
+}
+
+.demo-input {
+  padding: 12px;
+  border: 2px solid var(--muted);
+  border-radius: 8px;
+  font-family: var(--font-body);
+  font-size: var(--font-size);
+  transition: all 0.2s;
+}
+
+.demo-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+  outline: none;
+}
+
+/* TEXT SIZE DEMO */
+.text-size-demo {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid var(--muted);
+  margin-bottom: 12px;
+}
+
+.text-size-demo p {
+  margin-bottom: 8px;
+}
+
+.text-size-demo strong {
+  color: var(--accent);
+}
+
+/* COMPARISON */
+.comparison {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.comparison-item {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  border: 2px solid var(--muted);
+}
+
+.comparison-item h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+
+.comparison-item p {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.comparison-item.better {
+  border-color: var(--accent);
+  background: rgba(0, 194, 129, 0.05);
+}
+
+.comparison-item.better h4 {
+  color: var(--accent);
+}
+
+/* INSTRUCTIONS */
+.instructions {
+  background: var(--surface);
+  padding: 16px;
+  border-radius: 12px;
+  margin: 20px 0;
+  border-left: 4px solid var(--accent);
+}
+
+.instructions h4 {
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.instructions ol {
+  margin-left: 20px;
+}
+
+.instructions li {
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .comparison {
+    grid-template-columns: 1fr;
+  }
+  .control-group {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* Responsive font sizing */
+body.font-small { --font-size: 14px; }
+body.font-large { --font-size: 18px; }
+body.font-xlarge { --font-size: 20px; }
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">⏭️ Skip to main content</a>
+
+<div class="container">
+  <div class="header">
+    <h1>Accessibility Features Preview</h1>
+    <p class="subheader">How Option A (Native Accessibility) works in Meteor Meet</p>
+  </div>
+
+  <!-- CONTROLS -->
+  <div class="feature-controls">
+    <h2>Try These Features</h2>
+    <div class="control-group">
+      <span class="control-label">📝 Text Size:</span>
+      <div class="size-buttons">
+        <button class="size-btn" onclick="setFontSize('small')">Small</button>
+        <button class="size-btn active" onclick="setFontSize('normal')">Normal</button>
+        <button class="size-btn" onclick="setFontSize('large')">Large</button>
+        <button class="size-btn" onclick="setFontSize('xlarge')">Extra Large</button>
+      </div>
+    </div>
+    <div class="control-group">
+      <span class="control-label">🎯 Keyboard Nav:</span>
+      <p style="font-size: 13px; color: var(--muted);">Press <kbd>TAB</kbd> to navigate buttons below ↓</p>
+    </div>
+  </div>
+
+  <main id="main">
+    <!-- FEATURE 1: TEXT SIZE CONTROL -->
+    <div class="feature-section">
+      <h2 class="feature-title">Feature 1: Text Size Control 📝</h2>
+
+      <div class="feature-desc">
+        <strong>For Users With:</strong> Low vision, difficulty reading small text, aging eyes<br>
+        <strong>How It Works:</strong> Click buttons above to increase/decrease text size throughout the page. Preference is saved in browser.
+      </div>
+
+      <div class="demo-interface">
+        <div class="demo-title">Live Example: Event Creation Form</div>
+
+        <div style="margin-bottom: 16px;">
+          <label style="display: block; margin-bottom: 8px; font-weight: 500;">Event Name</label>
+          <input type="text" class="demo-input" placeholder="Team lunch, Project kickoff…" aria-label="Event name">
+          <small style="color: var(--muted); display: block; margin-top: 4px;">Give your meeting a descriptive name</small>
+        </div>
+
+        <div style="margin-bottom: 16px;">
+          <label style="display: block; margin-bottom: 8px; font-weight: 500;">Your Email</label>
+          <input type="email" class="demo-input" placeholder="your@email.com" aria-label="Your email address" aria-describedby="email-hint">
+          <small id="email-hint" style="color: var(--muted); display: block; margin-top: 4px;">We'll send you a link so you can return to check responses anytime.</small>
+        </div>
+
+        <button class="demo-button">Next ➜</button>
+      </div>
+
+      <div class="comparison">
+        <div class="comparison-item">
+          <h4>❌ Without Text Size Control</h4>
+          <p>Users who need larger text must:</p>
+          <ol style="margin-left: 16px; font-size: 13px;">
+            <li>Use browser zoom (affects layout)</li>
+            <li>Magnify the whole screen</li>
+            <li>Give up and not use the service</li>
+          </ol>
+        </div>
+        <div class="comparison-item better">
+          <h4>✅ With Text Size Control</h4>
+          <p>Users can:</p>
+          <ol style="margin-left: 16px; font-size: 13px;">
+            <li>Adjust only the text size</li>
+            <li>Layout stays intact</li>
+            <li>Setting saves automatically</li>
+            <li>Easy one-click control</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- FEATURE 2: KEYBOARD NAVIGATION + SKIP LINKS -->
+    <div class="feature-section">
+      <h2 class="feature-title">Feature 2: Keyboard Navigation & Focus Indicators ⌨️</h2>
+
+      <div class="feature-desc">
+        <strong>For Users With:</strong> Motor disabilities, unable to use mouse, screen reader users, power users<br>
+        <strong>How It Works:</strong> Press <strong>TAB</strong> to move between buttons. Press <strong>ENTER</strong> to click. Notice the bright green outline showing which button is focused.
+      </div>
+
+      <div class="demo-interface">
+        <div class="demo-title">Interactive Demo: Meeting Actions</div>
+        <p style="margin-bottom: 16px; color: var(--muted); font-size: 14px;">Try using only your keyboard. Press TAB to move between buttons:</p>
+
+        <div class="keyboard-demo">
+          <button class="demo-button" aria-label="Copy meeting link to clipboard">🔗 Copy Meeting Link</button>
+          <button class="demo-button" aria-label="Send meeting link via email">📧 Email Link</button>
+          <button class="demo-button" aria-label="View and send best times to participants">📊 Send Best Times</button>
+          <button class="demo-button" aria-label="Create a new event">➕ New Event</button>
+        </div>
+      </div>
+
+      <div class="instructions">
+        <h4>🎯 Try This:</h4>
+        <ol>
+          <li>Click anywhere on this page first</li>
+          <li>Press <kbd>TAB</kbd> repeatedly to navigate between buttons</li>
+          <li>Notice the <strong>bright green outline and glow</strong> around the focused button</li>
+          <li>Press <kbd>ENTER</kbd> or <kbd>SPACE</kbd> to activate the button</li>
+          <li>Press <kbd>SHIFT</kbd> + <kbd>TAB</kbd> to go backwards</li>
+        </ol>
+      </div>
+
+      <div class="comparison">
+        <div class="comparison-item">
+          <h4>❌ Without Enhanced Focus</h4>
+          <p>Keyboard users:</p>
+          <ol style="margin-left: 16px; font-size: 13px;">
+            <li>Can't see which button is focused</li>
+            <li>Get lost navigating the page</li>
+            <li>Can't use the app effectively</li>
+            <li>Frustrated experience</li>
+          </ol>
+        </div>
+        <div class="comparison-item better">
+          <h4>✅ With Enhanced Focus</h4>
+          <p>Keyboard users can:</p>
+          <ol style="margin-left: 16px; font-size: 13px;">
+            <li>See exactly where they are</li>
+            <li>Navigate smoothly with TAB</li>
+            <li>Control the entire app</li>
+            <li>Same experience as mouse users</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUMMARY -->
+    <div class="feature-section">
+      <h2 class="feature-title">All Accessibility Features in Option A</h2>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px;">
+        <div class="feature-desc" style="border-left: 4px solid #00C281;">
+          <strong>✅ Text Size Control</strong>
+          <p style="margin-top: 8px; font-size: 14px;">Users adjust font size. Preference saved.</p>
+        </div>
+
+        <div class="feature-desc" style="border-left: 4px solid #00C281;">
+          <strong>✅ Keyboard Navigation</strong>
+          <p style="margin-top: 8px; font-size: 14px;">TAB through all interactive elements. No mouse needed.</p>
+        </div>
+
+        <div class="feature-desc" style="border-left: 4px solid #00C281;">
+          <strong>✅ Enhanced Focus Indicators</strong>
+          <p style="margin-top: 8px; font-size: 14px;">Bright green outline shows which button is active.</p>
+        </div>
+
+        <div class="feature-desc" style="border-left: 4px solid #00C281;">
+          <strong>✅ Skip Links</strong>
+          <p style="margin-top: 8px; font-size: 14px;">Jump directly to main content. Tab at top of page.</p>
+        </div>
+
+        <div class="feature-desc" style="border-left: 4px solid #00C281;">
+          <strong>✅ Screen Reader Support</strong>
+          <p style="margin-top: 8px; font-size: 14px;">ARIA labels describe buttons, form fields, icons.</p>
+        </div>
+
+        <div class="feature-desc" style="border-left: 4px solid #00C281;">
+          <strong>✅ Reduced Motion</strong>
+          <p style="margin-top: 8px; font-size: 14px;">Respects user's motion preferences (no animations).</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- COMPARISON WITH OVERLAY -->
+    <div class="feature-section">
+      <h2 class="feature-title">Option A vs. Paid Overlays</h2>
+
+      <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+          <thead>
+            <tr style="background: var(--surface); border-bottom: 2px solid var(--accent);">
+              <th style="padding: 12px; text-align: left; font-weight: 600;">Feature</th>
+              <th style="padding: 12px; text-align: center; font-weight: 600;">Option A<br>(Native)</th>
+              <th style="padding: 12px; text-align: center; font-weight: 600;">Overlay<br>(UserWay, Accessibe)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid #eee;">
+              <td style="padding: 12px;">Cost</td>
+              <td style="padding: 12px; text-align: center;">💰 Free</td>
+              <td style="padding: 12px; text-align: center;">💸 $25-99/mo</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #eee;">
+              <td style="padding: 12px;">Text Size Control</td>
+              <td style="padding: 12px; text-align: center;">✅ Yes</td>
+              <td style="padding: 12px; text-align: center;">✅ Yes</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #eee;">
+              <td style="padding: 12px;">Screen Reader Compatible</td>
+              <td style="padding: 12px; text-align: center;">✅ Yes</td>
+              <td style="padding: 12px; text-align: center;">⚠️ Sometimes interferes</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #eee;">
+              <td style="padding: 12px;">Keyboard Navigation</td>
+              <td style="padding: 12px; text-align: center;">✅ Full</td>
+              <td style="padding: 12px; text-align: center;">⚠️ Partial</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #eee;">
+              <td style="padding: 12px;">Actually Fixes Accessibility</td>
+              <td style="padding: 12px; text-align: center;">✅ Yes</td>
+              <td style="padding: 12px; text-align: center;">❌ Band-aid solution</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #eee;">
+              <td style="padding: 12px;">WCAG Compliant</td>
+              <td style="padding: 12px; text-align: center;">✅ Yes</td>
+              <td style="padding: 12px; text-align: center;">❌ Not by itself</td>
+            </tr>
+            <tr>
+              <td style="padding: 12px;">Trusted by Accessibility Experts</td>
+              <td style="padding: 12px; text-align: center;">✅ Yes</td>
+              <td style="padding: 12px; text-align: center;">❌ Controversial</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+function setFontSize(size) {
+  document.body.className = '';
+
+  const btnSmall = document.querySelector('.size-buttons .size-btn:nth-child(1)');
+  const btnNormal = document.querySelector('.size-buttons .size-btn:nth-child(2)');
+  const btnLarge = document.querySelector('.size-buttons .size-btn:nth-child(3)');
+  const btnXLarge = document.querySelector('.size-buttons .size-btn:nth-child(4)');
+
+  [btnSmall, btnNormal, btnLarge, btnXLarge].forEach(b => b.classList.remove('active'));
+
+  if (size === 'small') {
+    document.body.classList.add('font-small');
+    btnSmall.classList.add('active');
+  } else if (size === 'large') {
+    document.body.classList.add('font-large');
+    btnLarge.classList.add('active');
+  } else if (size === 'xlarge') {
+    document.body.classList.add('font-xlarge');
+    btnXLarge.classList.add('active');
+  } else {
+    btnNormal.classList.add('active');
+  }
+
+  localStorage.setItem('a11y-font-size', size);
+}
+
+// Restore saved preference
+const saved = localStorage.getItem('a11y-font-size') || 'normal';
+setFontSize(saved);
+</script>
+
+</body>
+</html>
