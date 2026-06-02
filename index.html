@@ -2867,18 +2867,18 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Toggle open/close
   a11yBtn.addEventListener('click', e => {
     e.stopPropagation();
-    a11yPanel.style.display = a11yPanel.style.display === 'none' ? 'block' : 'none';
+    a11yPanel.classList.toggle('open');
   });
 
   a11yCloseBtn.addEventListener('click', e => {
     e.stopPropagation();
-    a11yPanel.style.display = 'none';
+    a11yPanel.classList.remove('open');
   });
 
   // Close panel when clicking outside
   document.addEventListener('click', e => {
     if (!a11yPanel.contains(e.target) && e.target !== a11yBtn) {
-      a11yPanel.style.display = 'none';
+      a11yPanel.classList.remove('open');
     }
   });
 
