@@ -2373,6 +2373,17 @@ function initScreenA() {
 // INIT
 // ══════════════════════════════════════
 document.addEventListener('DOMContentLoaded', async () => {
+  // Auto-detect language from URL path (/en, /fr, /he)
+  const pathMatch = location.pathname.match(/^\/(en|fr|he)(?:\/|$)/);
+  if (pathMatch) {
+    const langFromPath = pathMatch[1];
+    currentLang = langFromPath;
+    localStorage.setItem('lang', langFromPath);
+    applyLang();
+  } else {
+    applyLang();
+  }
+
   // Close time pickers when clicking outside
   document.addEventListener('click', e => {
     closeAllTimePickers();
