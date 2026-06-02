@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Accessibility Statement</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root {
+  --bg:          #D6EDE4;
+  --surface:     #E9F6F0;
+  --surface2:    #D6EDE4;
+  --border:      rgba(10, 70, 52, 0.15);
+  --border2:     rgba(10, 70, 52, 0.20);
+  --text:        #0B2018;
+  --muted:       #3E5750;
+  --muted2:      #7E988F;
+  --accent:          #00C281;
+  --accent-glow:     rgba(0, 194, 129, 0.12);
+  --accent-dim:      rgba(0, 194, 129, 0.28);
+  --accent-text:     #00C281;
+  --on-primary:      #04261B;
+  --primary-ctr:     #C7F4E2;
+  --on-primary-ctr:  #00382A;
+  --cell-empty:  #DEEFE8;
+  --font-display: 'Figtree', system-ui, sans-serif;
+  --font-body:    'DM Sans',  system-ui, sans-serif;
+  --r:    22px;
+  --r-sm: 14px;
+  --r-xs:  6px;
+  --r-pill: 100px;
+}
+
+[data-theme="dark"]{
+  --bg:          #081C13;
+  --surface:     #0F2A1E;
+  --surface2:    #163526;
+  --border:      rgba(200, 255, 230, 0.08);
+  --border2:     rgba(200, 255, 230, 0.14);
+  --text:        #D6F0E6;
+  --muted:       #81B09A;
+  --muted2:      #5A7D6E;
+  --accent:          #00D68F;
+  --accent-glow:     rgba(0, 214, 143, 0.15);
+  --accent-dim:      rgba(0, 214, 143, 0.25);
+  --accent-text:     #00D68F;
+  --on-primary:      #04261B;
+  --primary-ctr:     #1A4D38;
+  --on-primary-ctr:  #7FDBBA;
+  --cell-empty:  #163526;
+}
+
+html,body{height:100%;-webkit-font-smoothing:antialiased}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflow-x:hidden}
+
+.container{max-width:900px;margin:0 auto;padding:20px}
+
+.header{text-align:center;padding:40px 20px 30px;border-bottom:1px solid var(--border)}
+.logo{
+  font-family:var(--font-display);
+  font-size:32px;font-weight:700;
+  letter-spacing:-0.01em;
+  color:var(--text);
+  line-height:1;
+  margin-bottom:8px;
+}
+.tagline{font-size:14px;color:var(--muted);margin:0}
+
+.controls{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+  flex-wrap:wrap;
+  padding:20px 0;
+}
+
+.lang-toggle{
+  display:flex;
+  gap:8px;
+}
+.lang-btn{
+  padding:6px 12px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  color:var(--text);
+  border-radius:var(--r-pill);
+  cursor:pointer;
+  font-weight:500;
+  font-size:12px;
+  transition:all 0.2s;
+}
+.lang-btn:hover{
+  background:var(--surface2);
+}
+.lang-btn.active{
+  background:var(--accent);
+  color:var(--on-primary);
+  border-color:var(--accent);
+}
+
+.theme-toggle{
+  display:flex;
+  gap:8px;
+}
+.theme-btn{
+  width:40px;
+  height:40px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  border-radius:var(--r-pill);
+  cursor:pointer;
+  font-size:18px;
+  transition:all 0.2s;
+}
+.theme-btn:hover{
+  background:var(--surface2);
+}
+.theme-btn.active{
+  background:var(--accent);
+  border-color:var(--accent);
+}
+
+.back-link{
+  display:inline-block;
+  margin-bottom:24px;
+  color:var(--accent);
+  text-decoration:none;
+  font-weight:500;
+  font-size:14px;
+  transition:opacity 0.2s;
+}
+.back-link:hover{
+  opacity:0.8;
+}
+
+.content{padding:40px 0}
+
+h1,h2,h3{
+  font-family:var(--font-display);
+  font-weight:700;
+  color:var(--text);
+  margin-bottom:16px;
+  line-height:1.2;
+}
+
+h1{font-size:28px;margin-bottom:24px}
+h2{font-size:22px;margin-top:28px;margin-bottom:16px}
+h3{font-size:16px;margin-top:24px;margin-bottom:12px}
+
+p,li{
+  font-size:15px;
+  line-height:1.7;
+  margin-bottom:8px;
+}
+
+ul{
+  margin-left:20px;
+  margin-bottom:16px;
+}
+
+li{margin-bottom:8px}
+
+.compliance-item{
+  margin:16px 0;
+  padding:16px;
+  background:var(--surface);
+  border-left:4px solid var(--accent);
+  border-radius:var(--r-xs);
+}
+
+.compliance-item strong{
+  color:var(--accent);
+}
+
+.contact{
+  margin-top:32px;
+  padding:20px;
+  background:var(--primary-ctr);
+  border:1px solid var(--accent-dim);
+  border-radius:var(--r-sm);
+}
+
+.contact p{margin-bottom:12px}
+
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+
+code{
+  background:var(--surface);
+  padding:2px 6px;
+  border-radius:4px;
+  font-family:monospace;
+  font-size:13px;
+}
+
+@media (max-width:600px){
+  .header{padding:20px}
+  h1{font-size:24px}
+  h2{font-size:20px}
+  .controls{flex-direction:column;align-items:stretch}
+  .lang-toggle,.theme-toggle{justify-content:center}
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   ACCESSIBILITY: Skip Link & Widget
+   ════════════════════════════════════════════════════════════════════ */
+
+.skip-link{
+  position:absolute;
+  top:-40px;
+  left:0;
+  background:var(--accent);
+  color:var(--on-primary);
+  padding:8px 16px;
+  text-decoration:none;
+  z-index:10000;
+  border-radius:var(--r-xs);
+}
+
+.skip-link:focus{
+  top:0;
+}
+
+.a11y-widget-btn{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  width:50px;
+  height:50px;
+  border-radius:50%;
+  background:var(--accent);
+  color:white;
+  font-size:24px;
+  border:none;
+  cursor:pointer;
+  box-shadow:0 2px 16px rgba(0,0,0,0.2);
+  z-index:9999;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:opacity 0.2s;
+}
+
+.a11y-widget-btn:hover{
+  opacity:0.9;
+}
+
+.a11y-widget-btn:focus{
+  outline:3px solid var(--accent-glow);
+  outline-offset:2px;
+}
+
+.a11y-panel{
+  position:fixed;
+  bottom:80px;
+  right:20px;
+  width:300px;
+  max-width:90vw;
+  background:var(--surface);
+  border:1px solid var(--border2);
+  border-radius:var(--r-sm);
+  box-shadow:0 4px 24px rgba(0,0,0,0.15);
+  z-index:9998;
+  display:none;
+  flex-direction:column;
+  overflow:hidden;
+}
+
+.a11y-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:12px 16px;
+  background:var(--primary-ctr);
+  border-bottom:1px solid var(--border);
+}
+
+.a11y-title{
+  font-family:var(--font-display);
+  font-weight:600;
+  font-size:14px;
+  color:var(--on-primary-ctr);
+}
+
+.a11y-close{
+  background:none;
+  border:none;
+  font-size:20px;
+  cursor:pointer;
+  color:var(--on-primary-ctr);
+  padding:0;
+  width:24px;
+  height:24px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.a11y-close:hover{
+  opacity:0.8;
+}
+
+.a11y-content{
+  padding:16px;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+  max-height:60vh;
+  overflow-y:auto;
+}
+
+.a11y-feature{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:12px;
+}
+
+.a11y-feature-info{
+  flex:1;
+}
+
+.a11y-feature-name{
+  font-weight:500;
+  font-size:13px;
+  color:var(--text);
+}
+
+.a11y-feature-desc{
+  font-size:12px;
+  color:var(--muted2);
+  margin-top:2px;
+}
+
+.a11y-toggle{
+  width:40px;
+  height:24px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:rgba(0,0,0,0.1);
+  cursor:pointer;
+  position:relative;
+  transition:background 0.2s;
+  flex-shrink:0;
+}
+
+[data-theme="dark"] .a11y-toggle{
+  background:rgba(255,255,255,0.1);
+}
+
+.a11y-toggle:focus{
+  outline:2px solid var(--accent);
+  outline-offset:2px;
+}
+
+.a11y-toggle.active{
+  background:var(--accent);
+  border-color:var(--accent);
+}
+
+.a11y-reset{
+  background:var(--accent);
+  color:var(--on-primary);
+  border:none;
+  padding:8px 12px;
+  border-radius:var(--r-xs);
+  font-weight:500;
+  font-size:13px;
+  cursor:pointer;
+  transition:opacity 0.2s;
+  margin-top:8px;
+}
+
+.a11y-reset:hover{
+  opacity:0.9;
+}
+
+.a11y-reset:focus{
+  outline:2px solid var(--accent-glow);
+  outline-offset:2px;
+}
+
+/* Text size adjustments */
+.a11y-text-lg{font-size:1.125em}
+.a11y-text-xl{font-size:1.25em}
+
+/* High contrast mode */
+.a11y-high-contrast{
+  --text:#000;
+  --muted:#333;
+  --muted2:#666;
+  --accent:#0080FF;
+  --border:#000;
+  --border2:#000;
+}
+
+[data-theme="dark"].a11y-high-contrast{
+  --text:#FFF;
+  --muted:#EEE;
+  --muted2:#DDD;
+  --accent:#00FFFF;
+  --border:#FFF;
+  --border2:#FFF;
+}
+
+/* Reduced motion */
+.a11y-reduced-motion *{
+  animation:none!important;
+  transition:none!important;
+}
+
+/* Keyboard focus highlights */
+.a11y-keyboard-focus *:focus{
+  outline:3px solid var(--accent)!important;
+  outline-offset:2px!important;
+}
+
+/* ADHD friendly */
+.a11y-adhd .content{
+  opacity:0.95;
+}
+</style>
+</head>
+<body>
+
+<!-- ACCESSIBILITY: Skip link -->
+<a href="#main-content" class="skip-link" data-i18n="skipLink">Skip to main content</a>
+
+<!-- ACCESSIBILITY: Overlay widget -->
+<button class="a11y-widget-btn" id="a11y-widget-btn" aria-label="Accessibility options" title="Accessibility adjustments"></button>
+<div class="a11y-panel" id="a11y-panel">
+  <div class="a11y-header">
+    <div class="a11y-title" data-i18n="a11yTitle">Accessibility</div>
+    <button class="a11y-close" id="a11y-close" aria-label="Close accessibility panel">✕</button>
+  </div>
+  <div class="a11y-content">
+    <div class="a11y-feature">
+      <div class="a11y-feature-info">
+        <div class="a11y-feature-name" data-i18n="a11yTextSize">Text Size</div>
+        <div class="a11y-feature-desc" data-i18n="a11yTextSizeDesc">Increase or decrease text</div>
+      </div>
+      <select id="a11y-text-size" class="a11y-toggle" style="width:60px;padding:4px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xs);cursor:pointer">
+        <option value="normal">Normal</option>
+        <option value="lg">Large</option>
+        <option value="xl">XL</option>
+      </select>
+    </div>
+
+    <div class="a11y-feature">
+      <div class="a11y-feature-info">
+        <div class="a11y-feature-name" data-i18n="a11yHighContrast">High Contrast</div>
+        <div class="a11y-feature-desc" data-i18n="a11yHighContrastDesc">Boost colors and contrast</div>
+      </div>
+      <button class="a11y-toggle" id="a11y-high-contrast" aria-pressed="false" aria-label="Toggle high contrast mode"></button>
+    </div>
+
+    <div class="a11y-feature">
+      <div class="a11y-feature-info">
+        <div class="a11y-feature-name" data-i18n="a11yReducedMotion">Reduce Motion</div>
+        <div class="a11y-feature-desc" data-i18n="a11yReducedMotionDesc">Disable animations</div>
+      </div>
+      <button class="a11y-toggle" id="a11y-reduced-motion" aria-pressed="false" aria-label="Toggle reduced motion"></button>
+    </div>
+
+    <div class="a11y-feature">
+      <div class="a11y-feature-info">
+        <div class="a11y-feature-name" data-i18n="a11yKeyboardFocus">Focus Highlight</div>
+        <div class="a11y-feature-desc" data-i18n="a11yKeyboardFocusDesc">Bold focus outline</div>
+      </div>
+      <button class="a11y-toggle" id="a11y-keyboard-focus" aria-pressed="false" aria-label="Toggle keyboard focus highlights"></button>
+    </div>
+
+    <div class="a11y-feature">
+      <div class="a11y-feature-info">
+        <div class="a11y-feature-name" data-i18n="a11yAdhd">ADHD Friendly</div>
+        <div class="a11y-feature-desc" data-i18n="a11yAdhdDesc">Reduce distractions</div>
+      </div>
+      <button class="a11y-toggle" id="a11y-adhd" aria-pressed="false" aria-label="Toggle ADHD friendly mode"></button>
+    </div>
+
+    <button class="a11y-reset" id="a11y-reset-all" data-i18n="a11yReset">Reset All</button>
+  </div>
+</div>
+
+<div class="header">
+  <div class="logo"><span data-i18n="appName">Meteor Meet</span></div>
+  <p class="tagline" data-i18n="a11yStmtTitle">Accessibility Statement</p>
+</div>
+
+<div class="container">
+  <a href="/" class="back-link">← <span data-i18n="backHome">Back to Meteor</span></a>
+
+  <div class="controls">
+    <div class="lang-toggle">
+      <button id="lang-en" class="lang-btn active" onclick="setLang('en')">EN</button>
+      <button id="lang-fr" class="lang-btn" onclick="setLang('fr')">FR</button>
+      <button id="lang-he" class="lang-btn" onclick="setLang('he')">HE</button>
+    </div>
+    <div class="theme-toggle">
+      <button id="theme-btn-light" class="theme-btn active" onclick="setTheme('light')">☀️</button>
+      <button id="theme-btn-dark" class="theme-btn" onclick="setTheme('dark')">🌙</button>
+    </div>
+  </div>
+
+  <div class="content" id="main-content">
+    <h1 data-i18n="a11yStmtTitle">Accessibility Statement</h1>
+
+    <p data-i18n="a11yStmtIntro">Meteor Meet is committed to providing an accessible experience for all users, including people with disabilities. This statement outlines our commitment to accessibility and the measures we have taken to ensure our website complies with international accessibility standards.</p>
+
+    <h2 data-i18n="a11yStmtCompliance">Accessibility Compliance</h2>
+
+    <div class="compliance-item">
+      <strong data-i18n="a11yStmtStandard">Standard:</strong>
+      <p data-i18n="a11yStmtStandardDesc">Meteor Meet aims to comply with the Israeli Standard IS 5568, which is equivalent to <strong>WCAG 2.0 Level AA</strong>.</p>
+    </div>
+
+    <div class="compliance-item">
+      <strong data-i18n="a11yStmtDate">Statement Date:</strong>
+      <p data-i18n="a11yStmtDateDesc">This statement was last updated on June 2, 2026.</p>
+    </div>
+
+    <h2 data-i18n="a11yStmtFeatures">Accessibility Features</h2>
+
+    <p data-i18n="a11yStmtFeaturesDesc">Meteor Meet includes native accessibility features:</p>
+
+    <ul>
+      <li data-i18n="a11yFeature1">Keyboard navigation support — navigate the entire app using Tab, Enter, and arrow keys</li>
+      <li data-i18n="a11yFeature2">Skip link — press Tab at the top of the page to jump to main content</li>
+      <li data-i18n="a11yFeature3">Screen reader support — ARIA labels, landmarks, and semantic HTML for assistive technologies</li>
+      <li data-i18n="a11yFeature4">Focus indicators — clear focus rings on all interactive elements</li>
+      <li data-i18n="a11yFeature5">Text contrast — minimum 4.5:1 contrast ratio for WCAG AA compliance</li>
+      <li data-i18n="a11yFeature6">Responsive design — fully accessible on desktop, tablet, and mobile devices</li>
+      <li data-i18n="a11yFeature7">Reduced motion support — respects <code>prefers-reduced-motion</code> media query</li>
+      <li data-i18n="a11yFeature8">Multilingual support — available in English, French, and Hebrew with RTL support</li>
+      <li data-i18n="a11yFeature9">Accessibility toolbar — floating widget with toggles for text size, high contrast, reduced motion, and more</li>
+    </ul>
+
+    <h2 data-i18n="a11yStmtToolbar">Accessibility Toolbar</h2>
+
+    <p data-i18n="a11yStmtToolbarDesc">Click the ♿ button in the bottom-right corner to open the accessibility toolbar. This widget provides the following features:</p>
+
+    <ul>
+      <li data-i18n="a11yToolbar1"><strong data-i18n="a11yTextSize">Text Size:</strong> <span data-i18n="a11yToolbar1Desc">Choose between Normal, Large, and Extra Large text sizes</span></li>
+      <li data-i18n="a11yToolbar2"><strong data-i18n="a11yHighContrast">High Contrast:</strong> <span data-i18n="a11yToolbar2Desc">Increase color contrast and brightness for better visibility</span></li>
+      <li data-i18n="a11yToolbar3"><strong data-i18n="a11yReducedMotion">Reduce Motion:</strong> <span data-i18n="a11yToolbar3Desc">Disable animations and transitions for users sensitive to motion</span></li>
+      <li data-i18n="a11yToolbar4"><strong data-i18n="a11yKeyboardFocus">Focus Highlight:</strong> <span data-i18n="a11yToolbar4Desc">Display bold outlines on focused elements for easier keyboard navigation</span></li>
+      <li data-i18n="a11yToolbar5"><strong data-i18n="a11yAdhd">ADHD Friendly:</strong> <span data-i18n="a11yToolbar5Desc">Reduce visual distractions for users with attention-related needs</span></li>
+    </ul>
+
+    <p data-i18n="a11yStmtToolbarNote">Your accessibility preferences are saved and will persist across sessions.</p>
+
+    <h2 data-i18n="a11yStmtKnownIssues">Known Accessibility Issues</h2>
+
+    <p data-i18n="a11yStmtKnownIssuesDesc">We are aware of the following limitations and are working to address them:</p>
+
+    <ul>
+      <li data-i18n="a11yIssue1">Calendar grid interactions are primarily mouse-based; keyboard navigation may require improvement</li>
+      <li data-i18n="a11yIssue2">Some third-party integrations (Firebase) may have their own accessibility limitations</li>
+    </ul>
+
+    <h2 data-i18n="a11yStmtBrowserSupport">Browser and Assistive Technology Support</h2>
+
+    <p data-i18n="a11yStmtBrowserSupportDesc">Meteor Meet is tested and optimized for:</p>
+
+    <ul>
+      <li>Screen readers: NVDA, JAWS, VoiceOver</li>
+      <li>Browsers: Chrome, Firefox, Safari, Edge (latest versions)</li>
+      <li>Devices: Desktop, tablet, mobile (iOS and Android)</li>
+    </ul>
+
+    <h2 data-i18n="a11yStmtContact">Contact & Feedback</h2>
+
+    <div class="contact">
+      <p data-i18n="a11yStmtContactDesc">If you experience any accessibility barriers while using Meteor Meet, or if you have suggestions for improvements, please contact us:</p>
+      <p><strong data-i18n="a11yStmtContactName">Avi Klayman</strong></p>
+      <p><a href="mailto:avi@meteor.co.il">avi@meteor.co.il</a></p>
+      <p data-i18n="a11yStmtContactTime">We aim to respond to accessibility concerns within 5 business days.</p>
+    </div>
+
+    <h2 data-i18n="a11yStmtThanks">Thank You</h2>
+
+    <p data-i18n="a11yStmtThanksDesc">We believe accessibility is essential and appreciate your feedback in helping us improve Meteor Meet for everyone.</p>
+  </div>
+</div>
+
+<script>
+const LANGS = {
+  en: {
+    appName: 'Meteor Meet',
+    a11yStmtTitle: 'Accessibility Statement',
+    backHome: 'Back to Meteor',
+    a11yStmtIntro: 'Meteor Meet is committed to providing an accessible experience for all users, including people with disabilities. This statement outlines our commitment to accessibility and the measures we have taken to ensure our website complies with international accessibility standards.',
+    a11yStmtCompliance: 'Accessibility Compliance',
+    a11yStmtStandard: 'Standard:',
+    a11yStmtStandardDesc: 'Meteor Meet aims to comply with the Israeli Standard IS 5568, which is equivalent to WCAG 2.0 Level AA.',
+    a11yStmtDate: 'Statement Date:',
+    a11yStmtDateDesc: 'This statement was last updated on June 2, 2026.',
+    a11yStmtFeatures: 'Accessibility Features',
+    a11yStmtFeaturesDesc: 'Meteor Meet includes native accessibility features:',
+    a11yFeature1: 'Keyboard navigation support — navigate the entire app using Tab, Enter, and arrow keys',
+    a11yFeature2: 'Skip link — press Tab at the top of the page to jump to main content',
+    a11yFeature3: 'Screen reader support — ARIA labels, landmarks, and semantic HTML for assistive technologies',
+    a11yFeature4: 'Focus indicators — clear focus rings on all interactive elements',
+    a11yFeature5: 'Text contrast — minimum 4.5:1 contrast ratio for WCAG AA compliance',
+    a11yFeature6: 'Responsive design — fully accessible on desktop, tablet, and mobile devices',
+    a11yFeature7: 'Reduced motion support — respects prefers-reduced-motion media query',
+    a11yFeature8: 'Multilingual support — available in English, French, and Hebrew with RTL support',
+    a11yFeature9: 'Accessibility toolbar — floating widget with toggles for text size, high contrast, reduced motion, and more',
+    a11yStmtToolbar: 'Accessibility Toolbar',
+    a11yStmtToolbarDesc: 'Click the ♿ button in the bottom-right corner to open the accessibility toolbar. This widget provides the following features:',
+    a11yToolbar1: 'Text Size: Choose between Normal, Large, and Extra Large text sizes',
+    a11yToolbar1Desc: 'Choose between Normal, Large, and Extra Large text sizes',
+    a11yToolbar2: 'High Contrast: Increase color contrast and brightness for better visibility',
+    a11yToolbar2Desc: 'Increase color contrast and brightness for better visibility',
+    a11yToolbar3: 'Reduce Motion: Disable animations and transitions for users sensitive to motion',
+    a11yToolbar3Desc: 'Disable animations and transitions for users sensitive to motion',
+    a11yToolbar4: 'Focus Highlight: Display bold outlines on focused elements for easier keyboard navigation',
+    a11yToolbar4Desc: 'Display bold outlines on focused elements for easier keyboard navigation',
+    a11yToolbar5: 'ADHD Friendly: Reduce visual distractions for users with attention-related needs',
+    a11yToolbar5Desc: 'Reduce visual distractions for users with attention-related needs',
+    a11yStmtToolbarNote: 'Your accessibility preferences are saved and will persist across sessions.',
+    a11yStmtKnownIssues: 'Known Accessibility Issues',
+    a11yStmtKnownIssuesDesc: 'We are aware of the following limitations and are working to address them:',
+    a11yIssue1: 'Calendar grid interactions are primarily mouse-based; keyboard navigation may require improvement',
+    a11yIssue2: 'Some third-party integrations (Firebase) may have their own accessibility limitations',
+    a11yStmtBrowserSupport: 'Browser and Assistive Technology Support',
+    a11yStmtBrowserSupportDesc: 'Meteor Meet is tested and optimized for:',
+    a11yStmtContact: 'Contact & Feedback',
+    a11yStmtContactDesc: 'If you experience any accessibility barriers while using Meteor Meet, or if you have suggestions for improvements, please contact us:',
+    a11yStmtContactName: 'Avi Klayman',
+    a11yStmtContactTime: 'We aim to respond to accessibility concerns within 5 business days.',
+    a11yStmtThanks: 'Thank You',
+    a11yStmtThanksDesc: 'We believe accessibility is essential and appreciate your feedback in helping us improve Meteor Meet for everyone.',
+    skipLink: 'Skip to main content',
+    a11yTitle: 'Accessibility',
+    a11yTextSize: 'Text Size',
+    a11yTextSizeDesc: 'Increase or decrease text',
+    a11yHighContrast: 'High Contrast',
+    a11yHighContrastDesc: 'Boost colors and contrast',
+    a11yReducedMotion: 'Reduce Motion',
+    a11yReducedMotionDesc: 'Disable animations',
+    a11yKeyboardFocus: 'Focus Highlight',
+    a11yKeyboardFocusDesc: 'Bold focus outline',
+    a11yAdhd: 'ADHD Friendly',
+    a11yAdhdDesc: 'Reduce distractions',
+    a11yReset: 'Reset All',
+    dir: 'ltr',
+  },
+  fr: {
+    appName: 'Meteor Meet',
+    a11yStmtTitle: 'Déclaration d\'accessibilité',
+    backHome: 'Retour à Meteor',
+    a11yStmtIntro: 'Meteor Meet s\'engage à fournir une expérience accessible à tous les utilisateurs, y compris les personnes handicapées. Cette déclaration décrit notre engagement en matière d\'accessibilité et les mesures que nous avons prises pour assurer que notre site Web est conforme aux normes d\'accessibilité internationales.',
+    a11yStmtCompliance: 'Conformité en matière d\'accessibilité',
+    a11yStmtStandard: 'Norme :',
+    a11yStmtStandardDesc: 'Meteor Meet vise à se conformer à la norme israélienne IS 5568, qui est équivalente à WCAG 2.0 niveau AA.',
+    a11yStmtDate: 'Date de la déclaration :',
+    a11yStmtDateDesc: 'Cette déclaration a été mise à jour pour la dernière fois le 2 juin 2026.',
+    a11yStmtFeatures: 'Fonctionnalités d\'accessibilité',
+    a11yStmtFeaturesDesc: 'Meteor Meet inclut des fonctionnalités d\'accessibilité natives :',
+    a11yFeature1: 'Support de la navigation au clavier — naviguez dans l\'application entière à l\'aide des touches Tab, Entrée et flèches',
+    a11yFeature2: 'Lien de saut — appuyez sur Tab en haut de la page pour accéder au contenu principal',
+    a11yFeature3: 'Support des lecteurs d\'écran — étiquettes ARIA, repères et HTML sémantique pour les technologies d\'assistance',
+    a11yFeature4: 'Indicateurs de focus — anneaux de focus clairs sur tous les éléments interactifs',
+    a11yFeature5: 'Contraste du texte — ratio de contraste minimum 4,5:1 pour la conformité WCAG AA',
+    a11yFeature6: 'Conception réactive — entièrement accessible sur les appareils de bureau, tablette et mobiles',
+    a11yFeature7: 'Support de mouvement réduit — respecte la requête multimédia prefers-reduced-motion',
+    a11yFeature8: 'Support multilingue — disponible en anglais, français et hébreu avec support RTL',
+    a11yFeature9: 'Barre d\'outils d\'accessibilité — widget flottant avec des bascules pour la taille du texte, le contraste élevé, le mouvement réduit, etc.',
+    a11yStmtToolbar: 'Barre d\'outils d\'accessibilité',
+    a11yStmtToolbarDesc: 'Cliquez sur le bouton ♿ dans le coin inférieur droit pour ouvrir la barre d\'outils d\'accessibilité. Ce widget fournit les fonctionnalités suivantes :',
+    a11yToolbar1: 'Taille du texte : Choisissez entre Normal, Grand et Très Grand',
+    a11yToolbar1Desc: 'Choisissez entre Normal, Grand et Très Grand',
+    a11yToolbar2: 'Contraste élevé : Augmenter le contraste des couleurs et la luminosité',
+    a11yToolbar2Desc: 'Augmenter le contraste des couleurs et la luminosité',
+    a11yToolbar3: 'Réduire le mouvement : Désactiver les animations et transitions',
+    a11yToolbar3Desc: 'Désactiver les animations et transitions',
+    a11yToolbar4: 'Mise en surbrillance du focus : Afficher les contours gras sur les éléments ciblés',
+    a11yToolbar4Desc: 'Afficher les contours gras sur les éléments ciblés',
+    a11yToolbar5: 'Convivial TDAH : Réduire les distractions visuelles',
+    a11yToolbar5Desc: 'Réduire les distractions visuelles',
+    a11yStmtToolbarNote: 'Vos préférences d\'accessibilité sont enregistrées et persisteront d\'une session à l\'autre.',
+    a11yStmtKnownIssues: 'Problèmes d\'accessibilité connus',
+    a11yStmtKnownIssuesDesc: 'Nous sommes conscients des limitations suivantes et travaillons à les résoudre :',
+    a11yIssue1: 'Les interactions de la grille de calendrier sont principalement basées sur la souris ; la navigation au clavier peut nécessiter des améliorations',
+    a11yIssue2: 'Certaines intégrations tierces (Firebase) peuvent avoir leurs propres limitations en matière d\'accessibilité',
+    a11yStmtBrowserSupport: 'Support du navigateur et de la technologie d\'assistance',
+    a11yStmtBrowserSupportDesc: 'Meteor Meet est testé et optimisé pour :',
+    a11yStmtContact: 'Contact et rétroaction',
+    a11yStmtContactDesc: 'Si vous rencontrez des obstacles d\'accessibilité lors de l\'utilisation de Meteor Meet, ou si vous avez des suggestions d\'amélioration, veuillez nous contacter :',
+    a11yStmtContactName: 'Avi Klayman',
+    a11yStmtContactTime: 'Nous visons à répondre aux préoccupations d\'accessibilité dans un délai de 5 jours ouvrables.',
+    a11yStmtThanks: 'Merci',
+    a11yStmtThanksDesc: 'Nous croyons que l\'accessibilité est essentielle et apprécions vos commentaires pour nous aider à améliorer Meteor Meet pour tous.',
+    skipLink: 'Accéder au contenu principal',
+    a11yTitle: 'Accessibilité',
+    a11yTextSize: 'Taille du texte',
+    a11yTextSizeDesc: 'Augmenter ou diminuer le texte',
+    a11yHighContrast: 'Contraste élevé',
+    a11yHighContrastDesc: 'Augmenter les couleurs',
+    a11yReducedMotion: 'Réduire le mouvement',
+    a11yReducedMotionDesc: 'Désactiver les animations',
+    a11yKeyboardFocus: 'Mise en surbrillance du focus',
+    a11yKeyboardFocusDesc: 'Contour de focus gras',
+    a11yAdhd: 'Convivial TDAH',
+    a11yAdhdDesc: 'Réduire les distractions',
+    a11yReset: 'Réinitialiser tout',
+    dir: 'ltr',
+  },
+  he: {
+    appName: 'מטאור מפגישות',
+    a11yStmtTitle: 'הצהרת נגישות',
+    backHome: 'חזרה למטאור',
+    a11yStmtIntro: 'Meteor Meet מחויב לספק חוויה נגישה לכל המשתמשים, כולל אנשים עם מוגבלויות. הצהרה זו מתארת את התחייבותנו לנגישות והאמצעים שנקחנו כדי להבטיח שאתר הרשת שלנו עומד בתקנים בינלאומיים של נגישות.',
+    a11yStmtCompliance: 'עמידה בנגישות',
+    a11yStmtStandard: 'תקן:',
+    a11yStmtStandardDesc: 'Meteor Meet שואף לעמידה בתקן הישראלי IS 5568, המקביל ל- WCAG 2.0 רמה AA.',
+    a11yStmtDate: 'תאריך הצהרה:',
+    a11yStmtDateDesc: 'הצהרה זו עודכנה לאחרונה ב -2 ביוני 2026.',
+    a11yStmtFeatures: 'תכונות נגישות',
+    a11yStmtFeaturesDesc: 'Meteor Meet כוללת תכונות נגישות מקוריות:',
+    a11yFeature1: 'תמיכה בניווט במקלדת — נווט באפליקציה כולה באמצעות Tab, Enter וקשיות חץ',
+    a11yFeature2: 'קישור דילוג — לחץ על Tab בחלק העליון של הדף כדי לדלג לתוכן הראשי',
+    a11yFeature3: 'תמיכה בקורא מסך — תוויות ARIA, ציוני דרך ו- HTML סמנטי לטכנולוגיות כנות',
+    a11yFeature4: 'מחווני פוקוס — טבעות פוקוס ברורות בכל האלמנטים האינטראקטיביים',
+    a11yFeature5: 'ניגודיות טקסט — יחס ניגודיות מינימלי 4.5:1 לעמידה WCAG AA',
+    a11yFeature6: 'עיצוב תגובתי — נגישות מלאה בהתקנים שולחניים, טאבלט וניידים',
+    a11yFeature7: 'תמיכה בתנועה מופחתת — מכבדת שאילתה מדיה prefers-reduced-motion',
+    a11yFeature8: 'תמיכה רב-לשונית — זמינה באנגלית, צרפתית ועברית עם תמיכה RTL',
+    a11yFeature9: 'סרגל כלים נגישות — וויג\'ט צף עם מתגים לגודל טקסט, ניגודיות גבוהה, תנועה מופחתת ועוד',
+    a11yStmtToolbar: 'סרגל כלים נגישות',
+    a11yStmtToolbarDesc: 'לחץ על כפתור ♿ בפינה התחתונה הימנית כדי לפתוח את סרגל כלים הנגישות. וויג\'ט זה מספק את התכונות הבאות:',
+    a11yToolbar1: 'גודל טקסט: בחר בין רגיל, גדול וגדול מאוד',
+    a11yToolbar1Desc: 'בחר בין רגיל, גדול וגדול מאוד',
+    a11yToolbar2: 'ניגודיות גבוהה: הגבר ניגודיות צבע ובהירות',
+    a11yToolbar2Desc: 'הגבר ניגודיות צבע ובהירות',
+    a11yToolbar3: 'צמצם תנועה: השבת אנימציות וטרנזיציות',
+    a11yToolbar3Desc: 'השבת אנימציות וטרנזיציות',
+    a11yToolbar4: 'הדגשת פוקוס: הצג קווים עבים בזעפי אלמנטים',
+    a11yToolbar4Desc: 'הצג קווים עבים בזעפי אלמנטים',
+    a11yToolbar5: 'ידידותי ADHD: צמצם הפרעות ויזואליות',
+    a11yToolbar5Desc: 'צמצם הפרעות ויזואליות',
+    a11yStmtToolbarNote: 'העדפות הנגישות שלך נשמרות ונשארות בין הפעלות.',
+    a11yStmtKnownIssues: 'בעיות נגישות ידועות',
+    a11yStmtKnownIssuesDesc: 'אנחנו מודעים למגבלות הבאות ועובדים על פתרונן:',
+    a11yIssue1: 'אינטראקציות גריד לוח השנה מבוססות בעיקר על עכבר; ניווט במקלדת עשוי להזדקק לשיפור',
+    a11yIssue2: 'לחלק מהאינטגרציות של צד שלישי (Firebase) עשויות להיות מגבלות נגישות משלהן',
+    a11yStmtBrowserSupport: 'תמיכת דפדפן וטכנולוגיית כנות',
+    a11yStmtBrowserSupportDesc: 'Meteor Meet נבדק ואופטימלי עבור:',
+    a11yStmtContact: 'יצירת קשר ודברים משוב',
+    a11yStmtContactDesc: 'אם אתה חוצה מכשול נגישות בעת שימוש ב- Meteor Meet, או אם יש לך הצעות לשיפור, אנא צור קשר איתנו:',
+    a11yStmtContactName: 'Avi Klayman',
+    a11yStmtContactTime: 'אנו שואפים להגיב לדאגות נגישות תוך 5 ימי עבודה.',
+    a11yStmtThanks: 'תודה',
+    a11yStmtThanksDesc: 'אנחנו מאמינים שנגישות חיונית ומעריכים את המשוב שלך בעזרתנו לשפר את Meteor Meet לכולם.',
+    skipLink: 'דלג לתוכן הראשי',
+    a11yTitle: 'נגישות',
+    a11yTextSize: 'גודל הטקסט',
+    a11yTextSizeDesc: 'הגדל או הקטן את הטקסט',
+    a11yHighContrast: 'ניגודיות גבוהה',
+    a11yHighContrastDesc: 'הגבר צבעים וניגודיות',
+    a11yReducedMotion: 'צמצם תנועה',
+    a11yReducedMotionDesc: 'השבת אנימציות',
+    a11yKeyboardFocus: 'הדגשת Focus',
+    a11yKeyboardFocusDesc: 'קו focus עבה',
+    a11yAdhd: 'ידידותי ל-ADHD',
+    a11yAdhdDesc: 'הפחת הפרעות',
+    a11yReset: 'אפס הכל',
+    dir: 'rtl',
+  }
+};
+
+let currentLang = localStorage.getItem('lang') || 'en';
+let currentTheme = localStorage.getItem('theme') || 'light';
+
+function t() {
+  return LANGS[currentLang];
+}
+
+function setLang(code) {
+  currentLang = code;
+  localStorage.setItem('lang', code);
+  applyLang();
+}
+
+function setTheme(mode) {
+  currentTheme = mode;
+  localStorage.setItem('theme', currentTheme);
+  applyTheme();
+}
+
+function applyLang() {
+  document.documentElement.dir = t().dir;
+  document.documentElement.lang = currentLang;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const v = t()[el.dataset.i18n];
+    if (typeof v === 'string') el.textContent = v;
+  });
+  document.getElementById('lang-en')?.classList.toggle('active', currentLang === 'en');
+  document.getElementById('lang-fr')?.classList.toggle('active', currentLang === 'fr');
+  document.getElementById('lang-he')?.classList.toggle('active', currentLang === 'he');
+}
+
+function applyTheme() {
+  document.documentElement.setAttribute('data-theme', currentTheme);
+  const lightBtn = document.getElementById('theme-btn-light');
+  const darkBtn = document.getElementById('theme-btn-dark');
+  if (lightBtn && darkBtn) {
+    lightBtn.classList.toggle('active', currentTheme === 'light');
+    darkBtn.classList.toggle('active', currentTheme === 'dark');
+  }
+}
+
+// ════════════════════════════════════════════════════════════════════
+// ACCESSIBILITY WIDGET INITIALIZATION
+// ════════════════════════════════════════════════════════════════════
+
+const a11yPanel = document.getElementById('a11y-panel');
+const a11yBtn = document.getElementById('a11y-widget-btn');
+const a11yCloseBtn = document.getElementById('a11y-close');
+
+// Load saved preferences
+function loadA11yPrefs() {
+  const saved = localStorage.getItem('a11y-prefs');
+  if (!saved) return {};
+  try {
+    return JSON.parse(saved);
+  } catch(e) {
+    return {};
+  }
+}
+
+// Save preferences
+function saveA11yPrefs(prefs) {
+  localStorage.setItem('a11y-prefs', JSON.stringify(prefs));
+}
+
+// Apply preferences from object
+function applyA11yPrefs(prefs) {
+  // Text size
+  const sizeSelect = document.getElementById('a11y-text-size');
+  if (prefs.textSize) {
+    sizeSelect.value = prefs.textSize;
+    if (prefs.textSize === 'lg') {
+      document.body.classList.add('a11y-text-lg');
+      document.body.classList.remove('a11y-text-xl');
+    } else if (prefs.textSize === 'xl') {
+      document.body.classList.add('a11y-text-xl');
+      document.body.classList.remove('a11y-text-lg');
+    } else {
+      document.body.classList.remove('a11y-text-lg', 'a11y-text-xl');
+    }
+  }
+
+  // High contrast
+  const hcBtn = document.getElementById('a11y-high-contrast');
+  if (prefs.highContrast) {
+    document.body.classList.add('a11y-high-contrast');
+    hcBtn.setAttribute('aria-pressed', 'true');
+    hcBtn.classList.add('active');
+  }
+
+  // Reduced motion
+  const rmBtn = document.getElementById('a11y-reduced-motion');
+  if (prefs.reducedMotion) {
+    document.body.classList.add('a11y-reduced-motion');
+    rmBtn.setAttribute('aria-pressed', 'true');
+    rmBtn.classList.add('active');
+  }
+
+  // Keyboard focus highlights
+  const kfBtn = document.getElementById('a11y-keyboard-focus');
+  if (prefs.keyboardFocus) {
+    document.body.classList.add('a11y-keyboard-focus');
+    kfBtn.setAttribute('aria-pressed', 'true');
+    kfBtn.classList.add('active');
+  }
+
+  // ADHD friendly
+  const adhdBtn = document.getElementById('a11y-adhd');
+  if (prefs.adhd) {
+    document.body.classList.add('a11y-adhd');
+    adhdBtn.setAttribute('aria-pressed', 'true');
+    adhdBtn.classList.add('active');
+  }
+}
+
+// Toggle open/close
+a11yBtn.addEventListener('click', e => {
+  e.stopPropagation();
+  a11yPanel.style.display = a11yPanel.style.display === 'none' ? 'block' : 'none';
+});
+
+a11yCloseBtn.addEventListener('click', e => {
+  e.stopPropagation();
+  a11yPanel.style.display = 'none';
+});
+
+// Close panel when clicking outside
+document.addEventListener('click', e => {
+  if (!a11yPanel.contains(e.target) && e.target !== a11yBtn) {
+    a11yPanel.style.display = 'none';
+  }
+});
+
+// Text size change
+document.getElementById('a11y-text-size').addEventListener('change', e => {
+  const prefs = loadA11yPrefs();
+  prefs.textSize = e.target.value;
+  saveA11yPrefs(prefs);
+  applyA11yPrefs(prefs);
+});
+
+// High contrast
+document.getElementById('a11y-high-contrast').addEventListener('click', e => {
+  e.preventDefault();
+  const prefs = loadA11yPrefs();
+  prefs.highContrast = !prefs.highContrast;
+  saveA11yPrefs(prefs);
+  applyA11yPrefs(prefs);
+});
+
+// Reduced motion
+document.getElementById('a11y-reduced-motion').addEventListener('click', e => {
+  e.preventDefault();
+  const prefs = loadA11yPrefs();
+  prefs.reducedMotion = !prefs.reducedMotion;
+  saveA11yPrefs(prefs);
+  applyA11yPrefs(prefs);
+});
+
+// Keyboard focus highlights
+document.getElementById('a11y-keyboard-focus').addEventListener('click', e => {
+  e.preventDefault();
+  const prefs = loadA11yPrefs();
+  prefs.keyboardFocus = !prefs.keyboardFocus;
+  saveA11yPrefs(prefs);
+  applyA11yPrefs(prefs);
+});
+
+// ADHD friendly
+document.getElementById('a11y-adhd').addEventListener('click', e => {
+  e.preventDefault();
+  const prefs = loadA11yPrefs();
+  prefs.adhd = !prefs.adhd;
+  saveA11yPrefs(prefs);
+  applyA11yPrefs(prefs);
+});
+
+// Reset all
+document.getElementById('a11y-reset-all').addEventListener('click', e => {
+  e.preventDefault();
+  localStorage.removeItem('a11y-prefs');
+  document.body.classList.remove(
+    'a11y-text-lg', 'a11y-text-xl', 'a11y-high-contrast',
+    'a11y-reduced-motion', 'a11y-keyboard-focus', 'a11y-adhd'
+  );
+  document.getElementById('a11y-text-size').value = 'normal';
+  document.querySelectorAll('.a11y-toggle').forEach(btn => {
+    if (btn !== document.getElementById('a11y-text-size')) {
+      btn.setAttribute('aria-pressed', 'false');
+      btn.classList.remove('active');
+    }
+  });
+});
+
+// Apply saved preferences on load
+const savedPrefs = loadA11yPrefs();
+applyA11yPrefs(savedPrefs);
+
+document.addEventListener('DOMContentLoaded', () => {
+  applyLang();
+  applyTheme();
+});
+</script>
+
+</body>
+</html>

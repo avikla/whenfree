@@ -305,9 +305,287 @@ code{
   .controls{flex-direction:column;align-items:stretch}
   .lang-toggle,.theme-toggle{justify-content:center}
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   ACCESSIBILITY: Skip Link & Widget
+   ════════════════════════════════════════════════════════════════════ */
+
+.skip-link{
+  position:absolute;
+  top:-40px;
+  left:0;
+  background:var(--accent);
+  color:var(--on-primary);
+  padding:8px 16px;
+  text-decoration:none;
+  z-index:10000;
+  border-radius:var(--r-xs);
+}
+
+.skip-link:focus{
+  top:0;
+}
+
+.a11y-widget-btn{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  width:50px;
+  height:50px;
+  border-radius:50%;
+  background:var(--accent);
+  color:white;
+  font-size:24px;
+  border:none;
+  cursor:pointer;
+  box-shadow:0 2px 16px rgba(0,0,0,0.2);
+  z-index:9999;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:opacity 0.2s;
+}
+
+.a11y-widget-btn:hover{
+  opacity:0.9;
+}
+
+.a11y-widget-btn:focus{
+  outline:3px solid var(--accent-glow);
+  outline-offset:2px;
+}
+
+.a11y-panel{
+  position:fixed;
+  bottom:80px;
+  right:20px;
+  width:300px;
+  max-width:90vw;
+  background:var(--surface);
+  border:1px solid var(--border2);
+  border-radius:var(--r-sm);
+  box-shadow:0 4px 24px rgba(0,0,0,0.15);
+  z-index:9998;
+  display:none;
+  flex-direction:column;
+  overflow:hidden;
+}
+
+.a11y-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:12px 16px;
+  background:var(--primary-ctr);
+  border-bottom:1px solid var(--border);
+}
+
+.a11y-title{
+  font-family:var(--font-display);
+  font-weight:600;
+  font-size:14px;
+  color:var(--on-primary-ctr);
+}
+
+.a11y-close{
+  background:none;
+  border:none;
+  font-size:20px;
+  cursor:pointer;
+  color:var(--on-primary-ctr);
+  padding:0;
+  width:24px;
+  height:24px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.a11y-close:hover{
+  opacity:0.8;
+}
+
+.a11y-content{
+  padding:16px;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+  max-height:60vh;
+  overflow-y:auto;
+}
+
+.a11y-feature{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:12px;
+}
+
+.a11y-feature-info{
+  flex:1;
+}
+
+.a11y-feature-name{
+  font-weight:500;
+  font-size:13px;
+  color:var(--text);
+}
+
+.a11y-feature-desc{
+  font-size:12px;
+  color:var(--muted2);
+  margin-top:2px;
+}
+
+.a11y-toggle{
+  width:40px;
+  height:24px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:rgba(0,0,0,0.1);
+  cursor:pointer;
+  position:relative;
+  transition:background 0.2s;
+  flex-shrink:0;
+}
+
+[data-theme="dark"] .a11y-toggle{
+  background:rgba(255,255,255,0.1);
+}
+
+.a11y-toggle:focus{
+  outline:2px solid var(--accent);
+  outline-offset:2px;
+}
+
+.a11y-toggle.active{
+  background:var(--accent);
+  border-color:var(--accent);
+}
+
+.a11y-reset{
+  background:var(--accent);
+  color:var(--on-primary);
+  border:none;
+  padding:8px 12px;
+  border-radius:var(--r-xs);
+  font-weight:500;
+  font-size:13px;
+  cursor:pointer;
+  transition:opacity 0.2s;
+  margin-top:8px;
+}
+
+.a11y-reset:hover{
+  opacity:0.9;
+}
+
+.a11y-reset:focus{
+  outline:2px solid var(--accent-glow);
+  outline-offset:2px;
+}
+
+/* Text size adjustments */
+.a11y-text-lg{font-size:1.125em}
+.a11y-text-xl{font-size:1.25em}
+
+/* High contrast mode */
+.a11y-high-contrast{
+  --text:#000;
+  --muted:#333;
+  --muted2:#666;
+  --accent:#0080FF;
+  --border:#000;
+  --border2:#000;
+}
+
+[data-theme="dark"].a11y-high-contrast{
+  --text:#FFF;
+  --muted:#EEE;
+  --muted2:#DDD;
+  --accent:#00FFFF;
+  --border:#FFF;
+  --border2:#FFF;
+}
+
+/* Reduced motion */
+.a11y-reduced-motion *{
+  animation:none!important;
+  transition:none!important;
+}
+
+/* Keyboard focus highlights */
+.a11y-keyboard-focus *:focus{
+  outline:3px solid var(--accent)!important;
+  outline-offset:2px!important;
+}
+
+/* ADHD friendly - dim sidebar and reduce clutter */
+.a11y-adhd .faq-item{
+  opacity:0.9;
+}
 </style>
 </head>
 <body>
+
+<!-- ACCESSIBILITY: Skip link -->
+<a href="#main-content" class="skip-link" data-i18n="skipLink">Skip to main content</a>
+
+<!-- ACCESSIBILITY: Overlay widget -->
+<button class="a11y-widget-btn" id="a11y-widget-btn" aria-label="Accessibility options" title="Accessibility adjustments"></button>
+<div class="a11y-panel" id="a11y-panel">
+  <div class="a11y-header">
+    <div class="a11y-title" data-i18n="a11yTitle">Accessibility</div>
+    <button class="a11y-close" id="a11y-close" aria-label="Close accessibility panel">✕</button>
+  </div>
+  <div class="a11y-content">
+    <div class="a11y-feature">
+      <div class="a11y-feature-info">
+        <div class="a11y-feature-name" data-i18n="a11yTextSize">Text Size</div>
+        <div class="a11y-feature-desc" data-i18n="a11yTextSizeDesc">Increase or decrease text</div>
+      </div>
+      <select id="a11y-text-size" class="a11y-toggle" style="width:60px;padding:4px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xs);cursor:pointer">
+        <option value="normal">Normal</option>
+        <option value="lg">Large</option>
+        <option value="xl">XL</option>
+      </select>
+    </div>
+
+    <div class="a11y-feature">
+      <div class="a11y-feature-info">
+        <div class="a11y-feature-name" data-i18n="a11yHighContrast">High Contrast</div>
+        <div class="a11y-feature-desc" data-i18n="a11yHighContrastDesc">Boost colors and contrast</div>
+      </div>
+      <button class="a11y-toggle" id="a11y-high-contrast" aria-pressed="false" aria-label="Toggle high contrast mode"></button>
+    </div>
+
+    <div class="a11y-feature">
+      <div class="a11y-feature-info">
+        <div class="a11y-feature-name" data-i18n="a11yReducedMotion">Reduce Motion</div>
+        <div class="a11y-feature-desc" data-i18n="a11yReducedMotionDesc">Disable animations</div>
+      </div>
+      <button class="a11y-toggle" id="a11y-reduced-motion" aria-pressed="false" aria-label="Toggle reduced motion"></button>
+    </div>
+
+    <div class="a11y-feature">
+      <div class="a11y-feature-info">
+        <div class="a11y-feature-name" data-i18n="a11yKeyboardFocus">Focus Highlight</div>
+        <div class="a11y-feature-desc" data-i18n="a11yKeyboardFocusDesc">Bold focus outline</div>
+      </div>
+      <button class="a11y-toggle" id="a11y-keyboard-focus" aria-pressed="false" aria-label="Toggle keyboard focus highlights"></button>
+    </div>
+
+    <div class="a11y-feature">
+      <div class="a11y-feature-info">
+        <div class="a11y-feature-name" data-i18n="a11yAdhd">ADHD Friendly</div>
+        <div class="a11y-feature-desc" data-i18n="a11yAdhdDesc">Reduce distractions</div>
+      </div>
+      <button class="a11y-toggle" id="a11y-adhd" aria-pressed="false" aria-label="Toggle ADHD friendly mode"></button>
+    </div>
+
+    <button class="a11y-reset" id="a11y-reset-all" data-i18n="a11yReset">Reset All</button>
+  </div>
+</div>
 
 <div class="header">
   <div class="logo"><span data-i18n="appName">Meteor Meet</span></div>
@@ -479,6 +757,12 @@ code{
       <a href="mailto:avi@meteor.co.il" class="support-link" data-i18n="contactEmail">Contact Avi Klayman</a>
       <p style="font-size:12px;margin-top:12px;color:var(--on-primary-ctr)">avi@meteor.co.il</p>
     </div>
+
+    <!-- FOOTER -->
+    <div style="margin-top:60px;padding-top:20px;border-top:1px solid var(--border);text-align:center;font-size:12px;color:var(--muted)">
+      <p style="margin-bottom:8px"><a href="/" style="color:var(--accent);text-decoration:none">Back to Meteor</a> &middot; <a href="accessibility-statement.html" style="color:var(--accent);text-decoration:none">Accessibility</a> &middot; <a href="terms.html" style="color:var(--accent);text-decoration:none">Terms &amp; Privacy</a></p>
+      <p style="margin:0">© 2026 Meteor Meet by Avi Klayman</p>
+    </div>
   </div>
 </div>
 
@@ -526,6 +810,19 @@ const LANGS = {
     supportTitle: 'Need Help?',
     supportDesc: 'Have questions, found a bug, or want to suggest a feature? We\'d love to hear from you!',
     contactEmail: 'Contact Avi Klayman',
+    skipLink: 'Skip to main content',
+    a11yTitle: 'Accessibility',
+    a11yTextSize: 'Text Size',
+    a11yTextSizeDesc: 'Increase or decrease text',
+    a11yHighContrast: 'High Contrast',
+    a11yHighContrastDesc: 'Boost colors and contrast',
+    a11yReducedMotion: 'Reduce Motion',
+    a11yReducedMotionDesc: 'Disable animations',
+    a11yKeyboardFocus: 'Focus Highlight',
+    a11yKeyboardFocusDesc: 'Bold focus outline',
+    a11yAdhd: 'ADHD Friendly',
+    a11yAdhdDesc: 'Reduce distractions',
+    a11yReset: 'Reset All',
     dir: 'ltr',
   },
   fr: {
@@ -570,6 +867,19 @@ const LANGS = {
     supportTitle: 'Besoin d\'aide ?',
     supportDesc: 'Vous avez des questions, trouvé un bug ou voulez suggérer une fonctionnalité ? Nous aimerions vous écouter !',
     contactEmail: 'Contacter Avi Klayman',
+    skipLink: 'Accéder au contenu principal',
+    a11yTitle: 'Accessibilité',
+    a11yTextSize: 'Taille du texte',
+    a11yTextSizeDesc: 'Augmenter ou diminuer le texte',
+    a11yHighContrast: 'Contraste élevé',
+    a11yHighContrastDesc: 'Augmenter les couleurs',
+    a11yReducedMotion: 'Réduire le mouvement',
+    a11yReducedMotionDesc: 'Désactiver les animations',
+    a11yKeyboardFocus: 'Mise en surbrillance du focus',
+    a11yKeyboardFocusDesc: 'Contour de focus gras',
+    a11yAdhd: 'Convivial TDAH',
+    a11yAdhdDesc: 'Réduire les distractions',
+    a11yReset: 'Réinitialiser tout',
     dir: 'ltr',
   },
   he: {
@@ -614,6 +924,19 @@ const LANGS = {
     supportTitle: 'צריך עזרה?',
     supportDesc: 'יש שאלות, מצאת באג, או רוצה להציע תכונה? היינו שמחים לשמוע ממך!',
     contactEmail: 'צור קשר עם Avi Klayman',
+    skipLink: 'דלג לתוכן הראשי',
+    a11yTitle: 'נגישות',
+    a11yTextSize: 'גודל הטקסט',
+    a11yTextSizeDesc: 'הגדל או הקטן את הטקסט',
+    a11yHighContrast: 'ניגודיות גבוהה',
+    a11yHighContrastDesc: 'הגבר צבעים וניגודיות',
+    a11yReducedMotion: 'צמצם תנועה',
+    a11yReducedMotionDesc: 'השבת אנימציות',
+    a11yKeyboardFocus: 'הדגשת Focus',
+    a11yKeyboardFocusDesc: 'קו focus עבה',
+    a11yAdhd: 'ידידותי ל-ADHD',
+    a11yAdhdDesc: 'הפחת הפרעות',
+    a11yReset: 'אפס הכל',
     dir: 'rtl',
   }
 };
@@ -662,6 +985,163 @@ function applyTheme() {
 function toggleFAQ(el) {
   el.parentElement.classList.toggle('open');
 }
+
+// ════════════════════════════════════════════════════════════════════
+// ACCESSIBILITY WIDGET INITIALIZATION
+// ════════════════════════════════════════════════════════════════════
+
+const a11yPanel = document.getElementById('a11y-panel');
+const a11yBtn = document.getElementById('a11y-widget-btn');
+const a11yCloseBtn = document.getElementById('a11y-close');
+
+// Load saved preferences
+function loadA11yPrefs() {
+  const saved = localStorage.getItem('a11y-prefs');
+  if (!saved) return {};
+  try {
+    return JSON.parse(saved);
+  } catch(e) {
+    return {};
+  }
+}
+
+// Save preferences
+function saveA11yPrefs(prefs) {
+  localStorage.setItem('a11y-prefs', JSON.stringify(prefs));
+}
+
+// Apply preferences from object
+function applyA11yPrefs(prefs) {
+  // Text size
+  const sizeSelect = document.getElementById('a11y-text-size');
+  if (prefs.textSize) {
+    sizeSelect.value = prefs.textSize;
+    if (prefs.textSize === 'lg') {
+      document.body.classList.add('a11y-text-lg');
+      document.body.classList.remove('a11y-text-xl');
+    } else if (prefs.textSize === 'xl') {
+      document.body.classList.add('a11y-text-xl');
+      document.body.classList.remove('a11y-text-lg');
+    } else {
+      document.body.classList.remove('a11y-text-lg', 'a11y-text-xl');
+    }
+  }
+
+  // High contrast
+  const hcBtn = document.getElementById('a11y-high-contrast');
+  if (prefs.highContrast) {
+    document.body.classList.add('a11y-high-contrast');
+    hcBtn.setAttribute('aria-pressed', 'true');
+    hcBtn.classList.add('active');
+  }
+
+  // Reduced motion
+  const rmBtn = document.getElementById('a11y-reduced-motion');
+  if (prefs.reducedMotion) {
+    document.body.classList.add('a11y-reduced-motion');
+    rmBtn.setAttribute('aria-pressed', 'true');
+    rmBtn.classList.add('active');
+  }
+
+  // Keyboard focus highlights
+  const kfBtn = document.getElementById('a11y-keyboard-focus');
+  if (prefs.keyboardFocus) {
+    document.body.classList.add('a11y-keyboard-focus');
+    kfBtn.setAttribute('aria-pressed', 'true');
+    kfBtn.classList.add('active');
+  }
+
+  // ADHD friendly
+  const adhdBtn = document.getElementById('a11y-adhd');
+  if (prefs.adhd) {
+    document.body.classList.add('a11y-adhd');
+    adhdBtn.setAttribute('aria-pressed', 'true');
+    adhdBtn.classList.add('active');
+  }
+}
+
+// Toggle open/close
+a11yBtn.addEventListener('click', e => {
+  e.stopPropagation();
+  a11yPanel.style.display = a11yPanel.style.display === 'none' ? 'block' : 'none';
+});
+
+a11yCloseBtn.addEventListener('click', e => {
+  e.stopPropagation();
+  a11yPanel.style.display = 'none';
+});
+
+// Close panel when clicking outside
+document.addEventListener('click', e => {
+  if (!a11yPanel.contains(e.target) && e.target !== a11yBtn) {
+    a11yPanel.style.display = 'none';
+  }
+});
+
+// Text size change
+document.getElementById('a11y-text-size').addEventListener('change', e => {
+  const prefs = loadA11yPrefs();
+  prefs.textSize = e.target.value;
+  saveA11yPrefs(prefs);
+  applyA11yPrefs(prefs);
+});
+
+// High contrast
+document.getElementById('a11y-high-contrast').addEventListener('click', e => {
+  e.preventDefault();
+  const prefs = loadA11yPrefs();
+  prefs.highContrast = !prefs.highContrast;
+  saveA11yPrefs(prefs);
+  applyA11yPrefs(prefs);
+});
+
+// Reduced motion
+document.getElementById('a11y-reduced-motion').addEventListener('click', e => {
+  e.preventDefault();
+  const prefs = loadA11yPrefs();
+  prefs.reducedMotion = !prefs.reducedMotion;
+  saveA11yPrefs(prefs);
+  applyA11yPrefs(prefs);
+});
+
+// Keyboard focus highlights
+document.getElementById('a11y-keyboard-focus').addEventListener('click', e => {
+  e.preventDefault();
+  const prefs = loadA11yPrefs();
+  prefs.keyboardFocus = !prefs.keyboardFocus;
+  saveA11yPrefs(prefs);
+  applyA11yPrefs(prefs);
+});
+
+// ADHD friendly
+document.getElementById('a11y-adhd').addEventListener('click', e => {
+  e.preventDefault();
+  const prefs = loadA11yPrefs();
+  prefs.adhd = !prefs.adhd;
+  saveA11yPrefs(prefs);
+  applyA11yPrefs(prefs);
+});
+
+// Reset all
+document.getElementById('a11y-reset-all').addEventListener('click', e => {
+  e.preventDefault();
+  localStorage.removeItem('a11y-prefs');
+  document.body.classList.remove(
+    'a11y-text-lg', 'a11y-text-xl', 'a11y-high-contrast',
+    'a11y-reduced-motion', 'a11y-keyboard-focus', 'a11y-adhd'
+  );
+  document.getElementById('a11y-text-size').value = 'normal';
+  document.querySelectorAll('.a11y-toggle').forEach(btn => {
+    if (btn !== document.getElementById('a11y-text-size')) {
+      btn.setAttribute('aria-pressed', 'false');
+      btn.classList.remove('active');
+    }
+  });
+});
+
+// Apply saved preferences on load
+const savedPrefs = loadA11yPrefs();
+applyA11yPrefs(savedPrefs);
 
 document.addEventListener('DOMContentLoaded', () => {
   applyLang();

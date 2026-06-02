@@ -722,9 +722,141 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
 /* ─── Notify toggle checkbox ─── */
 .notify-toggle{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--text);cursor:pointer;margin-top:4px}
 .notify-toggle input[type="checkbox"]{cursor:pointer;accent-color:var(--accent)}
+
+/* ─── ACCESSIBILITY OVERLAY ─── */
+.a11y-widget-btn{
+  position:fixed;bottom:20px;right:20px;width:50px;height:50px;z-index:999;
+  background:var(--accent);color:var(--on-primary);border:none;border-radius:50%;
+  cursor:pointer;font-size:24px;box-shadow:0 4px 12px rgba(0,0,0,0.15);
+  display:flex;align-items:center;justify-content:center;transition:all 0.2s;
+}
+.a11y-widget-btn:hover{transform:scale(1.1);box-shadow:0 6px 16px rgba(0,0,0,0.2)}
+.a11y-widget-btn:focus{outline:3px solid var(--accent);outline-offset:2px}
+
+.a11y-panel{
+  position:fixed;bottom:80px;right:20px;width:300px;z-index:999;
+  background:var(--surface);border-radius:var(--r);
+  box-shadow:0 8px 32px rgba(0,0,0,0.15);
+  max-height:70vh;overflow-y:auto;
+  transform:translateY(20px);opacity:0;pointer-events:none;
+  transition:all 0.3s ease;
+}
+.a11y-panel.open{transform:translateY(0);opacity:1;pointer-events:auto}
+
+.a11y-header{padding:16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.a11y-title{font-family:var(--font-display);font-weight:600;font-size:16px;color:var(--text)}
+.a11y-close{background:none;border:none;cursor:pointer;font-size:20px;color:var(--muted)}
+
+.a11y-content{padding:16px;display:flex;flex-direction:column;gap:12px}
+
+.a11y-feature{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px;background:var(--bg);border-radius:var(--r-sm);border:1px solid var(--border)
+}
+
+.a11y-feature-info{flex:1}
+.a11y-feature-name{font-weight:500;font-size:14px;color:var(--text)}
+.a11y-feature-desc{font-size:12px;color:var(--muted);margin-top:2px;line-height:1.3}
+
+.a11y-toggle{
+  position:relative;width:44px;height:26px;background:#ccc;border-radius:13px;
+  border:none;cursor:pointer;transition:background 0.2s;flex-shrink:0
+}
+.a11y-toggle.on{background:var(--accent)}
+.a11y-toggle::after{
+  content:'';position:absolute;width:20px;height:20px;
+  background:white;border-radius:50%;top:3px;left:3px;transition:left 0.2s
+}
+.a11y-toggle.on::after{left:21px}
+
+.a11y-reset{width:100%;padding:10px;margin-top:8px;background:var(--accent);color:var(--on-primary);border:none;border-radius:var(--r-pill);font-weight:500;cursor:pointer;font-size:13px;transition:opacity 0.2s}
+.a11y-reset:hover{opacity:0.9}
+
+/* Skip link */
+.skip-link{position:absolute;top:-40px;left:0;background:var(--accent);color:var(--on-primary);padding:8px 16px;text-decoration:none;border-radius:0 0 6px 0;font-weight:600;font-size:14px;z-index:999}
+.skip-link:focus{top:0}
+
+/* Feature-specific CSS */
+body.a11y-reduced-motion{--transition-duration:0.01ms !important}
+body.a11y-reduced-motion *{transition-duration:var(--transition-duration) !important;animation-duration:var(--transition-duration) !important}
+
+body.a11y-high-contrast{--text:#000;--border:rgba(0,0,0,0.5)}
+[data-theme="dark"] body.a11y-high-contrast{--text:#FFF;--bg:#000}
+
+body.a11y-text-lg{font-size:17px}
+body.a11y-text-lg *{font-size:1.1em}
+body.a11y-text-xl{font-size:19px}
+body.a11y-text-xl *{font-size:1.2em}
+
+body.a11y-adhd .sidebar{opacity:0.4;pointer-events:none}
+body.a11y-adhd .sidebar *{cursor:default}
+
+@media (max-width:600px){
+  .a11y-widget-btn{bottom:16px;right:16px}
+  .a11y-panel{bottom:72px;right:16px;width:calc(100vw - 32px);max-width:300px}
+}
 </style>
 </head>
 <body>
+
+<!-- ACCESSIBILITY: Skip link -->
+<a href="#main-content" class="skip-link" data-i18n="skipLink">Skip to main content</a>
+
+<!-- ACCESSIBILITY: Overlay widget -->
+<button class="a11y-widget-btn" id="a11y-widget-btn" aria-label="Accessibility options" title="Accessibility adjustments"></button>
+<div class="a11y-panel" id="a11y-panel">
+  <div class="a11y-header">
+    <div class="a11y-title" data-i18n="a11yTitle">Accessibility</div>
+    <button class="a11y-close" id="a11y-close" aria-label="Close accessibility panel">✕</button>
+  </div>
+  <div class="a11y-content">
+    <div class="a11y-feature">
+      <div class="a11y-feature-info">
+        <div class="a11y-feature-name" data-i18n="a11yTextSize">Text Size</div>
+        <div class="a11y-feature-desc" data-i18n="a11yTextSizeDesc">Increase or decrease text</div>
+      </div>
+      <select id="a11y-text-size" class="a11y-toggle" style="width:60px;padding:4px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xs);cursor:pointer">
+        <option value="normal" data-i18n-option="normal">Normal</option>
+        <option value="lg" data-i18n-option="large">Large</option>
+        <option value="xl" data-i18n-option="xlarge">XL</option>
+      </select>
+    </div>
+
+    <div class="a11y-feature">
+      <div class="a11y-feature-info">
+        <div class="a11y-feature-name" data-i18n="a11yHighContrast">High Contrast</div>
+        <div class="a11y-feature-desc" data-i18n="a11yHighContrastDesc">Boost colors and contrast</div>
+      </div>
+      <button class="a11y-toggle" id="a11y-high-contrast" aria-pressed="false" aria-label="Toggle high contrast mode"></button>
+    </div>
+
+    <div class="a11y-feature">
+      <div class="a11y-feature-info">
+        <div class="a11y-feature-name" data-i18n="a11yReducedMotion">Reduce Motion</div>
+        <div class="a11y-feature-desc" data-i18n="a11yReducedMotionDesc">Disable animations</div>
+      </div>
+      <button class="a11y-toggle" id="a11y-reduced-motion" aria-pressed="false" aria-label="Toggle reduced motion"></button>
+    </div>
+
+    <div class="a11y-feature">
+      <div class="a11y-feature-info">
+        <div class="a11y-feature-name" data-i18n="a11yKeyboardFocus">Focus Highlight</div>
+        <div class="a11y-feature-desc" data-i18n="a11yKeyboardFocusDesc">Bold focus outline</div>
+      </div>
+      <button class="a11y-toggle" id="a11y-keyboard-focus" aria-pressed="false" aria-label="Toggle keyboard focus highlights"></button>
+    </div>
+
+    <div class="a11y-feature">
+      <div class="a11y-feature-info">
+        <div class="a11y-feature-name" data-i18n="a11yAdhd">ADHD Friendly</div>
+        <div class="a11y-feature-desc" data-i18n="a11yAdhdDesc">Reduce distractions</div>
+      </div>
+      <button class="a11y-toggle" id="a11y-adhd" aria-pressed="false" aria-label="Toggle ADHD friendly mode"></button>
+    </div>
+
+    <button class="a11y-reset" id="a11y-reset-all" data-i18n="a11yReset">Reset All</button>
+  </div>
+</div>
 
 <!-- ═══════════════════════════════════════
      SCREEN A — CREATE EVENT
@@ -827,7 +959,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
         <button id="back-btn" class="create-btn" style="display:none;background:var(--surface);color:var(--text);border:1px solid var(--border);flex:0 0 auto;width:52px">&#8592;</button>
         <button id="create-btn" class="create-btn" style="flex:1">Next &nbsp;&#8594;</button>
       </div>
-      <p class="dev-footer">Avi Klayman &mdash; <a href="mailto:avi@meteor.co.il">avi@meteor.co.il</a><br><a href="help.html">Help</a> &middot; <a href="terms.html">Terms &amp; Privacy</a></p>
+      <p class="dev-footer">Avi Klayman &mdash; <a href="mailto:avi@meteor.co.il">avi@meteor.co.il</a><br><a href="help.html">Help</a> &middot; <a href="accessibility-statement.html">Accessibility</a> &middot; <a href="terms.html">Terms &amp; Privacy</a></p>
     </div>
   </main>
 </div>
@@ -1041,6 +1173,19 @@ const LANGS = {
     notifyResponses:'Email me when someone responds',
     notifySubject:(name,event)=>`${name} responded to: ${event}`,
     notifyBody:(name,event,url)=>`Hi,\n\n${name} just updated their availability for: ${event}\n\n${url}\n\nThanks!`,
+    skipLink:'Skip to main content',
+    a11yTitle:'Accessibility',
+    a11yTextSize:'Text Size',
+    a11yTextSizeDesc:'Increase or decrease text',
+    a11yHighContrast:'High Contrast',
+    a11yHighContrastDesc:'Boost colors and contrast',
+    a11yReducedMotion:'Reduce Motion',
+    a11yReducedMotionDesc:'Disable animations',
+    a11yKeyboardFocus:'Focus Highlight',
+    a11yKeyboardFocusDesc:'Bold focus outline',
+    a11yAdhd:'ADHD Friendly',
+    a11yAdhdDesc:'Reduce distractions',
+    a11yReset:'Reset All',
     creatorNameErr:'Please enter your name.', creatorEmailErr:'Please enter a valid email address.',
     nextBtn:'Next &nbsp;&#8594;',
     creatorEmailSubject:(name)=>`Your meeting link — ${name}`,
@@ -1092,6 +1237,19 @@ const LANGS = {
     notifyResponses:'שלח לי מייל כשמישהו עדכן',
     notifySubject:(name,event)=>`${name} עדכן את הזמינות שלו עבור: ${event}`,
     notifyBody:(name,event,url)=>`שלום,\n\n${name} זה עתה עדכן את הזמינות שלו עבור: ${event}\n\n${url}\n\nתודה!`,
+    skipLink:'דלג לתוכן הראשי',
+    a11yTitle:'נגישות',
+    a11yTextSize:'גודל הטקסט',
+    a11yTextSizeDesc:'הגדל או הקטן את הטקסט',
+    a11yHighContrast:'ניגודיות גבוהה',
+    a11yHighContrastDesc:'הגבר צבעים וניגודיות',
+    a11yReducedMotion:'צמצם תנועה',
+    a11yReducedMotionDesc:'השבת אנימציות',
+    a11yKeyboardFocus:'הדגשת Focus',
+    a11yKeyboardFocusDesc:'קו focus עבה',
+    a11yAdhd:'ידידותי ל-ADHD',
+    a11yAdhdDesc:'הפחת הפרעות',
+    a11yReset:'אפס הכל',
     creatorNameErr:'יש להזין שם.', creatorEmailErr:'יש להזין כתובת מייל תקינה.',
     nextBtn:'הבא &nbsp;&#8592;',
     creatorEmailSubject:(name)=>`קישור לפגישה שלך — ${name}`,
@@ -1142,6 +1300,19 @@ const LANGS = {
     notifyResponses:'M\'avertir quand quelqu\'un répond',
     notifySubject:(name,event)=>`${name} a répondu à : ${event}`,
     notifyBody:(name,event,url)=>`Bonjour,\n\n${name} vient de mettre à jour sa disponibilité pour : ${event}\n\n${url}\n\nCordialement !`,
+    skipLink:'Accéder au contenu principal',
+    a11yTitle:'Accessibilité',
+    a11yTextSize:'Taille du texte',
+    a11yTextSizeDesc:'Augmenter ou diminuer le texte',
+    a11yHighContrast:'Contraste élevé',
+    a11yHighContrastDesc:'Augmenter les couleurs',
+    a11yReducedMotion:'Réduire le mouvement',
+    a11yReducedMotionDesc:'Désactiver les animations',
+    a11yKeyboardFocus:'Mise en surbrillance du focus',
+    a11yKeyboardFocusDesc:'Contour de focus gras',
+    a11yAdhd:'Convivial TDAH',
+    a11yAdhdDesc:'Réduire les distractions',
+    a11yReset:'Réinitialiser tout',
     creatorNameErr:'Veuillez entrer votre nom.', creatorEmailErr:'Veuillez entrer une adresse e-mail valide.',
     nextBtn:'Suivant &nbsp;&#8594;',
     creatorEmailSubject:(name)=>`Votre lien de réunion — ${name}`,
@@ -2618,6 +2789,163 @@ document.addEventListener('DOMContentLoaded', async () => {
       document.getElementById('loading-overlay').style.display = 'none';
     }
   }
+
+  // ════════════════════════════════════════════════════════════════════
+  // ACCESSIBILITY WIDGET INITIALIZATION
+  // ════════════════════════════════════════════════════════════════════
+
+  const a11yPanel = document.getElementById('a11y-panel');
+  const a11yBtn = document.getElementById('a11y-widget-btn');
+  const a11yCloseBtn = document.getElementById('a11y-close');
+
+  // Load saved preferences
+  function loadA11yPrefs() {
+    const saved = localStorage.getItem('a11y-prefs');
+    if (!saved) return {};
+    try {
+      return JSON.parse(saved);
+    } catch(e) {
+      return {};
+    }
+  }
+
+  // Save preferences
+  function saveA11yPrefs(prefs) {
+    localStorage.setItem('a11y-prefs', JSON.stringify(prefs));
+  }
+
+  // Apply preferences from object
+  function applyA11yPrefs(prefs) {
+    // Text size
+    const sizeSelect = document.getElementById('a11y-text-size');
+    if (prefs.textSize) {
+      sizeSelect.value = prefs.textSize;
+      if (prefs.textSize === 'lg') {
+        document.body.classList.add('a11y-text-lg');
+        document.body.classList.remove('a11y-text-xl');
+      } else if (prefs.textSize === 'xl') {
+        document.body.classList.add('a11y-text-xl');
+        document.body.classList.remove('a11y-text-lg');
+      } else {
+        document.body.classList.remove('a11y-text-lg', 'a11y-text-xl');
+      }
+    }
+
+    // High contrast
+    const hcBtn = document.getElementById('a11y-high-contrast');
+    if (prefs.highContrast) {
+      document.body.classList.add('a11y-high-contrast');
+      hcBtn.setAttribute('aria-pressed', 'true');
+      hcBtn.classList.add('active');
+    }
+
+    // Reduced motion
+    const rmBtn = document.getElementById('a11y-reduced-motion');
+    if (prefs.reducedMotion) {
+      document.body.classList.add('a11y-reduced-motion');
+      rmBtn.setAttribute('aria-pressed', 'true');
+      rmBtn.classList.add('active');
+    }
+
+    // Keyboard focus highlights
+    const kfBtn = document.getElementById('a11y-keyboard-focus');
+    if (prefs.keyboardFocus) {
+      document.body.classList.add('a11y-keyboard-focus');
+      kfBtn.setAttribute('aria-pressed', 'true');
+      kfBtn.classList.add('active');
+    }
+
+    // ADHD friendly
+    const adhdBtn = document.getElementById('a11y-adhd');
+    if (prefs.adhd) {
+      document.body.classList.add('a11y-adhd');
+      adhdBtn.setAttribute('aria-pressed', 'true');
+      adhdBtn.classList.add('active');
+    }
+  }
+
+  // Toggle open/close
+  a11yBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    a11yPanel.style.display = a11yPanel.style.display === 'none' ? 'block' : 'none';
+  });
+
+  a11yCloseBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    a11yPanel.style.display = 'none';
+  });
+
+  // Close panel when clicking outside
+  document.addEventListener('click', e => {
+    if (!a11yPanel.contains(e.target) && e.target !== a11yBtn) {
+      a11yPanel.style.display = 'none';
+    }
+  });
+
+  // Text size change
+  document.getElementById('a11y-text-size').addEventListener('change', e => {
+    const prefs = loadA11yPrefs();
+    prefs.textSize = e.target.value;
+    saveA11yPrefs(prefs);
+    applyA11yPrefs(prefs);
+  });
+
+  // High contrast
+  document.getElementById('a11y-high-contrast').addEventListener('click', e => {
+    e.preventDefault();
+    const prefs = loadA11yPrefs();
+    prefs.highContrast = !prefs.highContrast;
+    saveA11yPrefs(prefs);
+    applyA11yPrefs(prefs);
+  });
+
+  // Reduced motion
+  document.getElementById('a11y-reduced-motion').addEventListener('click', e => {
+    e.preventDefault();
+    const prefs = loadA11yPrefs();
+    prefs.reducedMotion = !prefs.reducedMotion;
+    saveA11yPrefs(prefs);
+    applyA11yPrefs(prefs);
+  });
+
+  // Keyboard focus highlights
+  document.getElementById('a11y-keyboard-focus').addEventListener('click', e => {
+    e.preventDefault();
+    const prefs = loadA11yPrefs();
+    prefs.keyboardFocus = !prefs.keyboardFocus;
+    saveA11yPrefs(prefs);
+    applyA11yPrefs(prefs);
+  });
+
+  // ADHD friendly
+  document.getElementById('a11y-adhd').addEventListener('click', e => {
+    e.preventDefault();
+    const prefs = loadA11yPrefs();
+    prefs.adhd = !prefs.adhd;
+    saveA11yPrefs(prefs);
+    applyA11yPrefs(prefs);
+  });
+
+  // Reset all
+  document.getElementById('a11y-reset-all').addEventListener('click', e => {
+    e.preventDefault();
+    localStorage.removeItem('a11y-prefs');
+    document.body.classList.remove(
+      'a11y-text-lg', 'a11y-text-xl', 'a11y-high-contrast',
+      'a11y-reduced-motion', 'a11y-keyboard-focus', 'a11y-adhd'
+    );
+    document.getElementById('a11y-text-size').value = 'normal';
+    document.querySelectorAll('.a11y-toggle').forEach(btn => {
+      if (btn !== document.getElementById('a11y-text-size')) {
+        btn.setAttribute('aria-pressed', 'false');
+        btn.classList.remove('active');
+      }
+    });
+  });
+
+  // Apply saved preferences on load
+  const savedPrefs = loadA11yPrefs();
+  applyA11yPrefs(savedPrefs);
 
   initScreenA();
   applyLang();
