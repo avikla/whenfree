@@ -111,11 +111,15 @@ Collection: `meetings` → documents with participant availability maps
 - `--muted: #3E5750` — secondary text, labels
 - `--muted2: #7E988F` — tertiary text, hints
 - `--accent: #00C281` — primary green (buttons, links, highlights)
+- `--accent-text: #00C281` — same as accent (used for text contexts)
+- `--accent-glow: rgba(0, 194, 129, 0.12)` — accent focus ring
+- `--accent-dim: rgba(0, 194, 129, 0.28)` — accent divider/border tint
 - `--primary-ctr: #C7F4E2` — tonal container (top ranked card background)
 - `--on-primary-ctr: #00382A` — text on tonal container
 - `--on-primary: #04261B` — text on accent buttons
-- `--accent-glow: rgba(0, 194, 129, 0.12)` — accent focus ring
-- `--accent-dim: rgba(0, 194, 129, 0.28)` — accent divider
+- `--cell-empty: #DEEFE8` — empty calendar cell background
+- `--border: rgba(10, 70, 52, 0.15)` — subtle green-tinted border
+- `--border2: rgba(10, 70, 52, 0.20)` — stronger border
 
 **Dark Mode (`[data-theme="dark"]`)**
 - `--bg: #081C13` — page background (deep forest)
@@ -125,9 +129,15 @@ Collection: `meetings` → documents with participant availability maps
 - `--muted: #81B09A` — secondary text
 - `--muted2: #5A7D6E` — tertiary text
 - `--accent: #00D68F` — brighter green for dark contrast
+- `--accent-text: #00D68F` — same as accent (text contexts)
+- `--accent-glow: rgba(0, 214, 143, 0.15)` — accent focus ring (dark)
+- `--accent-dim: rgba(0, 214, 143, 0.25)` — accent divider/border tint (dark)
 - `--primary-ctr: #1A4D38` — tonal container (darker variant)
 - `--on-primary-ctr: #7FDBBA` — text on tonal container (light)
+- `--on-primary: #04261B` — text on accent buttons (same as light)
 - `--cell-empty: #163526` — empty calendar cell background
+- `--border: rgba(200, 255, 230, 0.08)` — light mint border on dark bg
+- `--border2: rgba(200, 255, 230, 0.14)` — stronger border on dark bg
 
 **Heatmap Ramp (5-step density)**
 - `--heat-1: #CBEFE0` → `#193828` (1/5 people free)
