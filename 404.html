@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Redirecting...</title>
+  <script>
+    // Capture the language from the 404 path and redirect to index.html
+    // GitHub Pages serves 404.html for any path that doesn't exist
+    const path = window.location.pathname;
+    const match = path.match(/^\/(en|fr|he)(?:\/|$)/);
+
+    if (match) {
+      const lang = match[1];
+      // Store language in localStorage before redirecting
+      localStorage.setItem('lang', lang);
+      // Get any hash that might exist (e.g., /fr#eventId)
+      const hash = window.location.hash;
+      // Redirect to root index.html with hash preserved
+      window.location.replace('/' + hash);
+    } else {
+      // No language match, just go to root
+      window.location.replace('/');
+    }
+  </script>
+</head>
+<body>
+  Redirecting...
+</body>
+</html>
