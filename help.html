@@ -1053,6 +1053,8 @@ function applyA11yPrefs(prefs) {
     hcBtn.setAttribute('aria-pressed', 'true');
     hcBtn.classList.add('on');
   } else {
+    document.body.classList.remove('a11y-high-contrast');
+    hcBtn.setAttribute('aria-pressed', 'false');
     hcBtn.classList.remove('on');
   }
 
@@ -1063,6 +1065,8 @@ function applyA11yPrefs(prefs) {
     rmBtn.setAttribute('aria-pressed', 'true');
     rmBtn.classList.add('on');
   } else {
+    document.body.classList.remove('a11y-reduced-motion');
+    rmBtn.setAttribute('aria-pressed', 'false');
     rmBtn.classList.remove('on');
   }
 
@@ -1073,6 +1077,8 @@ function applyA11yPrefs(prefs) {
     kfBtn.setAttribute('aria-pressed', 'true');
     kfBtn.classList.add('on');
   } else {
+    document.body.classList.remove('a11y-keyboard-focus');
+    kfBtn.setAttribute('aria-pressed', 'false');
     kfBtn.classList.remove('on');
   }
 
@@ -1083,6 +1089,8 @@ function applyA11yPrefs(prefs) {
     adhdBtn.setAttribute('aria-pressed', 'true');
     adhdBtn.classList.add('on');
   } else {
+    document.body.classList.remove('a11y-adhd');
+    adhdBtn.setAttribute('aria-pressed', 'false');
     adhdBtn.classList.remove('on');
   }
 }

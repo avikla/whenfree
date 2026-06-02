@@ -779,19 +779,20 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
 .skip-link:focus{top:0}
 
 /* Feature-specific CSS */
-body.a11y-reduced-motion{--transition-duration:0.01ms !important}
-body.a11y-reduced-motion *{transition-duration:var(--transition-duration) !important;animation-duration:var(--transition-duration) !important}
+body.a11y-reduced-motion *{transition-duration:0.01ms !important;animation-duration:0.01ms !important}
 
-body.a11y-high-contrast{--text:#000;--border:rgba(0,0,0,0.5)}
-[data-theme="dark"] body.a11y-high-contrast{--text:#FFF;--bg:#000}
+body.a11y-high-contrast{filter:contrast(1.5) saturate(1.2)}
 
 body.a11y-text-lg{font-size:17px}
 body.a11y-text-lg *{font-size:1.1em}
 body.a11y-text-xl{font-size:19px}
 body.a11y-text-xl *{font-size:1.2em}
 
-body.a11y-adhd .sidebar{opacity:0.4;pointer-events:none}
-body.a11y-adhd .sidebar *{cursor:default}
+body.a11y-keyboard-focus *:focus{outline:3px solid #00C281 !important;outline-offset:3px !important;box-shadow:0 0 0 5px rgba(0,194,129,0.3) !important}
+
+body.a11y-adhd .sidebar{opacity:0.3 !important;pointer-events:none !important}
+body.a11y-adhd .sidebar *{cursor:default !important}
+body.a11y-adhd .a11y-panel{opacity:1 !important;pointer-events:auto !important}
 
 @media (max-width:600px){
   .a11y-widget-btn{bottom:16px;right:16px}
@@ -2844,6 +2845,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       hcBtn.setAttribute('aria-pressed', 'true');
       hcBtn.classList.add('on');
     } else {
+      document.body.classList.remove('a11y-high-contrast');
+      hcBtn.setAttribute('aria-pressed', 'false');
       hcBtn.classList.remove('on');
     }
 
@@ -2854,6 +2857,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       rmBtn.setAttribute('aria-pressed', 'true');
       rmBtn.classList.add('on');
     } else {
+      document.body.classList.remove('a11y-reduced-motion');
+      rmBtn.setAttribute('aria-pressed', 'false');
       rmBtn.classList.remove('on');
     }
 
@@ -2864,6 +2869,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       kfBtn.setAttribute('aria-pressed', 'true');
       kfBtn.classList.add('on');
     } else {
+      document.body.classList.remove('a11y-keyboard-focus');
+      kfBtn.setAttribute('aria-pressed', 'false');
       kfBtn.classList.remove('on');
     }
 
@@ -2874,6 +2881,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       adhdBtn.setAttribute('aria-pressed', 'true');
       adhdBtn.classList.add('on');
     } else {
+      document.body.classList.remove('a11y-adhd');
+      adhdBtn.setAttribute('aria-pressed', 'false');
       adhdBtn.classList.remove('on');
     }
   }
