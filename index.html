@@ -2842,7 +2842,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (prefs.highContrast) {
       document.body.classList.add('a11y-high-contrast');
       hcBtn.setAttribute('aria-pressed', 'true');
-      hcBtn.classList.add('active');
+      hcBtn.classList.add('on');
+    } else {
+      hcBtn.classList.remove('on');
     }
 
     // Reduced motion
@@ -2850,7 +2852,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (prefs.reducedMotion) {
       document.body.classList.add('a11y-reduced-motion');
       rmBtn.setAttribute('aria-pressed', 'true');
-      rmBtn.classList.add('active');
+      rmBtn.classList.add('on');
+    } else {
+      rmBtn.classList.remove('on');
     }
 
     // Keyboard focus highlights
@@ -2858,7 +2862,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (prefs.keyboardFocus) {
       document.body.classList.add('a11y-keyboard-focus');
       kfBtn.setAttribute('aria-pressed', 'true');
-      kfBtn.classList.add('active');
+      kfBtn.classList.add('on');
+    } else {
+      kfBtn.classList.remove('on');
     }
 
     // ADHD friendly
@@ -2866,7 +2872,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (prefs.adhd) {
       document.body.classList.add('a11y-adhd');
       adhdBtn.setAttribute('aria-pressed', 'true');
-      adhdBtn.classList.add('active');
+      adhdBtn.classList.add('on');
+    } else {
+      adhdBtn.classList.remove('on');
     }
   }
 
@@ -2944,7 +2952,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.querySelectorAll('.a11y-toggle').forEach(btn => {
       if (btn !== document.getElementById('a11y-text-size')) {
         btn.setAttribute('aria-pressed', 'false');
-        btn.classList.remove('active');
+        btn.classList.remove('on');
       }
     });
   });
