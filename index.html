@@ -929,6 +929,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
   <!-- Language toggle -->
   <div class="lang-toggle" id="lang-toggle">
     <button id="lang-en" onclick="setLang('en')">EN</button>
+    <button id="lang-fr" onclick="setLang('fr')">FR</button>
     <button id="lang-he" onclick="setLang('he')">עב</button>
   </div>
 </div>
@@ -1079,6 +1080,53 @@ const LANGS = {
     daysShort:['א׳','ב׳','ג׳','ד׳','ה׳','ו׳','ש׳'],
     daysFull:['ראשון','שני','שלישי','רביעי','חמישי','שישי','שבת'],
     dir:'rtl', locale:'he-IL', ampm:false,
+  },
+  fr: {
+    appName:'Meteor Meet',
+    pageTitle:'Meteor — Trouvez le bon moment.',
+    tagline:'par <em>Meteor</em> — Trouvez le bon moment.',
+    step1:'Nommez votre événement', namePlaceholder:'Déjeuner d\'équipe, Lancement de projet…',
+    step2:'Choisir les dates', modeSpecific:'Dates précises', modeDays:'Jours de la semaine',
+    prevMonth:'Mois précédent', nextMonth:'Mois suivant',
+    errorDate:'Veuillez sélectionner au moins une date.', errorDay:'Veuillez sélectionner au moins un jour.',
+    step3:'Définir la plage horaire', noEarlier:'Pas avant', noLater:'Pas après', timezone:'Fuseau horaire', tzSearch:'Rechercher un fuseau…',
+    createBtn:'Créer l\'événement &nbsp;&#8594;', creating:'Création…',
+    markAvail:'Indiquez vos disponibilités',
+    markSub:'Entrez votre nom, puis cliquez sur les créneaux pour indiquer vos disponibilités.',
+    namePH:'Votre nom', continueBtn:'Continuer &#8594;', joinBtn:'Rejoindre l\'événement &nbsp;&#8594;', joining:'Connexion…',
+    people:'Participants', copyLink:'<span class="btn-icon">🔗</span> Copier le lien', copied:'&#10003; Copié !',
+    sendEmail:'&#9993; Envoyer le lien par e-mail', newEvent:'<span class="nav-arrow">⬅</span><span class="nav-label">Nouvel événement</span>', editTitle:'Modifier le nom de la réunion',
+    gridHint:'Cliquez pour indiquer vos disponibilités.', bestTimes:'Meilleurs créneaux',
+    bestEmpty:'Indiquez vos disponibilités pour voir les meilleurs créneaux',
+    mobileNotice:'Meilleure expérience sur un écran plus large', loading:'Chargement…',
+    youBadge:'vous', clearBtn:'&#10005; Effacer mes créneaux',
+    sendBestTimes:'📊 Envoyer les meilleurs créneaux',
+    bestTimesSubject:(name)=>`Meilleurs créneaux pour : ${name}`,
+    bestTimesBody:(name,url)=>`Bonjour,\n\nVoici les meilleurs créneaux pour : ${name}\n\n${url}\n\nCordialement !`,
+    emailBtnPH:'E-mail du destinataire',
+    linkBannerSend:'Envoyer', linkBannerSending:'Envoi…',
+    linkBannerSent:'&#10003; Envoyé ! Vérifiez votre boîte mail.',
+    linkBannerError:'Échec de l\'envoi — réessayez.',
+    allPeople:(n)=>n===1?'1 personne au total':`${n} personnes au total`,
+    ofPeople:(x,n)=>n===1?`${x} sur 1 personne`:`${x} sur ${n} personnes`,
+    rejoinPrompt:(name)=>`"${name}" a déjà rejoint cette réunion. Continuer en tant que cette personne ?`,
+    dateCount:(n)=>n===1?'1 date':`${n} dates`,
+    emailSubject:(name)=>`Vous êtes invité(e) : ${name}`,
+    emailBody:(name,url)=>`Bonjour,\n\nJe cherche un créneau pour : ${name}\n\nIndiquez vos disponibilités :\n${url}\n\nCordialement !`,
+    step4:'Qui organise ?', creatorNamePH:'Votre nom', creatorEmailPH:'Votre e-mail',
+    creatorEmailHint:'Nous vous enverrons un lien pour revenir\nconsulter les réponses à tout moment.',
+    creatorNameErr:'Veuillez entrer votre nom.', creatorEmailErr:'Veuillez entrer une adresse e-mail valide.',
+    nextBtn:'Suivant &nbsp;&#8594;',
+    creatorEmailSubject:(name)=>`Votre lien de réunion — ${name}`,
+    creatorEmailHtml:(creatorName,eventName,url)=>`<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.6;color:#222"><p>Bonjour ${creatorName},</p><p>Votre réunion <strong>${eventName}</strong> est prête.</p><p><a href="${url}" style="display:inline-block;padding:10px 20px;background:#00d68f;color:#0f1623;border-radius:6px;text-decoration:none">Ouvrir la réunion</a></p><p style="color:#888;font-size:13px">${url}</p></div>`,
+    emailFailMsg:'Nous n\'avons pas pu envoyer l\'e-mail de confirmation. Copiez ce lien pour le sauvegarder :', emailRetrying:'Nouvel essai…', emailRetryFail:'Toujours impossible d\'envoyer — veuillez copier le lien ci-dessus.',
+    notFound:'Événement introuvable. Créez-en un nouveau.',
+    firebaseErr:'Impossible de créer l\'événement — vérifiez votre configuration Firebase.',
+    months:['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
+    monthsShort:['Jan','Fév','Mar','Avr','Mai','Juin','Juil','Août','Sep','Oct','Nov','Déc'],
+    daysShort:['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'],
+    daysFull:['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
+    dir:'ltr', locale:'fr-FR', ampm:false,
   }
 };
 
@@ -1120,6 +1168,7 @@ function applyLang() {
   const sc = document.getElementById('share-confirm');
   if (sc) sc.innerHTML = lang.copied;
   document.getElementById('lang-en')?.classList.toggle('active', currentLang === 'en');
+  document.getElementById('lang-fr')?.classList.toggle('active', currentLang === 'fr');
   document.getElementById('lang-he')?.classList.toggle('active', currentLang === 'he');
 }
 
