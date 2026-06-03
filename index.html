@@ -800,18 +800,21 @@ body.a11y-adhd .a11y-panel{opacity:1 !important;pointer-events:auto !important}
 @media (max-width:600px){
   .a11y-widget-btn{bottom:16px;right:16px}
   .a11y-panel{bottom:72px;right:16px;width:calc(100vw - 32px);max-width:300px}
+  #screen-event{overflow-x:hidden}
 
-  /* On mobile: controls flow inline, centered, below the footer */
+  /* On mobile: pin controls bottom-left so they're visible on both screens */
   .top-controls{
-    position:static;
-    display:flex;
-    justify-content:center;
-    padding:14px 16px 28px;
-    gap:8px;
+    position:fixed;
+    bottom:16px;
+    left:16px;
+    right:auto;
+    top:auto;
+    padding:0;
+    z-index:999;
   }
   [dir="rtl"] .top-controls{
     left:auto;
-    right:auto;
+    right:80px;
   }
 }
 </style>
@@ -879,6 +882,19 @@ body.a11y-adhd .a11y-panel{opacity:1 !important;pointer-events:auto !important}
     </div>
 
     <button class="a11y-reset" id="a11y-reset-all" data-i18n="a11yReset">Reset All</button>
+  </div>
+</div>
+
+<!-- Theme + language toggles — lives at body level so it persists across both screens -->
+<div class="top-controls" id="top-controls">
+  <div class="theme-toggle" id="theme-toggle">
+    <button id="theme-btn-light" onclick="setTheme('light')" title="Light mode">&#x2600;</button>
+    <button id="theme-btn-dark" onclick="setTheme('dark')" title="Dark mode">&#x263E;</button>
+  </div>
+  <div class="lang-toggle" id="lang-toggle">
+    <button id="lang-en" onclick="setLang('en')">EN</button>
+    <button id="lang-fr" onclick="setLang('fr')">FR</button>
+    <button id="lang-he" onclick="setLang('he')">עב</button>
   </div>
 </div>
 
@@ -984,18 +1000,6 @@ body.a11y-adhd .a11y-panel{opacity:1 !important;pointer-events:auto !important}
         <button id="create-btn" class="create-btn" style="flex:1">Next &nbsp;&#8594;</button>
       </div>
       <p class="dev-footer">Avi Klayman &mdash; <a href="mailto:avi@meteor.co.il">avi@meteor.co.il</a><br><a href="help.html">Help</a> &middot; <a href="accessibility-statement.html">Accessibility</a> &middot; <a href="terms.html">Terms &amp; Privacy</a></p>
-      <!-- Top controls: theme + language toggles -->
-      <div class="top-controls" id="top-controls">
-        <div class="theme-toggle" id="theme-toggle">
-          <button id="theme-btn-light" onclick="setTheme('light')" title="Light mode">&#x2600;</button>
-          <button id="theme-btn-dark" onclick="setTheme('dark')" title="Dark mode">&#x263E;</button>
-        </div>
-        <div class="lang-toggle" id="lang-toggle">
-          <button id="lang-en" onclick="setLang('en')">EN</button>
-          <button id="lang-fr" onclick="setLang('fr')">FR</button>
-          <button id="lang-he" onclick="setLang('he')">עב</button>
-        </div>
-      </div>
     </div>
   </main>
 </div>
