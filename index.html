@@ -1570,6 +1570,23 @@ function toggleTheme() {
   setTheme(currentTheme === 'dark' ? 'light' : 'dark');
 }
 
+function showOnboarding() {
+  const overlay = document.getElementById('onboard-overlay');
+  if (!overlay) return;
+  overlay.style.display = 'flex';
+  // Force reflow so CSS transition fires
+  overlay.offsetHeight;
+  overlay.classList.add('visible');
+}
+
+function dismissOnboarding(persist) {
+  const overlay = document.getElementById('onboard-overlay');
+  if (!overlay) return;
+  overlay.classList.remove('visible');
+  overlay.addEventListener('transitionend', () => { overlay.style.display = 'none'; }, { once: true });
+  if (persist) localStorage.setItem('meteor_onboarded', '1');
+}
+
 function setLang(code) {
   currentLang = code;
   localStorage.setItem('lang', code);
@@ -3147,6 +3164,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   initScreenA();
   applyLang();
   applyTheme();
+
+  document.getElementById('onboard-got-it')?.addEventListener('click', () => dismissOnboarding(true));
+  document.getElementById('onboard-skip')?.addEventListener('click', () => dismissOnboarding(true));
+
+  // Auto-show for first-time visitors
+  if (!localStorage.getItem('meteor_onboarded')) {
+    setTimeout(showOnboarding, 600);
+  }
 });
 </script>
 </body>
