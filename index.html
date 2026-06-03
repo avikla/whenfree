@@ -1583,7 +1583,9 @@ function dismissOnboarding(persist) {
   const overlay = document.getElementById('onboard-overlay');
   if (!overlay) return;
   overlay.classList.remove('visible');
-  overlay.addEventListener('transitionend', () => { overlay.style.display = 'none'; }, { once: true });
+  const hide = () => { overlay.style.display = 'none'; };
+  overlay.addEventListener('transitionend', hide, { once: true });
+  setTimeout(hide, 350);
   if (persist) localStorage.setItem('meteor_onboarded', '1');
 }
 
