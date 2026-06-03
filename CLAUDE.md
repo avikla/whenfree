@@ -8,13 +8,13 @@ Single-file meeting scheduler (when2meet alternative). Real-time availability sy
 
 **Git submodule** pointing to `avikla/Meteor-Meet`:
 - GitHub: https://github.com/avikla/Meteor-Meet
-- Local path: `projects/Meteor-Meeting-Scheduler/`
+- Local path: `projects/meet-meteor/`
 - Deployment: GitHub Pages (automatic on push to `avikla/Meteor-Meet`)
 
 Push changes **from inside the submodule** to avoid merge conflicts:
 
 ```powershell
-cd "projects/Meteor-Meeting-Scheduler"
+cd "projects/meet-meteor"
 git add .
 git commit -m "..."
 git push
@@ -45,7 +45,7 @@ After pushing from the submodule, return to workspace root and the submodule poi
 ### Website
 
 ```powershell
-cd "projects/Meteor-Meeting-Scheduler"
+cd "projects/meet-meteor"
 git push  # deploys to meet.meteor.co.il via GitHub Pages
 ```
 
