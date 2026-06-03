@@ -889,13 +889,6 @@ body.a11y-adhd .a11y-panel{opacity:1 !important;pointer-events:auto !important}
   transition:opacity 0.15s;
 }
 .onboard-got-it:hover{opacity:0.9}
-.onboard-skip{
-  background:none;border:none;cursor:pointer;
-  font-family:var(--font-body);font-size:13px;
-  color:var(--muted2);padding:0;
-  transition:color 0.15s;
-}
-.onboard-skip:hover{color:var(--muted)}
 /* Help button in top-controls */
 .onboard-help-btn{
   background:var(--surface);border:1px solid var(--border2);
@@ -1031,7 +1024,6 @@ body.a11y-adhd .a11y-panel{opacity:1 !important;pointer-events:auto !important}
     </div>
     <div class="onboard-footer">
       <button id="onboard-got-it" class="onboard-got-it" data-i18n="onboardGotIt">Got it →</button>
-      <button id="onboard-skip" class="onboard-skip" data-i18n="onboardSkip">Skip</button>
     </div>
   </div>
 </div>
@@ -1320,7 +1312,7 @@ const LANGS = {
     onboardStep1Title:'Create an event', onboardStep1Body:'Name it, pick dates and a time range, then share the link.',
     onboardStep2Title:'Mark your availability', onboardStep2Body:'Click cells on the grid to show when you\'re free.',
     onboardStep3Title:'Find the best time', onboardStep3Body:'The app ranks slots by how many people are available.',
-    onboardGotIt:'Got it →', onboardSkip:'Skip', onboardBtnTitle:'Help',
+    onboardGotIt:'Got it →', onboardBtnTitle:'Help',
     bestEmpty:'Mark your availability to see best times',
     mobileNotice:'Best experienced on a wider screen', loading:'Loading…',
     youBadge:'you', clearBtn:'&#10005; Clear my times',
@@ -1389,7 +1381,7 @@ const LANGS = {
     onboardStep1Title:'יוצרים אירוע', onboardStep1Body:'נותנים שם, בוחרים תאריכים וטווח שעות, ומשתפים את הקישור.',
     onboardStep2Title:'מסמנים זמינות', onboardStep2Body:'לוחצים על תאים בטבלה כדי לסמן מתי אתם פנויים.',
     onboardStep3Title:'מוצאים את הזמן הטוב ביותר', onboardStep3Body:'האפליקציה מדרגת את הזמנים לפי כמה אנשים פנויים.',
-    onboardGotIt:'הבנתי ←', onboardSkip:'דלג', onboardBtnTitle:'עזרה',
+    onboardGotIt:'הבנתי ←', onboardBtnTitle:'עזרה',
     bestEmpty:'סמן זמינות כדי לראות את הזמנים הטובים ביותר',
     mobileNotice:'מומלץ לצפות במסך רחב יותר', loading:'טוען…',
     youBadge:'את/ה', clearBtn:'&#10005; נקה זמנים',
@@ -1459,7 +1451,7 @@ const LANGS = {
     onboardStep1Title:'Créer un événement', onboardStep1Body:'Nommez-le, choisissez des dates et une plage horaire, puis partagez le lien.',
     onboardStep2Title:'Indiquer vos disponibilités', onboardStep2Body:'Cliquez sur les cellules pour montrer quand vous êtes libre.',
     onboardStep3Title:'Trouver le meilleur créneau', onboardStep3Body:'L\'app classe les créneaux selon le nombre de personnes disponibles.',
-    onboardGotIt:'Compris →', onboardSkip:'Passer', onboardBtnTitle:'Aide',
+    onboardGotIt:'Compris →', onboardBtnTitle:'Aide',
     bestEmpty:'Indiquez vos disponibilités pour voir les meilleurs créneaux',
     mobileNotice:'Meilleure expérience sur un écran plus large', loading:'Chargement…',
     youBadge:'vous', clearBtn:'&#10005; Effacer mes créneaux',
@@ -3170,7 +3162,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   applyTheme();
 
   document.getElementById('onboard-got-it')?.addEventListener('click', () => dismissOnboarding(true));
-  document.getElementById('onboard-skip')?.addEventListener('click', () => dismissOnboarding(true));
 
   // Auto-show for first-time visitors
   if (!localStorage.getItem('meteor_onboarded')) {
