@@ -1549,6 +1549,8 @@ function applyLang() {
   document.getElementById('lang-en')?.classList.toggle('active', currentLang === 'en');
   document.getElementById('lang-fr')?.classList.toggle('active', currentLang === 'fr');
   document.getElementById('lang-he')?.classList.toggle('active', currentLang === 'he');
+  const op = document.querySelector('.onboard-panel');
+  if (op) op.dir = t().dir;
 }
 
 
