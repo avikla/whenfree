@@ -892,7 +892,7 @@ body.a11y-adhd .a11y-panel{opacity:1 !important;pointer-events:auto !important}
 
 <!-- Theme + language toggles — lives at body level so it persists across both screens -->
 <div class="top-controls" id="top-controls">
-  <button id="onboard-help-btn" class="onboard-help-btn" onclick="showOnboarding()" data-i18n-title="onboardBtnTitle" title="Help">?</button>
+  <button id="onboard-help-btn" class="onboard-help-btn" onclick="showOnboarding()" data-i18n-title="onboardBtnTitle" aria-label="Help" title="Help">?</button>
   <div class="theme-toggle" id="theme-toggle">
     <button id="theme-btn-light" onclick="setTheme('light')" title="Light mode">&#x2600;</button>
     <button id="theme-btn-dark" onclick="setTheme('dark')" title="Dark mode">&#x263E;</button>
@@ -907,6 +907,7 @@ body.a11y-adhd .a11y-panel{opacity:1 !important;pointer-events:auto !important}
 <!-- Onboarding modal -->
 <div id="onboard-overlay" class="onboard-overlay" role="dialog" aria-modal="true" aria-labelledby="onboard-title">
   <div class="onboard-panel">
+    <button class="onboard-close" aria-label="Close" onclick="dismissOnboarding(true)">✕</button>
     <h2 class="onboard-title" id="onboard-title" data-i18n="onboardTitle">How it works</h2>
     <div class="onboard-steps">
       <div class="onboard-step">
