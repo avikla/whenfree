@@ -6,5 +6,10 @@
   "webapp": {
     "executeAs": "USER_DEPLOYING",
     "access": "ANYONE_ANONYMOUS"
-  }
+  },
+  "oauthScopes": [
+    "https://mail.google.com/",
+    "https://www.googleapis.com/auth/monitoring.read",
+    "https://www.googleapis.com/auth/script.scriptapp"
+  ]
 }
