@@ -90,7 +90,7 @@ function buildEmailHtml_(data) {
         '<table width="100%" cellpadding="0" cellspacing="0"><tr>' +
           '<td><div style="font-size:12px;color:#3E5750;font-weight:500;">Reads, writes, storage &amp; bandwidth</div>' +
               '<div style="font-size:12px;color:#7E988F;margin-top:3px;">View detailed usage in Firebase Console</div></td>' +
-          '<td align="right"><a href="https://console.firebase.google.com/project/meteor-meet/firestore/usage" ' +
+          '<td align="right"><a href="https://console.cloud.google.com/firestore/databases/-default-/usage?project=meteor-meet" ' +
             'style="background:#00C281;color:#04261B;font-size:12px;font-weight:700;padding:8px 16px;border-radius:100px;text-decoration:none;">View &#8594;</a></td>' +
         '</tr></table>' +
       '</div>' +
