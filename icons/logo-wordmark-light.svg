@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 48" width="200" height="48">
+  <!-- Icon (32x32 centered vertically in 48px height) -->
+  <g transform="translate(0, 8)">
+    <rect width="32" height="32" rx="7" fill="#0B1F17"/>
+    <rect x="5" y="8.5" width="22" height="17" rx="3" fill="#163526" stroke="#00C281" stroke-width="1.4" stroke-opacity="0.6"/>
+    <rect x="5" y="8.5" width="22" height="5.5" rx="3" fill="#00C281" fill-opacity="0.22"/>
+    <rect x="5" y="11.5" width="22" height="2.5" fill="#00C281" fill-opacity="0.22"/>
+    <rect x="10.5" y="5.5" width="2" height="5" rx="1" fill="#00C281"/>
+    <rect x="19.5" y="5.5" width="2" height="5" rx="1" fill="#00C281"/>
+    <path d="M10.5 18.5 L14.5 22.5 L21.5 14" stroke="#00C281" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </g>
+  <!-- Wordmark text (light/white for dark backgrounds) -->
+  <text x="44" y="31" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="22" font-weight="700" fill="#D6F0E6" letter-spacing="-0.3">WhenFree</text>
+</svg>
