@@ -801,7 +801,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
 .grid-cell.past{opacity:0.3;cursor:not-allowed;pointer-events:none}
 
 /* ─── Sidebar email panel ─── */
-.email-panel{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+.email-panel{position:fixed;z-index:200;display:none;flex-direction:column;gap:8px;background:var(--surface);border:1px solid var(--border2);border-radius:var(--r-sm);padding:10px 12px;box-shadow:0 4px 20px rgba(10,70,52,0.14)}
 .email-panel-row{display:flex;gap:6px}
 .email-panel-input{flex:1;font-size:12px;padding:6px 9px;height:32px}
 [dir="rtl"] .email-panel-row{flex-direction:row-reverse}
@@ -811,7 +811,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
   flex-shrink:0;background:var(--accent);color:var(--on-primary);
   border:none;border-radius:var(--r-pill);padding:0 14px;
   font-size:12px;font-weight:600;cursor:pointer;height:34px;
-  transition:opacity 0.15s;
+  min-width:90px;transition:opacity 0.15s;
 }
 .link-banner-btn:hover{opacity:0.85}
 .link-banner-btn:disabled{opacity:0.5;cursor:default}
@@ -3149,12 +3149,32 @@ document.addEventListener('DOMContentLoaded', async () => {
     c.style.display = 'block';
     setTimeout(() => c.style.display = 'none', 2000);
   });
-  document.getElementById('email-btn').addEventListener('click', () => {
-    const panel = document.getElementById('email-panel');
-    panel.style.display = panel.style.display === 'none' ? 'flex' : 'none';
-    if (panel.style.display === 'flex')
-      document.getElementById('email-panel-input').focus();
-  });
+  function toggleEmailPanel(panelId, btnId, otherPanelId) {
+    const panel = document.getElementById(panelId);
+    const btn   = document.getElementById(btnId);
+    const isOpen = panel.style.display === 'flex';
+    document.getElementById(otherPanelId).style.display = 'none';
+    if (isOpen) {
+      panel.style.display = 'none';
+    } else {
+      const r = btn.getBoundingClientRect();
+      const spaceBelow = window.innerHeight - r.bottom;
+      panel.style.left     = r.left + 'px';
+      panel.style.width    = r.width + 'px';
+      panel.style.maxWidth = 'calc(100vw - 32px)';
+      if (spaceBelow < 100) {
+        panel.style.top    = '';
+        panel.style.bottom = (window.innerHeight - r.top + 6) + 'px';
+      } else {
+        panel.style.bottom = '';
+        panel.style.top    = (r.bottom + 6) + 'px';
+      }
+      panel.style.display = 'flex';
+      panel.querySelector('input').focus();
+    }
+  }
+  document.getElementById('email-btn').addEventListener('click', () =>
+    toggleEmailPanel('email-panel', 'email-btn', 'best-times-email-panel'));
 
   document.getElementById('email-panel-send').addEventListener('click', async () => {
     const email  = document.getElementById('email-panel-input').value.trim();
@@ -3194,12 +3214,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
   // Best times email
-  document.getElementById('best-times-email-btn').addEventListener('click', () => {
-    const panel = document.getElementById('best-times-email-panel');
-    panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
-    if (panel.style.display === 'block')
-      document.getElementById('best-times-email-input').focus();
-  });
+  document.getElementById('best-times-email-btn').addEventListener('click', () =>
+    toggleEmailPanel('best-times-email-panel', 'best-times-email-btn', 'email-panel'));
   document.getElementById('best-times-email-send').addEventListener('click', async () => {
     const email  = document.getElementById('best-times-email-input').value.trim();
     const status = document.getElementById('best-times-email-status');
@@ -3235,6 +3251,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
+  document.addEventListener('click', e => {
+    if (!e.target.closest('#email-panel') && !e.target.closest('#email-btn'))
+      document.getElementById('email-panel').style.display = 'none';
+    if (!e.target.closest('#best-times-email-panel') && !e.target.closest('#best-times-email-btn'))
+      document.getElementById('best-times-email-panel').style.display = 'none';
+  });
   document.addEventListener('dragstart', e => e.preventDefault());
 
   // Check URL hash for an existing event
