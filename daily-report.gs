@@ -5,39 +5,17 @@ const REPORT_CONFIG = {
   collection: 'events',
   recipient:  'avi@meteor.co.il',
   tz:         'Asia/Jerusalem',
-  limits: {
-    reads:     50000,
-    writes:    20000,
-    deletes:   20000,
-    bandwidth: 10 * 1024 * 1024 * 1024,  // 10 GiB in bytes
-  },
 };
 
 // ── Time window ───────────────────────────────────────────────────────────────
-// Returns UTC ISO strings for yesterday 00:00:00 → today 00:00:00 in IST,
-// plus a human-readable label for the email subject.
 function getYesterdayWindow_() {
   const { tz } = REPORT_CONFIG;
   const now = new Date();
   const yesterday = new Date(now.getTime() - 86400000);
 
   const yDateStr = Utilities.formatDate(yesterday, tz, 'yyyy-MM-dd');
-  const tDateStr = Utilities.formatDate(now,       tz, 'yyyy-MM-dd');
-
-  // Find what UTC time corresponds to midnight on a given IST date string.
-  // Works for both UTC+2 (IST winter) and UTC+3 (IDT summer).
-  function midnightISTtoUTC(dateStr) {
-    // At noon UTC on this date, what hour is it in IST?
-    const testDate = new Date(dateStr + 'T12:00:00Z');
-    const istHour  = parseInt(Utilities.formatDate(testDate, tz, 'H'), 10);
-    const [y, m, d] = dateStr.split('-').map(Number);
-    // Midnight IST = midnight UTC minus the IST-UTC offset
-    return new Date(Date.UTC(y, m - 1, d) - (istHour - 12) * 3600000);
-  }
 
   return {
-    start:     midnightISTtoUTC(yDateStr).toISOString(),
-    end:       midnightISTtoUTC(tDateStr).toISOString(),
     dateLabel: Utilities.formatDate(yesterday, tz, 'EEE, d MMM yyyy'),
   };
 }
@@ -54,9 +32,9 @@ function fetchEventCount_() {
     },
   };
   const res = UrlFetchApp.fetch(url, {
-    method:           'post',
-    contentType:      'application/json',
-    payload:          JSON.stringify(payload),
+    method:             'post',
+    contentType:        'application/json',
+    payload:            JSON.stringify(payload),
     muteHttpExceptions: true,
   });
   const json = JSON.parse(res.getContentText());
@@ -67,130 +45,15 @@ function fetchEventCount_() {
   return val ? parseInt(val, 10) : null;
 }
 
-// ── Cloud Monitoring: sum a daily metric over the given UTC window ────────────
-function fetchMonitoringMetric_(metricType, startIso, endIso) {
-  const { projectId } = REPORT_CONFIG;
-  const token = ScriptApp.getOAuthToken();
-  const base  = 'https://monitoring.googleapis.com/v3/projects/' + projectId + '/timeSeries';
-  const qs = [
-    'filter='                         + encodeURIComponent('metric.type="' + metricType + '"'),
-    'interval.startTime='             + encodeURIComponent(startIso),
-    'interval.endTime='               + encodeURIComponent(endIso),
-    'aggregation.alignmentPeriod=86400s',
-    'aggregation.perSeriesAligner=ALIGN_SUM',
-    'aggregation.crossSeriesReducer=REDUCE_SUM',
-  ].join('&');
-  const res = UrlFetchApp.fetch(base + '?' + qs, {
-    headers: { Authorization: 'Bearer ' + token },
-    muteHttpExceptions: true,
-  });
-  const code = res.getResponseCode();
-  if (code !== 200) {
-    console.error('Monitoring API error ' + code + ': ' + res.getContentText());
-    return null;
-  }
-  const json = JSON.parse(res.getContentText());
-  if (!json.timeSeries || !json.timeSeries.length) return 0;
-  return json.timeSeries[0].points.reduce(function(sum, p) {
-    return sum + parseInt(p.value.int64Value || p.value.doubleValue || 0, 10);
-  }, 0);
-}
-
-// ── Cloud Monitoring: sum outbound bandwidth since start of current month ─────
-function fetchMonthlyBandwidth_() {
-  const { projectId, tz } = REPORT_CONFIG;
-  const token = ScriptApp.getOAuthToken();
-  const now   = new Date();
-  // First day of current month at midnight IST (correctly accounts for UTC+2/UTC+3 offset)
-  const monthDateStr = Utilities.formatDate(now, tz, 'yyyy-MM') + '-01';
-  const testDate = new Date(monthDateStr + 'T12:00:00Z');
-  const istHour  = parseInt(Utilities.formatDate(testDate, tz, 'H'), 10);
-  const [my, mm] = monthDateStr.split('-').map(Number);
-  const monthStart = new Date(Date.UTC(my, mm - 1, 1) - (istHour - 12) * 3600000).toISOString();
-  const base  = 'https://monitoring.googleapis.com/v3/projects/' + projectId + '/timeSeries';
-  const qs = [
-    'filter='                         + encodeURIComponent('metric.type="firestore.googleapis.com/network/sent_bytes_count"'),
-    'interval.startTime='             + encodeURIComponent(monthStart),
-    'interval.endTime='               + encodeURIComponent(now.toISOString()),
-    'aggregation.alignmentPeriod='    + (31 * 86400) + 's',
-    'aggregation.perSeriesAligner=ALIGN_SUM',
-    'aggregation.crossSeriesReducer=REDUCE_SUM',
-  ].join('&');
-  const res = UrlFetchApp.fetch(base + '?' + qs, {
-    headers: { Authorization: 'Bearer ' + token },
-    muteHttpExceptions: true,
-  });
-  const code = res.getResponseCode();
-  if (code !== 200) {
-    console.error('Bandwidth API error ' + code + ': ' + res.getContentText());
-    return null;
-  }
-  const json = JSON.parse(res.getContentText());
-  if (!json.timeSeries || !json.timeSeries.length) return 0;
-  return json.timeSeries[0].points.reduce(function(sum, p) {
-    return sum + parseInt(p.value.int64Value || p.value.doubleValue || 0, 10);
-  }, 0);
-}
-
 // ── Formatting helpers ────────────────────────────────────────────────────────
 function fmtNum_(n) {
   return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
-function fmtBytes_(bytes) {
-  if (bytes >= 1024 * 1024 * 1024) return (bytes / (1024 * 1024 * 1024)).toFixed(2) + ' GB';
-  if (bytes >= 1024 * 1024)        return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
-  return (bytes / 1024).toFixed(0) + ' KB';
-}
-
-function statusColor_(pct) {
-  if (pct >= 0.9) return '#E5534B';  // red
-  if (pct >= 0.7) return '#F5A623';  // yellow
-  return '#00C281';                   // green
-}
-
-// Returns HTML for one stat card (used inside a <td>)
-function statCard_(label, displayValue, limitLabel, pct) {
-  var color  = statusColor_(pct);
-  var barPct = Math.min(pct * 100, 100).toFixed(1);
-  return '<td style="width:50%;padding:6px;" valign="top">' +
-    '<div style="background:#F4FAF7;border:1px solid #D6EDE4;border-radius:12px;padding:16px 18px;">' +
-      '<div style="font-size:12px;color:#3E5750;font-weight:500;margin-bottom:6px;">' +
-        '<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:' + color + ';margin-right:5px;vertical-align:middle;"></span>' +
-        label +
-      '</div>' +
-      '<div style="font-size:26px;font-weight:700;color:#0B2018;line-height:1;">' +
-        displayValue +
-        '<span style="font-size:13px;color:#7E988F;font-weight:400;margin-left:2px;">/ ' + limitLabel + '</span>' +
-      '</div>' +
-      '<div style="margin-top:10px;">' +
-        '<div style="background:#D6EDE4;border-radius:100px;height:6px;overflow:hidden;">' +
-          '<div style="width:' + barPct + '%;background:' + color + ';height:100%;border-radius:100px;"></div>' +
-        '</div>' +
-        '<div style="margin-top:5px;">' +
-          '<span style="font-size:11px;color:#3E5750;font-weight:600;">' + barPct + '%</span>' +
-          '<span style="font-size:11px;color:#7E988F;float:right;">limit: ' + limitLabel + '</span>' +
-        '</div>' +
-      '</div>' +
-    '</div>' +
-  '</td>';
-}
-
 // ── HTML email builder ────────────────────────────────────────────────────────
 function buildEmailHtml_(data) {
-  var eventCount = data.eventCount;
-  var reads      = data.reads     !== null && data.reads     !== undefined ? data.reads     : 0;
-  var writes     = data.writes    !== null && data.writes    !== undefined ? data.writes    : 0;
-  var deletes    = data.deletes   !== null && data.deletes   !== undefined ? data.deletes   : 0;
-  var bandwidth  = data.bandwidth !== null && data.bandwidth !== undefined ? data.bandwidth : 0;
-  var dateLabel  = data.dateLabel;
-  var limits     = REPORT_CONFIG.limits;
-
-  var readsPct  = reads     / limits.reads;
-  var writesPct = writes    / limits.writes;
-  var delPct    = deletes   / limits.deletes;
-  var bwPct     = bandwidth / limits.bandwidth;
-  var countStr  = eventCount !== null ? fmtNum_(eventCount) : 'N/A';
+  var countStr  = data.eventCount !== null ? fmtNum_(data.eventCount) : 'N/A';
+  var dateLabel = data.dateLabel;
 
   return '<!DOCTYPE html><html lang="en"><head>' +
     '<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
@@ -221,22 +84,12 @@ function buildEmailHtml_(data) {
         '</tr></table>' +
       '</div>' +
 
-      // Operations grid
-      '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#7E988F;margin-bottom:14px;">Daily Operations (free-tier limits)</div>' +
-      '<table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;"><tr>' +
-        statCard_('Reads',   fmtNum_(reads),   '50,000', readsPct) +
-        statCard_('Writes',  fmtNum_(writes),  '20,000', writesPct) +
-      '</tr><tr>' +
-        statCard_('Deletes', fmtNum_(deletes), '20,000', delPct) +
-        statCard_('Bandwidth (month)', fmtBytes_(bandwidth), '10 GB', bwPct) +
-      '</tr></table>' +
-
-      // Storage
-      '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#7E988F;margin-bottom:14px;">Storage</div>' +
+      // Usage
+      '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#7E988F;margin-bottom:14px;">Usage &amp; Storage</div>' +
       '<div style="background:#F4FAF7;border:1px solid #D6EDE4;border-radius:12px;padding:16px 18px;">' +
         '<table width="100%" cellpadding="0" cellspacing="0"><tr>' +
-          '<td><div style="font-size:12px;color:#3E5750;font-weight:500;">Raw storage bytes</div>' +
-              '<div style="font-size:12px;color:#7E988F;margin-top:3px;">Not available via API &mdash; view in Firebase Console</div></td>' +
+          '<td><div style="font-size:12px;color:#3E5750;font-weight:500;">Reads, writes, storage &amp; bandwidth</div>' +
+              '<div style="font-size:12px;color:#7E988F;margin-top:3px;">View detailed usage in Firebase Console</div></td>' +
           '<td align="right"><a href="https://console.firebase.google.com/project/meteor-meet/firestore/usage" ' +
             'style="background:#00C281;color:#04261B;font-size:12px;font-weight:700;padding:8px 16px;border-radius:100px;text-decoration:none;">View &#8594;</a></td>' +
         '</tr></table>' +
@@ -259,23 +112,16 @@ function buildEmailHtml_(data) {
 // ── Main entry point ──────────────────────────────────────────────────────────
 function sendDailyReport() {
   try {
-    var win       = getYesterdayWindow_();
-    var recipient = REPORT_CONFIG.recipient;
-
+    var win        = getYesterdayWindow_();
     var eventCount = fetchEventCount_();
-    var reads      = fetchMonitoringMetric_('firestore.googleapis.com/document/read_count',   win.start, win.end);
-    var writes     = fetchMonitoringMetric_('firestore.googleapis.com/document/write_count',  win.start, win.end);
-    var deletes    = fetchMonitoringMetric_('firestore.googleapis.com/document/delete_count', win.start, win.end);
-    var bandwidth  = fetchMonthlyBandwidth_();
+    var html       = buildEmailHtml_({ eventCount: eventCount, dateLabel: win.dateLabel });
 
-    var html = buildEmailHtml_({ eventCount: eventCount, reads: reads, writes: writes, deletes: deletes, bandwidth: bandwidth, dateLabel: win.dateLabel });
-
-    GmailApp.sendEmail(recipient, 'Meteor · Daily DB Report — ' + win.dateLabel, '', {
+    GmailApp.sendEmail(REPORT_CONFIG.recipient, 'Meteor · Daily DB Report — ' + win.dateLabel, '', {
       htmlBody: html,
       name:     'Meteor Meet',
     });
 
-    console.log('Report sent for ' + win.dateLabel + ': events=' + eventCount + ', reads=' + reads + ', writes=' + writes + ', deletes=' + deletes + ', bw=' + bandwidth);
+    console.log('Report sent for ' + win.dateLabel + ': events=' + eventCount);
   } catch (err) {
     console.error('sendDailyReport failed: ' + err.message);
     GmailApp.sendEmail(REPORT_CONFIG.recipient, 'Meteor · Daily DB Report FAILED', 'The daily report script failed with error: ' + err.message);
@@ -283,8 +129,7 @@ function sendDailyReport() {
 }
 
 // ── One-time trigger installer ────────────────────────────────────────────────
-// Run this ONCE from the GAS editor. It installs a daily midnight trigger.
-// Safe to re-run — removes existing sendDailyReport triggers first.
+// Run this ONCE from the GAS editor. Safe to re-run — removes existing triggers first.
 function createTrigger() {
   ScriptApp.getProjectTriggers()
     .filter(function(t) { return t.getHandlerFunction() === 'sendDailyReport'; })
