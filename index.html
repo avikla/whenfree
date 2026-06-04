@@ -3185,9 +3185,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         btn.textContent = t().linkBannerSend;
       }, 2500);
     } catch(e) {
+      status.style.color = '#DC2626';
       status.textContent = t().linkBannerError;
       btn.disabled = false;
       btn.textContent = t().linkBannerSend;
+      setTimeout(() => { status.textContent = ''; status.style.color = ''; }, 5000);
       console.error('Email send failed:', e);
     }
   });
@@ -3224,9 +3226,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         btn.textContent = t().linkBannerSend;
       }, 2500);
     } catch(e) {
+      status.style.color = '#DC2626';
       status.textContent = t().linkBannerError;
       btn.disabled = false;
       btn.textContent = t().linkBannerSend;
+      setTimeout(() => { status.textContent = ''; status.style.color = ''; }, 5000);
       console.error('Email send failed:', e);
     }
   });
