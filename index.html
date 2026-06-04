@@ -3161,8 +3161,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     } else {
       const r = btn.getBoundingClientRect();
       const spaceBelow = window.innerHeight - r.bottom;
-      panel.style.left     = r.left + 'px';
-      panel.style.width    = Math.max(r.width, 280) + 'px';
+      const pw = Math.max(r.width, 280);
+      const pl = Math.min(r.left, window.innerWidth - pw - 16);
+      panel.style.left     = Math.max(pl, 8) + 'px';
+      panel.style.width    = pw + 'px';
       panel.style.maxWidth = 'calc(100vw - 32px)';
       if (spaceBelow < 100) {
         panel.style.top    = '';
