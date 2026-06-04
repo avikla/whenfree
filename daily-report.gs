@@ -1,7 +1,7 @@
 // ── Config ────────────────────────────────────────────────────────────────────
 const REPORT_CONFIG = {
   projectId:  'meteor-meet',
-  apiKey:     'AIzaSyCuqHAXIliejD8wfZvGRV04erVuU-WzhvM',
+  apiKey:     PropertiesService.getScriptProperties().getProperty('API_KEY'),
   collection: 'events',
   recipient:  'avi@meteor.co.il',
   tz:         'Asia/Jerusalem',

@@ -510,6 +510,97 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
 .bt-bar-wrap{height:3px;background:rgba(10,70,52,0.06);border-radius:2px;overflow:hidden;margin-bottom:5px}
 .bt-bar-fill{height:100%;background:var(--accent);border-radius:2px;transition:width 0.4s ease}
 .bt-card-avail{font-size:11px;font-weight:500;color:var(--accent)}
+.bt-cal-btn{
+  display:flex;align-items:center;justify-content:center;gap:5px;
+  margin-top:10px;width:100%;
+  background:none;border:1px solid var(--accent-dim);
+  border-radius:var(--r-pill);
+  font-family:var(--font-body);font-size:12px;font-weight:500;
+  color:var(--accent-text);
+  padding:7px 10px;cursor:pointer;
+  transition:background 0.15s,border-color 0.15s;
+  line-height:1;
+}
+.bt-cal-btn:hover{background:var(--accent-glow)}
+.bt-cal-btn svg{width:12px;height:12px;flex-shrink:0}
+.bt-card-top .bt-cal-btn{border-color:var(--accent-dim);color:var(--on-primary-ctr)}
+.bt-card-top .bt-cal-btn:hover{background:rgba(0,194,129,0.18)}
+
+/* Calendar modal */
+.cal-overlay{
+  position:fixed;inset:0;
+  background:rgba(8,28,19,0.50);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  z-index:300;
+  display:none;align-items:center;justify-content:center;
+  opacity:0;transition:opacity 0.3s ease;
+}
+.cal-overlay.visible{display:flex;opacity:1}
+.cal-panel{
+  background:var(--surface);
+  border:1px solid var(--border2);
+  border-radius:var(--r);
+  padding:32px 28px 28px;
+  width:360px;max-width:92vw;
+  box-shadow:0 32px 80px rgba(11,32,24,0.12);
+  position:relative;
+  display:flex;flex-direction:column;gap:18px;
+}
+[data-theme="dark"] .cal-panel{box-shadow:0 32px 80px rgba(200,255,230,0.08)}
+.cal-close{
+  position:absolute;top:14px;right:14px;
+  background:none;border:none;cursor:pointer;
+  font-size:15px;color:var(--muted2);padding:4px 8px;
+  border-radius:var(--r-xs);
+  transition:color 0.15s,background 0.15s;
+}
+.cal-close:hover{color:var(--text);background:var(--surface2)}
+[dir="rtl"] .cal-close{right:auto;left:14px}
+.cal-event-info{
+  background:var(--primary-ctr);
+  border:1px solid var(--accent-dim);
+  border-radius:var(--r-sm);
+  padding:14px 16px;
+  display:flex;flex-direction:column;gap:3px;
+}
+.cal-event-name{
+  font-family:var(--font-display);font-size:16px;font-weight:700;
+  color:var(--on-primary-ctr);
+}
+.cal-event-time{
+  font-family:var(--font-body);font-size:13px;
+  color:var(--accent-text);font-weight:500;
+}
+.cal-desc{
+  font-family:var(--font-body);font-size:13px;color:var(--muted);
+  line-height:1.55;margin:0;
+}
+.cal-actions{display:flex;flex-direction:column;gap:10px}
+.cal-action-btn{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;padding:12px 20px;
+  border:none;border-radius:var(--r-pill);
+  font-family:var(--font-body);font-size:14px;font-weight:600;
+  cursor:pointer;transition:opacity 0.15s;
+}
+.cal-action-btn:hover{opacity:0.88}
+.cal-action-btn--primary{background:var(--accent);color:var(--on-primary)}
+.cal-action-btn--secondary{
+  background:var(--surface2);color:var(--text);
+  border:1px solid var(--border2);
+}
+.cal-action-btn svg{width:16px;height:16px;flex-shrink:0}
+@media(max-width:640px){
+  .cal-overlay{align-items:flex-end}
+  .cal-panel{
+    width:100%;max-width:100%;
+    border-radius:22px 22px 0 0;
+    padding:24px 20px 32px;
+    transform:translateY(40px);
+    transition:transform 0.3s ease;
+  }
+  .cal-overlay.visible .cal-panel{transform:translateY(0)}
+}
 
 .grid-scroll{flex:1;overflow:auto;position:relative;display:flex;justify-content:center;align-items:flex-start;padding:0 8px}
 .grid-scroll::-webkit-scrollbar{width:6px;height:6px}
@@ -1029,6 +1120,28 @@ body.a11y-adhd .a11y-panel{opacity:1 !important;pointer-events:auto !important}
   </div>
 </div>
 
+<!-- Calendar modal -->
+<div id="cal-overlay" class="cal-overlay" role="dialog" aria-modal="true">
+  <div class="cal-panel">
+    <button class="cal-close" id="cal-close-btn" aria-label="Close">✕</button>
+    <div class="cal-event-info">
+      <div class="cal-event-name" id="cal-event-name"></div>
+      <div class="cal-event-time" id="cal-event-time"></div>
+    </div>
+    <p class="cal-desc" id="cal-desc"></p>
+    <div class="cal-actions">
+      <button id="cal-google-btn" class="cal-action-btn cal-action-btn--primary">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11zM7 11h5v5H7z"/></svg>
+        <span data-i18n="addToGoogleCal">Add to Google Cal</span>
+      </button>
+      <button id="cal-ics-btn" class="cal-action-btn cal-action-btn--secondary">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span data-i18n="addToAppleCal">Add to Apple Cal</span>
+      </button>
+    </div>
+  </div>
+</div>
+
 <!-- ═══════════════════════════════════════
      SCREEN A — CREATE EVENT
 ═══════════════════════════════════════ -->
@@ -1250,7 +1363,7 @@ body.a11y-adhd .a11y-panel{opacity:1 !important;pointer-events:auto !important}
 
 // ── FIREBASE CONFIG ───────────────────────────────────────────────────────────
 const firebaseConfig = {
-  apiKey:            "AIzaSyCuqHAXIliejD8wfZvGRV04erVuU-WzhvM",
+  apiKey:            "AIzaSyAe2UxmMoQeoqV9YvMdklGi1vr0QuX_bjg",
   authDomain:        "meteor-meet.firebaseapp.com",
   projectId:         "meteor-meet",
   storageBucket:     "meteor-meet.firebasestorage.app",
@@ -1359,6 +1472,10 @@ const LANGS = {
     monthsShort:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
     daysShort:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
     daysFull:['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
+    addToCalendar:'Add to Calendar',
+    calModalDesc:'Add the event to your Google Calendar or download the .ics for your local calendar app.',
+    addToGoogleCal:'Add to Google Cal',
+    addToAppleCal:'Add to Apple Cal',
     dir:'ltr', locale:'en-US', ampm:true,
   },
   he: {
@@ -1429,6 +1546,10 @@ const LANGS = {
     monthsShort:['ינו׳','פבר׳','מרץ','אפר׳','מאי','יונ׳','יול׳','אוג׳','ספט׳','אוק׳','נוב׳','דצמ׳'],
     daysShort:['א׳','ב׳','ג׳','ד׳','ה׳','ו׳','ש׳'],
     daysFull:['ראשון','שני','שלישי','רביעי','חמישי','שישי','שבת'],
+    addToCalendar:'הוסף ליומן',
+    calModalDesc:'הוסף את האירוע ל-Google Calendar או הורד .ics לאפליקציית היומן שלך.',
+    addToGoogleCal:'הוסף ל-Google Cal',
+    addToAppleCal:'הוסף ל-Apple Cal',
     dir:'rtl', locale:'he-IL', ampm:false,
   },
   fr: {
@@ -1498,6 +1619,10 @@ const LANGS = {
     monthsShort:['Jan','Fév','Mar','Avr','Mai','Juin','Juil','Août','Sep','Oct','Nov','Déc'],
     daysShort:['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'],
     daysFull:['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
+    addToCalendar:'Ajouter au calendrier',
+    calModalDesc:'Ajoutez l\'événement à Google Agenda ou téléchargez le fichier .ics pour votre application calendrier locale.',
+    addToGoogleCal:'Ajouter à Google Agenda',
+    addToAppleCal:'Ajouter à Apple Calendar',
     dir:'ltr', locale:'fr-FR', ampm:false,
   }
 };
@@ -2350,7 +2475,9 @@ function renderBestTimes() {
       : t().ofPeople(slot.count, total);
 
     const pct = Math.round(slot.count / total * 100);
-    S.bestSlots.push({ rank: i + 1, dateLabel, timeLabel, availLabel, pct });
+    S.bestSlots.push({ rank: i + 1, dateLabel, timeLabel, availLabel, pct,
+      colVal: cols[slot.c], startMins: rows[slot.r], endMins: rows[endRow] + 30,
+      mode: S.mode, timezone: S.timezone });
 
     const card = document.createElement('div');
     card.className = i === 0 ? 'bt-card bt-card-top' : 'bt-card';
@@ -2360,8 +2487,16 @@ function renderBestTimes() {
       <div class="bt-card-date">${dateLabel}</div>
       <div class="bt-card-time">${timeLabel}</div>
       <div class="bt-bar-wrap"><div class="bt-bar-fill" style="width:${pct}%"></div></div>
-      <div class="bt-card-avail">${availLabel}</div>`;
+      <div class="bt-card-avail">${availLabel}</div>
+      <button class="bt-cal-btn" data-slot="${i}" aria-label="${t().addToCalendar}">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11zM7 11h5v5H7z"/></svg>
+        ${t().addToCalendar}
+      </button>`;
     container.appendChild(card);
+    card.querySelector('.bt-cal-btn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      openCalModal(i);
+    });
   });
 }
 
@@ -2779,6 +2914,103 @@ function initScreenA() {
   document.getElementById('event-name').addEventListener('keydown', e => {
     if (e.key === 'Enter') document.getElementById('tp-from-btn').focus();
   });
+
+  // Calendar modal close handlers
+  document.getElementById('cal-close-btn').addEventListener('click', closeCalModal);
+  document.getElementById('cal-overlay').addEventListener('click', e => {
+    if (e.target === document.getElementById('cal-overlay')) closeCalModal();
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && document.getElementById('cal-overlay').classList.contains('visible')) closeCalModal();
+  });
+}
+
+// ══════════════════════════════════════
+// CALENDAR MODAL
+// ══════════════════════════════════════
+function buildCalDate(slot) {
+  let year, month, day;
+  if (slot.mode === 'specific') {
+    [year, month, day] = slot.colVal.split('-').map(Number);
+  } else {
+    // days mode — find next upcoming occurrence of the weekday
+    const dayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const targetDay = dayNames.findIndex(n => slot.colVal.startsWith(n.slice(0,3)));
+    const today = new Date();
+    const diff = ((targetDay - today.getDay() + 7) % 7) || 7;
+    const next = new Date(today.getFullYear(), today.getMonth(), today.getDate() + diff);
+    year = next.getFullYear(); month = next.getMonth() + 1; day = next.getDate();
+  }
+  const pad = n => String(n).padStart(2,'0');
+  const startH = Math.floor(slot.startMins / 60), startM = slot.startMins % 60;
+  const endH   = Math.floor(slot.endMins   / 60) % 24, endM = slot.endMins % 60;
+  return {
+    dateStr:  `${year}${pad(month)}${pad(day)}`,
+    startStr: `${pad(startH)}${pad(startM)}00`,
+    endStr:   `${pad(endH)}${pad(endM)}00`,
+  };
+}
+
+function openCalModal(slotIndex) {
+  const slot = S.bestSlots[slotIndex];
+  if (!slot) return;
+  const { dateStr, startStr, endStr } = buildCalDate(slot);
+  const gcal = `https://calendar.google.com/calendar/render?action=TEMPLATE` +
+    `&text=${encodeURIComponent(S.eventName)}` +
+    `&dates=${dateStr}T${startStr}/${dateStr}T${endStr}` +
+    `&details=${encodeURIComponent(window.location.href)}` +
+    `&location=${encodeURIComponent(window.location.href)}` +
+    `&ctz=${encodeURIComponent(slot.timezone)}`;
+
+  document.getElementById('cal-event-name').textContent = S.eventName;
+  document.getElementById('cal-event-time').textContent = `${slot.dateLabel} · ${slot.timeLabel}`;
+  document.getElementById('cal-desc').textContent = t().calModalDesc;
+  document.querySelector('#cal-google-btn span').textContent = t().addToGoogleCal;
+  document.querySelector('#cal-ics-btn span').textContent   = t().addToAppleCal;
+
+  document.getElementById('cal-google-btn').onclick = () => window.open(gcal, '_blank', 'noopener');
+  document.getElementById('cal-ics-btn').onclick    = () => downloadIcs(slot, dateStr, startStr, endStr);
+
+  const overlay = document.getElementById('cal-overlay');
+  overlay.style.display = 'flex';
+  requestAnimationFrame(() => overlay.classList.add('visible'));
+}
+
+function closeCalModal() {
+  const overlay = document.getElementById('cal-overlay');
+  overlay.classList.remove('visible');
+  setTimeout(() => { overlay.style.display = 'none'; }, 300);
+}
+
+function downloadIcs(slot, dateStr, startStr, endStr) {
+  const now = new Date().toISOString().replace(/[-:.]/g,'').slice(0,15) + 'Z';
+  const uid = `meteor-${S.eventSlug}-${Date.now()}@meteor.co.il`;
+  const ics = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Meteor Meet//EN',
+    'CALSCALE:GREGORIAN',
+    'METHOD:PUBLISH',
+    'BEGIN:VEVENT',
+    `UID:${uid}`,
+    `DTSTAMP:${now}`,
+    `DTSTART;TZID=${slot.timezone}:${dateStr}T${startStr}`,
+    `DTEND;TZID=${slot.timezone}:${dateStr}T${endStr}`,
+    `SUMMARY:${S.eventName.replace(/[\\;,]/g, s => '\\' + s)}`,
+    `URL:${window.location.href}`,
+    `DESCRIPTION:${window.location.href}`,
+    'END:VEVENT',
+    'END:VCALENDAR',
+  ].join('\r\n');
+  const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url;
+  a.download = (S.eventName.replace(/[^a-z0-9]/gi,'_').toLowerCase() || 'meeting') + '.ics';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 }
 
 // ══════════════════════════════════════
