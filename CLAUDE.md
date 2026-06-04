@@ -28,8 +28,14 @@ After pushing from the submodule, return to workspace root and the submodule poi
 |------|------|
 | `index.html` | Single-page app (HTML, CSS, JS inline) with Firebase Firestore integration |
 | `mailer.gs` | Google Apps Script for sending meeting invite emails from `no-reply@meteor.co.il` |
+| `daily-report.gs` | Google Apps Script — sends a daily DB usage report email to `avi@meteor.co.il` at midnight IST |
+| `appsscript.json` | GAS manifest — OAuth scopes, timezone (Asia/Jerusalem), runtime |
 | `favicon.svg` | App icon |
 | `CNAME` | Domain record for `meet.meteor.co.il` |
+| `help.html` | Help page (linked from app footer) |
+| `terms.html` | Terms & Privacy page (linked from app footer) |
+| `accessibility-statement.html` | Accessibility statement (linked from app footer) |
+| `404.html` | GitHub Pages custom 404 page |
 
 ## Features
 
@@ -39,6 +45,7 @@ After pushing from the submodule, return to workspace root and the submodule poi
 - **Dark/light toggle:** Theme switcher with localStorage persistence
 - **Hebrew RTL:** Email invites support Hebrew text with proper RTL formatting
 - **No login required:** Share a link, participants add their name and availability
+- **Daily DB report:** Automated midnight email to `avi@meteor.co.il` with Firestore event count, reads/writes/deletes vs. free-tier limits, and storage usage vs. 1 GiB limit
 
 ## Deployment & Usage
 
@@ -72,6 +79,27 @@ fetch(MAILER_URL, {
 
 **Script Properties (set once in GAS editor):**
 - `MAILER_URL` — GAS Web App deployment URL (embedded in the app)
+
+### Daily DB report (GAS)
+
+Runs at midnight IST via a GAS time-based trigger. Sends to `avi@meteor.co.il`.
+
+**GAS project:** `https://script.google.com/d/1MCoKYf2EVaueAzpjWAmHdvzubUcj3NqLAXzrBic6oRZgxacpnf44uYBD/edit`
+
+**Deploy changes:**
+```powershell
+clasp push --force
+```
+
+**One-time trigger install** (run once from GAS editor after any re-deploy):
+- Select `createTrigger` → Run
+
+**Metrics fetched:**
+- Firestore REST API → total event count (no billing required)
+- Cloud Monitoring API → reads/writes/deletes (requires Blaze plan — already enabled)
+- Cloud Monitoring API → storage bytes (`firestore.googleapis.com/storage/data_and_index_storage_bytes`)
+
+**Firebase plan:** Blaze (pay-as-you-go) — needed for Cloud Monitoring API. Actual cost: ~$0.
 
 ## Key Details
 
