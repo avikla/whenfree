@@ -1279,7 +1279,7 @@ body.a11y-adhd .a11y-panel{opacity:1 !important;pointer-events:auto !important}
     </div>
     <div style="margin-top:auto;display:flex;flex-direction:column;gap:6px">
       <button id="share-btn" class="sidebar-btn"><span class="btn-icon">🔗</span> Copy meeting link</button>
-      <span id="share-confirm" class="share-confirm" style="display:none">&#10003; Copied!</span>
+      <span id="share-confirm" class="share-confirm" style="display:none" aria-hidden="true">&#10003; Copied!</span>
       <button id="email-btn" class="sidebar-btn sidebar-btn-outline" data-i18n="sendEmail">&#9993; Email meeting link</button>
       <div id="email-panel" style="display:none" class="email-panel">
         <div class="email-panel-row">
@@ -3145,9 +3145,11 @@ document.addEventListener('DOMContentLoaded', async () => {
       document.execCommand('copy');
       document.body.removeChild(ta);
     }
-    const c = document.getElementById('share-confirm');
-    c.style.display = 'block';
-    setTimeout(() => c.style.display = 'none', 2000);
+    const btn = document.getElementById('share-btn');
+    const original = btn.innerHTML;
+    btn.innerHTML = t().copied;
+    btn.disabled = true;
+    setTimeout(() => { btn.innerHTML = original; btn.disabled = false; }, 2000);
   });
   function toggleEmailPanel(panelId, btnId, otherPanelId) {
     const panel = document.getElementById(panelId);
@@ -3160,7 +3162,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const r = btn.getBoundingClientRect();
       const spaceBelow = window.innerHeight - r.bottom;
       panel.style.left     = r.left + 'px';
-      panel.style.width    = r.width + 'px';
+      panel.style.width    = Math.max(r.width, 280) + 'px';
       panel.style.maxWidth = 'calc(100vw - 32px)';
       if (spaceBelow < 100) {
         panel.style.top    = '';
