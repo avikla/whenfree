@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Meteor — Find the time. Finally.</title>
+<title>WhenFree — Find the time. Finally.</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1152,7 +1152,7 @@ body.a11y-adhd .a11y-panel{opacity:1 !important;pointer-events:auto !important}
 <div id="screen-create">
   <header class="site-header">
     <div class="logo"><span data-i18n="appName">Meet Scheduler</span><span class="logo-mark">M</span></div>
-    <p class="tagline" data-i18n-html="tagline">by <em>Meteor</em> — Find the time. Finally.</p>
+    <p class="tagline" data-i18n-html="tagline">by <em>WhenFree</em> — Find the time. Finally.</p>
   </header>
 
   <main class="create-form">
@@ -1247,7 +1247,7 @@ body.a11y-adhd .a11y-panel{opacity:1 !important;pointer-events:auto !important}
         <button id="back-btn" class="create-btn" style="display:none;background:var(--surface);color:var(--text);border:1px solid var(--border);flex:0 0 auto;width:52px"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M11 6l-6 6 6 6"/></svg></button>
         <button id="create-btn" class="create-btn" style="flex:1">Next &nbsp;&#8594;</button>
       </div>
-      <p class="dev-footer">Avi Klayman &mdash; <a href="mailto:avi@meteor.co.il">avi@meteor.co.il</a><br><a href="help.html">Help</a> &middot; <a href="accessibility-statement.html">Accessibility</a> &middot; <a href="terms.html">Terms &amp; Privacy</a></p>
+      <p class="dev-footer">Avi Klayman &mdash; <a href="mailto:avi@whenfree.org">avi@whenfree.org</a><br><a href="help.html">Help</a> &middot; <a href="accessibility-statement.html">Accessibility</a> &middot; <a href="terms.html">Terms &amp; Privacy</a></p>
     </div>
   </main>
 </div>
@@ -1314,7 +1314,7 @@ body.a11y-adhd .a11y-panel{opacity:1 !important;pointer-events:auto !important}
     <div class="new-event-wrap">
       <button id="new-event-btn" class="new-event-btn"><span class="nav-arrow">⬅</span><span class="nav-label">New event</span></button>
     </div>
-    <p class="dev-footer">Avi Klayman &mdash; <a href="mailto:avi@meteor.co.il">avi@meteor.co.il</a><br><a href="help.html">Help</a> &middot; <a href="terms.html">Terms &amp; Privacy</a></p>
+    <p class="dev-footer">Avi Klayman &mdash; <a href="mailto:avi@whenfree.org">avi@whenfree.org</a><br><a href="help.html">Help</a> &middot; <a href="terms.html">Terms &amp; Privacy</a></p>
   </aside>
 
   <!-- Main content: grid + best times -->
@@ -1414,9 +1414,9 @@ const _X    = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" vi
 const _LINK = `<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>`;
 const LANGS = {
   en: {
-    appName:'Meteor Meet',
-    pageTitle:'Meteor — Find the time. Finally.',
-    tagline:'by <em>Meteor</em> — Find the time. Finally.',
+    appName:'WhenFree',
+    pageTitle:'WhenFree — Find the time. Finally.',
+    tagline:'by <em>WhenFree</em> — Find the time. Finally.',
     step1:'Name your event', namePlaceholder:'Team lunch, Project kickoff…',
     step2:'Pick dates', modeSpecific:'Specific Dates', modeDays:'Days of Week',
     prevMonth:'Previous month', nextMonth:'Next month',
@@ -1561,9 +1561,9 @@ const LANGS = {
     dir:'rtl', locale:'he-IL', ampm:false,
   },
   fr: {
-    appName:'Meteor Meet',
-    pageTitle:'Meteor — Trouvez le bon moment.',
-    tagline:'par <em>Meteor</em> — Trouvez le bon moment.',
+    appName:'WhenFree',
+    pageTitle:'WhenFree — Trouvez le bon moment.',
+    tagline:'par <em>WhenFree</em> — Trouvez le bon moment.',
     step1:'Nommez votre événement', namePlaceholder:'Déjeuner d\'équipe, Lancement de projet…',
     step2:'Choisir les dates', modeSpecific:'Dates précises', modeDays:'Jours de la semaine',
     prevMonth:'Mois précédent', nextMonth:'Mois suivant',
@@ -1714,7 +1714,7 @@ function dismissOnboarding(persist) {
   const hide = () => { overlay.style.display = 'none'; };
   overlay.addEventListener('transitionend', hide, { once: true });
   setTimeout(hide, 350);
-  if (persist) localStorage.setItem('meteor_onboarded', '1');
+  if (persist) localStorage.setItem('whenfree_onboarded', '1');
 }
 
 function setLang(code) {
@@ -2157,7 +2157,7 @@ async function createEvent() {
   S.creatorEmail = creatorEmail;
   S.creatorName = creatorName;
   const creatorToken = Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
-  sessionStorage.setItem('meteor-creator-' + S.eventSlug, creatorToken);
+  sessionStorage.setItem('whenfree-creator-' + S.eventSlug, creatorToken);
   S.isCreator = true;
 
   const btn = document.getElementById('create-btn');
@@ -2181,7 +2181,7 @@ async function createEvent() {
       participants: {},
     });
     location.hash = S.eventSlug;
-    sessionStorage.setItem('meteor-creator-name-' + S.eventSlug, creatorName);
+    sessionStorage.setItem('whenfree-creator-name-' + S.eventSlug, creatorName);
     transitionToB();
     sendCreatorConfirmationEmail(creatorName, creatorEmail, S.eventName, window.location.href);
   } catch(e) {
@@ -2228,7 +2228,7 @@ function renderEventTitle() {
 // ══════════════════════════════════════
 function initScreenB() {
   renderEventTitle();
-  const savedName = sessionStorage.getItem('meteor-creator-name-' + S.eventSlug);
+  const savedName = sessionStorage.getItem('whenfree-creator-name-' + S.eventSlug);
   if (savedName) {
     const nameInput = document.getElementById('participant-name');
     if (nameInput) nameInput.value = savedName;
@@ -2652,7 +2652,7 @@ function buildBestTimesEmailHtml() {
   </td></tr></table>
   <table width="100%" cellpadding="0" cellspacing="0"><tr><td align="center" style="padding:18px 16px 44px;">
     <p style="font-size:12px;color:#94a3b8;margin:0;line-height:1.9;">
-      Sent via <a href="https://meet.meteor.co.il" style="color:#00d68f;text-decoration:none;">Meteor Meet</a>
+      Sent via <a href="https://whenfree.org" style="color:#00d68f;text-decoration:none;">WhenFree</a>
       &nbsp;&#183;&nbsp;
       <a href="${url}" style="color:#94a3b8;text-decoration:none;">Open meeting</a>
     </p>
@@ -2751,7 +2751,7 @@ async function joinEvent() {
   joinBtn.disabled = true;
 
   S.currentUser = { name, color: nameToColor(name), availability: new Set() };
-  sessionStorage.setItem('meteor-user-' + S.eventSlug, name);
+  sessionStorage.setItem('whenfree-user-' + S.eventSlug, name);
 
   try {
     await db.collection('events').doc(S.eventSlug).update({
@@ -2779,7 +2779,7 @@ function resumeAsExisting(name) {
   if (!existing) return;
   S.currentUser = existing;
   S.participants = S.participants.filter(p => p.name.toLowerCase() !== name.toLowerCase());
-  sessionStorage.setItem('meteor-user-' + S.eventSlug, existing.name);
+  sessionStorage.setItem('whenfree-user-' + S.eventSlug, existing.name);
   const overlay = document.getElementById('name-overlay');
   overlay.style.transition = 'opacity 0.4s ease';
   overlay.style.opacity = '0';
@@ -3010,11 +3010,11 @@ function closeCalModal() {
 
 function downloadIcs(slot, dateStr, startStr, endStr) {
   const now = new Date().toISOString().replace(/[-:.]/g,'').slice(0,15) + 'Z';
-  const uid = `meteor-${S.eventSlug}-${Date.now()}@meteor.co.il`;
+  const uid = `${S.eventSlug}-${Date.now()}@whenfree.org`;
   const ics = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//Meteor Meet//EN',
+    'PRODID:-//WhenFree//EN',
     'CALSCALE:GREGORIAN',
     'METHOD:PUBLISH',
     'BEGIN:VEVENT',
@@ -3213,7 +3213,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         S.notifyOnResponse = data.notifyOnResponse || false;
         S.creatorEmail  = data.creatorEmail || '';
         S.creatorName   = data.creatorName || '';
-        const storedToken = sessionStorage.getItem('meteor-creator-' + hashId);
+        const storedToken = sessionStorage.getItem('whenfree-creator-' + hashId);
         S.isCreator = !!(storedToken && storedToken === data.creatorToken);
         // Apply meeting language as default if user has no stored preference
         if (!localStorage.getItem('lang') && data.lang && LANGS[data.lang]) {
@@ -3222,7 +3222,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         applyLang();
 
         // Restore participant from sessionStorage if they already joined
-        const savedName = sessionStorage.getItem('meteor-user-' + hashId);
+        const savedName = sessionStorage.getItem('whenfree-user-' + hashId);
         if (savedName && data.participants?.[savedName]) {
           S.currentUser = {
             name: savedName,
@@ -3423,7 +3423,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('onboard-got-it')?.addEventListener('click', () => dismissOnboarding(true));
 
   // Auto-show for first-time visitors
-  if (!localStorage.getItem('meteor_onboarded')) {
+  if (!localStorage.getItem('whenfree_onboarded')) {
     setTimeout(showOnboarding, 600);
   }
 });

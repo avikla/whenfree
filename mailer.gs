@@ -3,7 +3,7 @@ function doPost(e) {
     const data = JSON.parse(e.postData.contents);
     const { to_email, event_name, meeting_url, subject, body, html_body } = data;
 
-    const options = { name: 'Meteor Meet', from: 'no-reply@meteor.co.il' };
+    const options = { name: 'WhenFree', from: 'no-reply@whenfree.org' };
     if (html_body) options.htmlBody = html_body;
 
     GmailApp.sendEmail(
