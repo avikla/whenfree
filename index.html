@@ -591,15 +591,15 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
 }
 .cal-action-btn svg{width:16px;height:16px;flex-shrink:0}
 @media(max-width:640px){
-  .cal-overlay{align-items:flex-end}
+  .cal-overlay{align-items:center;padding:0 20px}
   .cal-panel{
-    width:100%;max-width:100%;
-    border-radius:22px 22px 0 0;
-    padding:24px 20px 32px;
-    transform:translateY(40px);
-    transition:transform 0.3s ease;
+    width:100%;max-width:400px;
+    border-radius:var(--r);
+    padding:28px 22px 24px;
+    transform:scale(0.95) translateY(8px);
+    transition:transform 0.25s ease,opacity 0.25s ease;
   }
-  .cal-overlay.visible .cal-panel{transform:translateY(0)}
+  .cal-overlay.visible .cal-panel{transform:scale(1) translateY(0)}
 }
 
 .grid-scroll{flex:1;overflow:auto;position:relative;display:flex;justify-content:center;align-items:flex-start;padding:0 8px}
