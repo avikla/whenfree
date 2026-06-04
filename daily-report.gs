@@ -6,11 +6,10 @@ const REPORT_CONFIG = {
   recipient:  'avi@meteor.co.il',
   tz:         'Asia/Jerusalem',
   limits: {
-    reads:     50000,
-    writes:    20000,
-    deletes:   20000,
-    bandwidth: 10  * 1024 * 1024 * 1024,  // 10 GiB
-    storage:   1   * 1024 * 1024 * 1024,  // 1 GiB
+    reads:   50000,
+    writes:  20000,
+    deletes: 20000,
+    storage: 1 * 1024 * 1024 * 1024,  // 1 GiB
   },
 };
 
@@ -99,7 +98,7 @@ function fetchStorageBytes_() {
   const start = new Date(now.getTime() - 86400000).toISOString(); // last 24h window
   const base  = 'https://monitoring.googleapis.com/v3/projects/' + projectId + '/timeSeries';
   const qs = [
-    'filter='                         + encodeURIComponent('metric.type="firestore.googleapis.com/document/data_and_index_storage_bytes"'),
+    'filter='                         + encodeURIComponent('metric.type="firestore.googleapis.com/storage/data_and_index_storage_bytes"'),
     'interval.startTime='             + encodeURIComponent(start),
     'interval.endTime='               + encodeURIComponent(now.toISOString()),
     'aggregation.alignmentPeriod=86400s',
@@ -120,41 +119,6 @@ function fetchStorageBytes_() {
   const points = json.timeSeries[0].points;
   if (!points || !points.length) return 0;
   return parseInt(points[0].value.int64Value || points[0].value.doubleValue || 0, 10);
-}
-
-// ── Cloud Monitoring: monthly outbound bandwidth ──────────────────────────────
-function fetchMonthlyBandwidth_() {
-  const { projectId, tz } = REPORT_CONFIG;
-  const token = ScriptApp.getOAuthToken();
-  const now   = new Date();
-  const monthDateStr = Utilities.formatDate(now, tz, 'yyyy-MM') + '-01';
-  const testDate = new Date(monthDateStr + 'T12:00:00Z');
-  const istHour  = parseInt(Utilities.formatDate(testDate, tz, 'H'), 10);
-  const [my, mm] = monthDateStr.split('-').map(Number);
-  const monthStart = new Date(Date.UTC(my, mm - 1, 1) - (istHour - 12) * 3600000).toISOString();
-  const base  = 'https://monitoring.googleapis.com/v3/projects/' + projectId + '/timeSeries';
-  const qs = [
-    'filter='                         + encodeURIComponent('metric.type="firestore.googleapis.com/network/sent_bytes_count"'),
-    'interval.startTime='             + encodeURIComponent(monthStart),
-    'interval.endTime='               + encodeURIComponent(now.toISOString()),
-    'aggregation.alignmentPeriod='    + (31 * 86400) + 's',
-    'aggregation.perSeriesAligner=ALIGN_SUM',
-    'aggregation.crossSeriesReducer=REDUCE_SUM',
-  ].join('&');
-  const res = UrlFetchApp.fetch(base + '?' + qs, {
-    headers: { Authorization: 'Bearer ' + token },
-    muteHttpExceptions: true,
-  });
-  const code = res.getResponseCode();
-  if (code !== 200) {
-    console.error('Bandwidth API error ' + code + ': ' + res.getContentText());
-    return null;
-  }
-  const json = JSON.parse(res.getContentText());
-  if (!json.timeSeries || !json.timeSeries.length) return 0;
-  return json.timeSeries[0].points.reduce(function(sum, p) {
-    return sum + parseInt(p.value.int64Value || p.value.doubleValue || 0, 10);
-  }, 0);
 }
 
 // ── Formatting helpers ────────────────────────────────────────────────────────
@@ -207,16 +171,14 @@ function buildEmailHtml_(data) {
   var reads      = data.reads     !== null && data.reads     !== undefined ? data.reads     : 0;
   var writes     = data.writes    !== null && data.writes    !== undefined ? data.writes    : 0;
   var deletes    = data.deletes   !== null && data.deletes   !== undefined ? data.deletes   : 0;
-  var bandwidth  = data.bandwidth !== null && data.bandwidth !== undefined ? data.bandwidth : 0;
   var storage    = data.storage   !== null && data.storage   !== undefined ? data.storage   : 0;
   var dateLabel  = data.dateLabel;
   var limits     = REPORT_CONFIG.limits;
 
-  var readsPct   = reads     / limits.reads;
-  var writesPct  = writes    / limits.writes;
-  var delPct     = deletes   / limits.deletes;
-  var bwPct      = bandwidth / limits.bandwidth;
-  var storagePct = storage   / limits.storage;
+  var readsPct   = reads   / limits.reads;
+  var writesPct  = writes  / limits.writes;
+  var delPct     = deletes / limits.deletes;
+  var storagePct = storage / limits.storage;
   var countStr   = eventCount !== null ? fmtNum_(eventCount) : 'N/A';
 
   return '<!DOCTYPE html><html lang="en"><head>' +
@@ -255,8 +217,6 @@ function buildEmailHtml_(data) {
         statCard_('Writes',  fmtNum_(writes),  '20,000', writesPct) +
       '</tr><tr>' +
         statCard_('Deletes', fmtNum_(deletes), '20,000', delPct) +
-        statCard_('Bandwidth (month)', fmtBytes_(bandwidth), '10 GB', bwPct) +
-      '</tr><tr>' +
         statCard_('Storage', fmtBytes_(storage), '1 GB', storagePct) +
         '<td style="width:50%;padding:6px;" valign="top">' +
           '<div style="background:#F4FAF7;border:1px solid #D6EDE4;border-radius:12px;padding:16px 18px;height:100%;box-sizing:border-box;">' +
@@ -287,18 +247,16 @@ function sendDailyReport() {
   try {
     var win        = getYesterdayWindow_();
     var eventCount = fetchEventCount_();
-    var reads      = fetchMonitoringMetric_('firestore.googleapis.com/document/read_count',   win.start, win.end);
-    var writes     = fetchMonitoringMetric_('firestore.googleapis.com/document/write_count',  win.start, win.end);
-    var deletes    = fetchMonitoringMetric_('firestore.googleapis.com/document/delete_count', win.start, win.end);
-    var bandwidth  = fetchMonthlyBandwidth_();
-    var storage    = fetchStorageBytes_();
+    var reads   = fetchMonitoringMetric_('firestore.googleapis.com/document/read_count',   win.start, win.end);
+    var writes  = fetchMonitoringMetric_('firestore.googleapis.com/document/write_count',  win.start, win.end);
+    var deletes = fetchMonitoringMetric_('firestore.googleapis.com/document/delete_count', win.start, win.end);
+    var storage = fetchStorageBytes_();
 
     var html = buildEmailHtml_({
       eventCount: eventCount,
       reads:      reads,
       writes:     writes,
       deletes:    deletes,
-      bandwidth:  bandwidth,
       storage:    storage,
       dateLabel:  win.dateLabel,
     });
@@ -309,8 +267,7 @@ function sendDailyReport() {
     });
 
     console.log('Report sent for ' + win.dateLabel + ': events=' + eventCount +
-      ', reads=' + reads + ', writes=' + writes + ', deletes=' + deletes +
-      ', bw=' + bandwidth + ', storage=' + storage);
+      ', reads=' + reads + ', writes=' + writes + ', deletes=' + deletes + ', storage=' + storage);
   } catch (err) {
     console.error('sendDailyReport failed: ' + err.message);
     GmailApp.sendEmail(REPORT_CONFIG.recipient, 'Meteor · Daily DB Report FAILED',
