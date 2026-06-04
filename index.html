@@ -3177,6 +3177,13 @@ document.addEventListener('DOMContentLoaded', async () => {
       );
       status.innerHTML = t().linkBannerSent;
       btn.textContent = '✓';
+      const input = document.getElementById('email-panel-input');
+      setTimeout(() => {
+        input.value = '';
+        status.textContent = '';
+        btn.disabled = false;
+        btn.textContent = t().linkBannerSend;
+      }, 2500);
     } catch(e) {
       status.textContent = t().linkBannerError;
       btn.disabled = false;
@@ -3209,6 +3216,13 @@ document.addEventListener('DOMContentLoaded', async () => {
       );
       status.innerHTML = t().linkBannerSent;
       btn.textContent = '✓';
+      const input = document.getElementById('best-times-email-input');
+      setTimeout(() => {
+        input.value = '';
+        status.textContent = '';
+        btn.disabled = false;
+        btn.textContent = t().linkBannerSend;
+      }, 2500);
     } catch(e) {
       status.textContent = t().linkBannerError;
       btn.disabled = false;
