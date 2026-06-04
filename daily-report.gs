@@ -212,18 +212,24 @@ function buildEmailHtml_(data) {
 
       // Operations + Storage grid
       '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#7E988F;margin-bottom:14px;">Daily Operations &amp; Storage</div>' +
-      '<table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:8px;"><tr>' +
+      '<table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:12px;"><tr>' +
         statCard_('Reads',   fmtNum_(reads),   '50,000', readsPct) +
         statCard_('Writes',  fmtNum_(writes),  '20,000', writesPct) +
       '</tr><tr>' +
         statCard_('Deletes', fmtNum_(deletes), '20,000', delPct) +
         statCard_('Storage', fmtBytes_(storage), '1 GB', storagePct) +
-        '<td style="width:50%;padding:6px;" valign="top">' +
-          '<div style="background:#F4FAF7;border:1px solid #D6EDE4;border-radius:12px;padding:16px 18px;height:100%;box-sizing:border-box;">' +
-            '<div style="font-size:12px;color:#3E5750;font-weight:500;margin-bottom:6px;">Full usage details</div>' +
-            '<div style="font-size:13px;color:#7E988F;margin-bottom:12px;">Reads, writes, and storage over time</div>' +
-            '<a href="https://console.cloud.google.com/firestore/databases/-default-/usage?project=meteor-meet" ' +
-              'style="background:#00C281;color:#04261B;font-size:12px;font-weight:700;padding:8px 16px;border-radius:100px;text-decoration:none;">View &#8594;</a>' +
+      '</tr></table>' +
+
+      // Full-width console link
+      '<table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:8px;"><tr>' +
+        '<td style="padding:6px;">' +
+          '<div style="background:#F4FAF7;border:1px solid #D6EDE4;border-radius:12px;padding:14px 18px;">' +
+            '<table width="100%" cellpadding="0" cellspacing="0"><tr>' +
+              '<td><div style="font-size:12px;color:#3E5750;font-weight:500;">Full usage details</div>' +
+                  '<div style="font-size:12px;color:#7E988F;margin-top:2px;">Reads, writes, and storage over time in Cloud Console</div></td>' +
+              '<td align="right"><a href="https://console.cloud.google.com/firestore/databases/-default-/usage?project=meteor-meet" ' +
+                'style="background:#00C281;color:#04261B;font-size:12px;font-weight:700;padding:8px 16px;border-radius:100px;text-decoration:none;white-space:nowrap;">View &#8594;</a></td>' +
+            '</tr></table>' +
           '</div>' +
         '</td>' +
       '</tr></table>' +
