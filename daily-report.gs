@@ -84,6 +84,11 @@ function fetchMonitoringMetric_(metricType, startIso, endIso) {
     headers: { Authorization: 'Bearer ' + token },
     muteHttpExceptions: true,
   });
+  const code = res.getResponseCode();
+  if (code !== 200) {
+    console.error('Monitoring API error ' + code + ': ' + res.getContentText());
+    return null;
+  }
   const json = JSON.parse(res.getContentText());
   if (!json.timeSeries || !json.timeSeries.length) return 0;
   return json.timeSeries[0].points.reduce(function(sum, p) {
@@ -96,14 +101,18 @@ function fetchMonthlyBandwidth_() {
   const { projectId, tz } = REPORT_CONFIG;
   const token = ScriptApp.getOAuthToken();
   const now   = new Date();
-  // First day of current month at midnight UTC (close enough for bandwidth)
-  const monthStart = Utilities.formatDate(now, tz, 'yyyy-MM') + '-01T00:00:00Z';
+  // First day of current month at midnight IST (correctly accounts for UTC+2/UTC+3 offset)
+  const monthDateStr = Utilities.formatDate(now, tz, 'yyyy-MM') + '-01';
+  const testDate = new Date(monthDateStr + 'T12:00:00Z');
+  const istHour  = parseInt(Utilities.formatDate(testDate, tz, 'H'), 10);
+  const [my, mm] = monthDateStr.split('-').map(Number);
+  const monthStart = new Date(Date.UTC(my, mm - 1, 1) - (istHour - 12) * 3600000).toISOString();
   const base  = 'https://monitoring.googleapis.com/v3/projects/' + projectId + '/timeSeries';
   const qs = [
     'filter='                         + encodeURIComponent('metric.type="firestore.googleapis.com/network/sent_bytes_count"'),
     'interval.startTime='             + encodeURIComponent(monthStart),
     'interval.endTime='               + encodeURIComponent(now.toISOString()),
-    'aggregation.alignmentPeriod='    + (30 * 86400) + 's',
+    'aggregation.alignmentPeriod='    + (31 * 86400) + 's',
     'aggregation.perSeriesAligner=ALIGN_SUM',
     'aggregation.crossSeriesReducer=REDUCE_SUM',
   ].join('&');
@@ -111,6 +120,11 @@ function fetchMonthlyBandwidth_() {
     headers: { Authorization: 'Bearer ' + token },
     muteHttpExceptions: true,
   });
+  const code = res.getResponseCode();
+  if (code !== 200) {
+    console.error('Bandwidth API error ' + code + ': ' + res.getContentText());
+    return null;
+  }
   const json = JSON.parse(res.getContentText());
   if (!json.timeSeries || !json.timeSeries.length) return 0;
   return json.timeSeries[0].points.reduce(function(sum, p) {
@@ -165,10 +179,10 @@ function statCard_(label, displayValue, limitLabel, pct) {
 // ── HTML email builder ────────────────────────────────────────────────────────
 function buildEmailHtml_(data) {
   var eventCount = data.eventCount;
-  var reads      = data.reads;
-  var writes     = data.writes;
-  var deletes    = data.deletes;
-  var bandwidth  = data.bandwidth;
+  var reads      = data.reads     !== null && data.reads     !== undefined ? data.reads     : 0;
+  var writes     = data.writes    !== null && data.writes    !== undefined ? data.writes    : 0;
+  var deletes    = data.deletes   !== null && data.deletes   !== undefined ? data.deletes   : 0;
+  var bandwidth  = data.bandwidth !== null && data.bandwidth !== undefined ? data.bandwidth : 0;
   var dateLabel  = data.dateLabel;
   var limits     = REPORT_CONFIG.limits;
 
@@ -244,23 +258,28 @@ function buildEmailHtml_(data) {
 
 // ── Main entry point ──────────────────────────────────────────────────────────
 function sendDailyReport() {
-  var win       = getYesterdayWindow_();
-  var recipient = REPORT_CONFIG.recipient;
+  try {
+    var win       = getYesterdayWindow_();
+    var recipient = REPORT_CONFIG.recipient;
 
-  var eventCount = fetchEventCount_();
-  var reads      = fetchMonitoringMetric_('firestore.googleapis.com/document/read_count',   win.start, win.end);
-  var writes     = fetchMonitoringMetric_('firestore.googleapis.com/document/write_count',  win.start, win.end);
-  var deletes    = fetchMonitoringMetric_('firestore.googleapis.com/document/delete_count', win.start, win.end);
-  var bandwidth  = fetchMonthlyBandwidth_();
+    var eventCount = fetchEventCount_();
+    var reads      = fetchMonitoringMetric_('firestore.googleapis.com/document/read_count',   win.start, win.end);
+    var writes     = fetchMonitoringMetric_('firestore.googleapis.com/document/write_count',  win.start, win.end);
+    var deletes    = fetchMonitoringMetric_('firestore.googleapis.com/document/delete_count', win.start, win.end);
+    var bandwidth  = fetchMonthlyBandwidth_();
 
-  var html = buildEmailHtml_({ eventCount: eventCount, reads: reads, writes: writes, deletes: deletes, bandwidth: bandwidth, dateLabel: win.dateLabel });
+    var html = buildEmailHtml_({ eventCount: eventCount, reads: reads, writes: writes, deletes: deletes, bandwidth: bandwidth, dateLabel: win.dateLabel });
 
-  GmailApp.sendEmail(recipient, 'Meteor · Daily DB Report — ' + win.dateLabel, '', {
-    htmlBody: html,
-    name:     'Meteor Meet',
-  });
+    GmailApp.sendEmail(recipient, 'Meteor · Daily DB Report — ' + win.dateLabel, '', {
+      htmlBody: html,
+      name:     'Meteor Meet',
+    });
 
-  console.log('Report sent for ' + win.dateLabel + ': events=' + eventCount + ', reads=' + reads + ', writes=' + writes + ', deletes=' + deletes + ', bw=' + bandwidth);
+    console.log('Report sent for ' + win.dateLabel + ': events=' + eventCount + ', reads=' + reads + ', writes=' + writes + ', deletes=' + deletes + ', bw=' + bandwidth);
+  } catch (err) {
+    console.error('sendDailyReport failed: ' + err.message);
+    GmailApp.sendEmail(REPORT_CONFIG.recipient, 'Meteor · Daily DB Report FAILED', 'The daily report script failed with error: ' + err.message);
+  }
 }
 
 // ── One-time trigger installer ────────────────────────────────────────────────
