@@ -350,7 +350,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
   font-family:var(--font-body);
   font-size:15px;font-weight:500;letter-spacing:0.04em;
   cursor:pointer;position:relative;overflow:hidden;
-  display:flex;align-items:center;justify-content:center;
+  display:flex;align-items:center;justify-content:center;gap:8px;
   transition:transform 0.15s,box-shadow 0.15s;
   animation:fadeUp 0.55s cubic-bezier(.16,1,.3,1) 0.4s both;
 }
@@ -1240,7 +1240,7 @@ body.a11y-adhd .a11y-panel{opacity:1 !important;pointer-events:auto !important}
 
     <div class="create-actions">
       <div style="display:flex;gap:8px">
-        <button id="back-btn" class="create-btn" style="display:none;background:var(--surface);color:var(--text);border:1px solid var(--border);flex:0 0 auto;width:52px">&#8592;</button>
+        <button id="back-btn" class="create-btn" style="display:none;background:var(--surface);color:var(--text);border:1px solid var(--border);flex:0 0 auto;width:52px"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M11 6l-6 6 6 6"/></svg></button>
         <button id="create-btn" class="create-btn" style="flex:1">Next &nbsp;&#8594;</button>
       </div>
       <p class="dev-footer">Avi Klayman &mdash; <a href="mailto:avi@meteor.co.il">avi@meteor.co.il</a><br><a href="help.html">Help</a> &middot; <a href="accessibility-statement.html">Accessibility</a> &middot; <a href="terms.html">Terms &amp; Privacy</a></p>
@@ -1404,6 +1404,8 @@ const S = {
 // ══════════════════════════════════════
 // I18N
 // ══════════════════════════════════════
+const _AR = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>`;
+const _AL = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M19 12H5"/><path d="M11 6l-6 6 6 6"/></svg>`;
 const LANGS = {
   en: {
     appName:'Meteor Meet',
@@ -1414,7 +1416,7 @@ const LANGS = {
     prevMonth:'Previous month', nextMonth:'Next month',
     errorDate:'Please select at least one date.', errorDay:'Please select at least one day.',
     step3:'Set time range', noEarlier:'No earlier than', noLater:'No later than', timezone:'Time zone', tzSearch:'Search timezone…',
-    createBtn:'Create Event &nbsp;&#8594;', creating:'Creating…',
+    createBtn:`Create Event ${_AR}`, creating:'Creating…',
     markAvail:'Mark your availability',
     markSub:"Enter your name, then drag across the grid to show when you're free.",
     namePH:'Your name', continueBtn:'Continue &#8594;', joinBtn:'Join the event &nbsp;&#8594;', joining:'Joining…',
@@ -1462,7 +1464,7 @@ const LANGS = {
     a11yAdhdDesc:'Reduce distractions',
     a11yReset:'Reset All',
     creatorNameErr:'Please enter your name.', creatorEmailErr:'Please enter a valid email address.',
-    nextBtn:'Next &nbsp;&#8594;',
+    nextBtn:`Next ${_AR}`,
     creatorEmailSubject:(name)=>`Your meeting link — ${name}`,
     creatorEmailHtml:(creatorName,eventName,url)=>`<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.6;color:#222"><p>Hi ${creatorName},</p><p>Your meeting <strong>${eventName}</strong> is ready.</p><p><a href="${url}" style="display:inline-block;padding:10px 20px;background:#00d68f;color:#0f1623;border-radius:6px;text-decoration:none">Open Meeting</a></p><p style="color:#888;font-size:13px">${url}</p></div>`,
     emailFailMsg:"We couldn't send the confirmation email. Copy this link to save it:", emailRetrying:'Retrying…', emailRetryFail:'Still couldn\'t send — please copy the link above.',
@@ -1487,7 +1489,7 @@ const LANGS = {
     prevMonth:'חודש קודם', nextMonth:'חודש הבא',
     errorDate:'יש לבחור לפחות תאריך אחד.', errorDay:'יש לבחור לפחות יום אחד.',
     step3:'טווח שעות', noEarlier:'לא לפני', noLater:'לא אחרי', timezone:'אזור זמן', tzSearch:'חיפוש אזור זמן…',
-    createBtn:'יצירת אירוע &nbsp;&#8592;', creating:'יוצר…',
+    createBtn:`יצירת אירוע ${_AL}`, creating:'יוצר…',
     markAvail:'סמן זמינות',
     markSub:'הכנס שם וגרור על הלוח כדי לסמן מתי אתה פנוי.',
     namePH:'השם שלך', continueBtn:'המשך &#8592;', joinBtn:'הצטרף לאירוע &nbsp;&#8592;', joining:'מצטרף…',
@@ -1536,7 +1538,7 @@ const LANGS = {
     a11yAdhdDesc:'הפחת הפרעות',
     a11yReset:'אפס הכל',
     creatorNameErr:'יש להזין שם.', creatorEmailErr:'יש להזין כתובת מייל תקינה.',
-    nextBtn:'הבא &nbsp;&#8592;',
+    nextBtn:`הבא ${_AL}`,
     creatorEmailSubject:(name)=>`קישור לפגישה שלך — ${name}`,
     creatorEmailHtml:(creatorName,eventName,url)=>`<div dir="rtl" style="text-align:right;font-family:Arial,sans-serif;font-size:15px;line-height:1.6;color:#222"><p>שלום ${creatorName},</p><p>הפגישה שלך <strong>${eventName}</strong> נוצרה בהצלחה.</p><p><a href="${url}" style="display:inline-block;padding:10px 20px;background:#00d68f;color:#0f1623;border-radius:6px;text-decoration:none">פתח פגישה</a></p><p style="color:#888;font-size:13px">${url}</p></div>`,
     emailFailMsg:'לא הצלחנו לשלוח את המייל. העתק את הקישור כדי לשמור אותו:', emailRetrying:'שולח מחדש…', emailRetryFail:'עדיין לא הצלחנו לשלוח — העתק את הקישור למעלה.',
@@ -1561,7 +1563,7 @@ const LANGS = {
     prevMonth:'Mois précédent', nextMonth:'Mois suivant',
     errorDate:'Veuillez sélectionner au moins une date.', errorDay:'Veuillez sélectionner au moins un jour.',
     step3:'Définir la plage horaire', noEarlier:'Pas avant', noLater:'Pas après', timezone:'Fuseau horaire', tzSearch:'Rechercher un fuseau…',
-    createBtn:'Créer l\'événement &nbsp;&#8594;', creating:'Création…',
+    createBtn:`Créer l'événement ${_AR}`, creating:'Création…',
     markAvail:'Indiquez vos disponibilités',
     markSub:'Entrez votre nom, puis cliquez sur les créneaux pour indiquer vos disponibilités.',
     namePH:'Votre nom', continueBtn:'Continuer &#8594;', joinBtn:'Rejoindre l\'événement &nbsp;&#8594;', joining:'Connexion…',
@@ -1609,7 +1611,7 @@ const LANGS = {
     a11yAdhdDesc:'Réduire les distractions',
     a11yReset:'Réinitialiser tout',
     creatorNameErr:'Veuillez entrer votre nom.', creatorEmailErr:'Veuillez entrer une adresse e-mail valide.',
-    nextBtn:'Suivant &nbsp;&#8594;',
+    nextBtn:`Suivant ${_AR}`,
     creatorEmailSubject:(name)=>`Votre lien de réunion — ${name}`,
     creatorEmailHtml:(creatorName,eventName,url)=>`<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.6;color:#222"><p>Bonjour ${creatorName},</p><p>Votre réunion <strong>${eventName}</strong> est prête.</p><p><a href="${url}" style="display:inline-block;padding:10px 20px;background:#00d68f;color:#0f1623;border-radius:6px;text-decoration:none">Ouvrir la réunion</a></p><p style="color:#888;font-size:13px">${url}</p></div>`,
     emailFailMsg:'Nous n\'avons pas pu envoyer l\'e-mail de confirmation. Copiez ce lien pour le sauvegarder :', emailRetrying:'Nouvel essai…', emailRetryFail:'Toujours impossible d\'envoyer — veuillez copier le lien ci-dessus.',
