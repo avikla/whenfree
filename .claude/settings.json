@@ -5,7 +5,8 @@
       "Bash(node -e \"const code = require\\('fs'\\).readFileSync\\('index.html', 'utf8'\\); const match = code.match\\(/const LANGS = \\\\{[\\\\s\\\\S]*?\\\\};/\\); if \\(match\\) { try { const obj = eval\\('\\({' + match[0].replace\\('const LANGS = ', ''\\).slice\\(0, -1\\) + '}\\)'\\); console.log\\('✓ Syntax valid'\\); } catch\\(e\\) { console.log\\('✗ Syntax error:', e.message\\); } } else { console.log\\('Could not find LANGS object'\\); }\")",
       "Bash(node -c /tmp/langs_test.js)",
       "Bash(git submodule *)",
-      "Bash(Remove-Item \"c:\\\\Users\\\\Avi\\\\Desktop\\\\Backup to Cloud\\\\Follow-up Actual\\\\Claude Code\\\\.gitmodules\")"
+      "Bash(Remove-Item \"c:\\\\Users\\\\Avi\\\\Desktop\\\\Backup to Cloud\\\\Follow-up Actual\\\\Claude Code\\\\.gitmodules\")",
+      "Bash(Remove-Item \"c:\\\\Users\\\\Avi\\\\Desktop\\\\Backup to cloud\\\\Follow-up Actual\\\\Claude Code\\\\projects\\\\meet-meteor\\\\docs\\\\superpowers\\\\plans\\\\2026-06-04-daily-db-report.md\")"
     ],
     "additionalDirectories": [
       "c:\\Users\\Avi\\Desktop\\Backup to Cloud\\Follow-up Actual\\Claude Code\\projects\\meet-meteor\\docs\\superpowers",

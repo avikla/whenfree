@@ -41,11 +41,13 @@ After pushing from the submodule, return to workspace root and the submodule poi
 
 - **Real-time sync:** Firestore backend syncs availability across all participants
 - **Ranked best times:** Algorithm ranks time slots by number of "available" votes
+- **Add to Calendar:** Each best-time card has a button that opens a modal — Google Calendar deep-link or `.ics` download for Apple/Outlook. Handles both `specific` and `days` mode (next upcoming weekday for `days` mode).
 - **Per-user colors:** Each participant gets a color for easy identification
 - **Dark/light toggle:** Theme switcher with localStorage persistence
 - **Hebrew RTL:** Email invites support Hebrew text with proper RTL formatting
 - **No login required:** Share a link, participants add their name and availability
 - **Daily DB report:** Automated midnight email to `avi@meteor.co.il` with Firestore event count, reads/writes/deletes vs. free-tier limits, and storage usage vs. 1 GiB limit
+- **Smart disabled states:** `syncActionStates()` disables "Send best times" when no slots exist and "Clear my times" when the current user has no availability; re-enables reactively
 
 ## Deployment & Usage
 
@@ -127,6 +129,28 @@ Collection: `meetings` → documents with participant availability maps
 - Changes to `index.html` are live after push
 - `mailer.gs` is independent — update via clasp if changes needed
 
+### SVG Icon Constants
+
+Button icons and arrows use pre-defined SVG constants declared before `const LANGS`:
+
+```js
+const _AR = `<svg ...right arrow, stroke-width 2.5...>`;  // LTR forward
+const _AL = `<svg ...left arrow,  stroke-width 2.5...>`;  // LTR back / RTL forward
+const _X  = `<svg ...× close,     stroke-width 2.5...>`;  // dismiss / clear
+```
+
+Use these in i18n strings (template literals) rather than Unicode entities (`&#8594;`, `&#10005;`) — they render consistently across platforms and are clearly visible at small sizes. Add new constants here if more icon types are needed.
+
+### Key Functions
+
+| Function | Purpose |
+|----------|---------|
+| `renderBestTimes()` | Scores and ranks time slots; populates `S.bestSlots` |
+| `syncActionStates()` | Disables/enables sidebar buttons based on data state; call after any availability change |
+| `openCalModal(i)` | Opens the "Add to Calendar" modal for `S.bestSlots[i]` |
+| `buildCalDate(slot)` | Converts slot data to `YYYYMMDD`/`HHMMSS` strings for calendar URLs |
+| `downloadIcs(slot, ...)` | Generates RFC 5545 `.ics` blob and triggers download |
+
 ## Design System — Verde (Material 3-aligned)
 
 ### Color Palette
@@ -204,9 +228,10 @@ Collection: `meetings` → documents with participant availability maps
 
 **Buttons**
 - Primary (accent): `background: var(--accent); color: var(--on-primary); border-radius: var(--r-pill);`
-- Hover: slight opacity reduction (0.9)
+- Sidebar/action buttons: `font-size: 14px; font-weight: 600; color: var(--text); border: 1.5px solid var(--border2);` — hover adds `accent-glow` background
+- Hover: slight opacity reduction (0.9) on primary; accent-glow background on outlined
 - Focus ring: `box-shadow: 0 0 0 3px var(--accent-glow)`
-- Disabled: `opacity: 0.5; cursor: not-allowed`
+- Disabled: `opacity: 0.35; cursor: not-allowed; pointer-events: none`
 
 **Input Fields**
 - Background: `rgba(10, 70, 52, 0.04)` (light) or `rgba(200, 255, 230, 0.06)` (dark)
