@@ -717,19 +717,19 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
   animation:fadeUp 0.2s ease;
 }
 .sidebar-btn{
-  width:100%;padding:10px 12px;
-  background:transparent;border:1px solid var(--border);
+  width:100%;padding:11px 14px;
+  background:transparent;border:1.5px solid var(--border2);
   border-radius:var(--r-pill);
-  color:var(--muted);font-family:var(--font-body);
-  font-size:12px;font-weight:500;letter-spacing:0.04em;
+  color:var(--text);font-family:var(--font-body);
+  font-size:14px;font-weight:600;
   cursor:pointer;
-  display:flex;align-items:center;justify-content:center;gap:6px;
-  transition:color 0.15s,border-color 0.15s;
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  transition:color 0.15s,border-color 0.15s,background 0.15s;
 }
-.sidebar-btn:hover{color:var(--accent);border-color:var(--accent-dim)}
-.sidebar-btn-outline{background:transparent;border:1px solid var(--border2);color:var(--text)}
-.sidebar-btn-outline:hover{background:var(--surface2)}
-#email-btn{background:var(--accent);color:var(--on-primary);border:none;border-radius:var(--r-pill);font-weight:600}
+.sidebar-btn:hover{color:var(--accent);border-color:var(--accent-dim);background:var(--accent-glow)}
+.sidebar-btn-outline{background:transparent;border:1.5px solid var(--border2);color:var(--text)}
+.sidebar-btn-outline:hover{background:var(--accent-glow);border-color:var(--accent-dim);color:var(--accent)}
+#email-btn{background:var(--accent);color:var(--on-primary);border:none;border-radius:var(--r-pill);font-size:14px;font-weight:600}
 #email-btn:hover{opacity:0.9}
 .share-confirm{
   font-size:11px;font-weight:500;
@@ -737,18 +737,16 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
   display:block;margin-top:6px;
 }
 .new-event-btn{
-  background:transparent;border:1px solid var(--border);
-  border-radius:6px;padding:8px 12px;
-  color:var(--muted);font-family:var(--font-body);
-  font-size:12px;font-weight:500;cursor:pointer;
-  transition:color 0.15s,border-color 0.15s;
-  display:flex;align-items:center;justify-content:center;gap:6px;width:100%;
-  letter-spacing:0.04em;
+  background:transparent;border:1.5px solid var(--border2);
+  border-radius:var(--r-pill);padding:11px 14px;
+  color:var(--text);font-family:var(--font-body);
+  font-size:14px;font-weight:600;cursor:pointer;
+  transition:color 0.15s,border-color 0.15s,background 0.15s;
+  display:flex;align-items:center;justify-content:center;gap:7px;width:100%;
 }
-.new-event-btn:hover{color:var(--accent);border-color:var(--accent-dim)}
-.new-event-btn .nav-arrow{font-size:1.47em;line-height:1}
+.new-event-btn:hover{color:var(--accent);border-color:var(--accent-dim);background:var(--accent-glow)}
 .new-event-wrap{border-top:1px solid var(--border);padding-top:10px;margin-top:4px}
-.btn-icon{font-variant-emoji:text}
+.btn-icon{font-variant-emoji:text;font-size:15px}
 .dev-footer{flex-shrink:0;text-align:center;font-size:12px;font-weight:400;color:var(--muted);padding:12px 0 6px;letter-spacing:0.02em;line-height:1.6;border-top:1px solid rgba(10,70,52,0.18);margin-top:6px}
 .dev-footer a{color:var(--muted);text-decoration:none;border-bottom:1px solid transparent;transition:color 0.15s,border-color 0.15s}
 .dev-footer a:hover{color:var(--accent);border-bottom-color:var(--accent)}
@@ -1421,7 +1419,7 @@ const LANGS = {
     markSub:"Enter your name, then drag across the grid to show when you're free.",
     namePH:'Your name', continueBtn:'Continue &#8594;', joinBtn:'Join the event &nbsp;&#8594;', joining:'Joining…',
     people:'People', copyLink:'<span class="btn-icon">🔗</span> Copy meeting link', copied:'&#10003; Copied!',
-    sendEmail:'&#9993; Email meeting link', newEvent:'<span class="nav-arrow">⬅</span><span class="nav-label">New event</span>', editTitle:'Edit meeting name',
+    sendEmail:'&#9993; Email meeting link', newEvent:`${_AL}<span class="nav-label">New event</span>`, editTitle:'Edit meeting name',
     gridHint:'Drag to mark your free times.', bestTimes:'Best times',
     legendFewerFree:'Fewer free', legendEveryone:'Everyone',
     onboardTitle:'How it works', onboardIntro:'The app helps people find the best time to meet — no accounts, no 47-message email threads, no "does Tuesday work for anyone?" Just a link. Just answers.',
@@ -1494,7 +1492,7 @@ const LANGS = {
     markSub:'הכנס שם וגרור על הלוח כדי לסמן מתי אתה פנוי.',
     namePH:'השם שלך', continueBtn:'המשך &#8592;', joinBtn:'הצטרף לאירוע &nbsp;&#8592;', joining:'מצטרף…',
     people:'משתתפים', copyLink:'<span class="btn-icon">🔗</span> העתק קישור', copied:'&#10003; הועתק!',
-    sendEmail:'&#9993; שלח קישור למייל', newEvent:'<span class="nav-arrow">➡</span><span class="nav-label">אירוע חדש</span>', editTitle:'עריכת שם הפגישה',
+    sendEmail:'&#9993; שלח קישור למייל', newEvent:`${_AR}<span class="nav-label">אירוע חדש</span>`, editTitle:'עריכת שם הפגישה',
     gridHint:'גרור כדי לסמן זמינות.', bestTimes:'זמנים מומלצים',
     legendFewerFree:'פחות פנויים', legendEveryone:'כולם',
     onboardTitle:'איך זה עובד', onboardIntro:'האפליקציה עוזרת לאנשים למצוא זמן לפגישה — בלי הרשמה, בלי 47 הודעות אימייל, בלי "מישהו פנוי ביום שלישי?" רק קישור. רק תשובות.',
@@ -1568,7 +1566,7 @@ const LANGS = {
     markSub:'Entrez votre nom, puis cliquez sur les créneaux pour indiquer vos disponibilités.',
     namePH:'Votre nom', continueBtn:'Continuer &#8594;', joinBtn:'Rejoindre l\'événement &nbsp;&#8594;', joining:'Connexion…',
     people:'Participants', copyLink:'<span class="btn-icon">🔗</span> Copier le lien', copied:'&#10003; Copié !',
-    sendEmail:'&#9993; Envoyer le lien par e-mail', newEvent:'<span class="nav-arrow">⬅</span><span class="nav-label">Nouvel événement</span>', editTitle:'Modifier le nom de la réunion',
+    sendEmail:'&#9993; Envoyer le lien par e-mail', newEvent:`${_AL}<span class="nav-label">Nouvel événement</span>`, editTitle:'Modifier le nom de la réunion',
     gridHint:'Cliquez pour indiquer vos disponibilités.', bestTimes:'Meilleurs créneaux',
     legendFewerFree:'Moins libres', legendEveryone:'Tous',
     onboardTitle:'Comment ça marche', onboardIntro:'L\'app aide les gens à trouver le bon moment — sans inscription, sans 47 emails, sans "quelqu\'un est libre mardi ?" Juste un lien. Juste des réponses.',
