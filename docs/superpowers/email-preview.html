@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meteor · Daily DB Report Preview</title>
+<style>
+  body { margin: 0; background: #e8f0eb; font-family: 'Segoe UI', system-ui, sans-serif; padding: 32px 16px; }
+  .email-wrap { max-width: 580px; margin: 0 auto; background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+  .header { background: #0B2018; padding: 28px 36px 24px; }
+  .header-top { display: flex; align-items: center; justify-content: space-between; }
+  .logo { color: #00C281; font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
+  .logo span { color: #ffffff; }
+  .date-badge { background: rgba(0,194,129,0.15); color: #00C281; font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 100px; }
+  .header-sub { color: #5A7D6E; font-size: 13px; margin-top: 6px; }
+
+  .body { padding: 28px 36px 32px; }
+  .section-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #7E988F; margin: 0 0 14px; }
+
+  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+  .stat-card { background: #F4FAF7; border: 1px solid #D6EDE4; border-radius: 12px; padding: 16px 18px; }
+  .stat-card.full { grid-column: 1 / -1; }
+  .stat-label { font-size: 12px; color: #3E5750; font-weight: 500; margin-bottom: 6px; }
+  .stat-value { font-size: 28px; font-weight: 700; color: #0B2018; line-height: 1; }
+  .stat-value.big { font-size: 36px; }
+  .stat-unit { font-size: 13px; color: #7E988F; font-weight: 400; margin-left: 2px; }
+
+  .bar-wrap { margin-top: 10px; }
+  .bar-track { background: #D6EDE4; border-radius: 100px; height: 6px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 100px; }
+  .bar-fill.green  { background: #00C281; }
+  .bar-fill.yellow { background: #F5A623; }
+  .bar-fill.red    { background: #E5534B; }
+  .bar-meta { display: flex; justify-content: space-between; margin-top: 5px; }
+  .bar-used { font-size: 11px; color: #3E5750; font-weight: 600; }
+  .bar-limit { font-size: 11px; color: #7E988F; }
+
+  .status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; vertical-align: middle; }
+  .status-dot.green  { background: #00C281; }
+  .status-dot.yellow { background: #F5A623; }
+  .status-dot.red    { background: #E5534B; }
+
+  .divider { border: none; border-top: 1px solid #E9F6F0; margin: 20px 0; }
+
+  .bw-card { background: #F4FAF7; border: 1px solid #D6EDE4; border-radius: 12px; padding: 16px 18px; margin-bottom: 24px; }
+  .bw-row { display: flex; align-items: center; justify-content: space-between; }
+  .bw-label { font-size: 12px; color: #3E5750; font-weight: 500; }
+  .bw-value { font-size: 18px; font-weight: 700; color: #0B2018; }
+
+  .footer { background: #F4FAF7; border-top: 1px solid #D6EDE4; padding: 18px 36px; display: flex; align-items: center; justify-content: space-between; }
+  .footer-note { font-size: 12px; color: #7E988F; }
+  .footer-link { font-size: 12px; color: #00C281; text-decoration: none; font-weight: 600; }
+  .footer-link:hover { text-decoration: underline; }
+
+  .meetings-card { background: #0B2018; border-radius: 12px; padding: 20px 22px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; }
+  .meetings-left .label { font-size: 12px; color: #5A7D6E; font-weight: 500; margin-bottom: 4px; }
+  .meetings-left .value { font-size: 42px; font-weight: 700; color: #ffffff; line-height: 1; }
+  .meetings-right { text-align: right; }
+  .meetings-right .delta { font-size: 13px; color: #00C281; font-weight: 600; }
+  .meetings-right .delta-label { font-size: 11px; color: #5A7D6E; margin-top: 2px; }
+</style>
+</head>
+<body>
+<div class="email-wrap">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-top">
+      <div class="logo"><span>Meteor</span> Meet</div>
+      <div class="date-badge">Wed, 4 Jun 2026</div>
+    </div>
+    <div class="header-sub">Daily DB Report &mdash; midnight to midnight (IST)</div>
+  </div>
+
+  <div class="body">
+
+    <!-- Total Meetings -->
+    <div class="section-label">Database</div>
+    <div class="meetings-card">
+      <div class="meetings-left">
+        <div class="label">Total meetings stored</div>
+        <div class="value">1,284</div>
+      </div>
+      <div class="meetings-right">
+        <div class="delta">+17 yesterday</div>
+        <div class="delta-label">new meetings created</div>
+      </div>
+    </div>
+
+    <!-- Ops -->
+    <div class="section-label">Daily Operations (free tier: resets at midnight)</div>
+    <div class="stats-grid">
+
+      <!-- Reads -->
+      <div class="stat-card">
+        <div class="stat-label"><span class="status-dot green"></span>Reads</div>
+        <div class="stat-value">8,412<span class="stat-unit">/ 50k</span></div>
+        <div class="bar-wrap">
+          <div class="bar-track"><div class="bar-fill green" style="width:16.8%"></div></div>
+          <div class="bar-meta">
+            <span class="bar-used">16.8%</span>
+            <span class="bar-limit">limit: 50,000</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Writes -->
+      <div class="stat-card">
+        <div class="stat-label"><span class="status-dot green"></span>Writes</div>
+        <div class="stat-value">1,103<span class="stat-unit">/ 20k</span></div>
+        <div class="bar-wrap">
+          <div class="bar-track"><div class="bar-fill green" style="width:5.5%"></div></div>
+          <div class="bar-meta">
+            <span class="bar-used">5.5%</span>
+            <span class="bar-limit">limit: 20,000</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Deletes -->
+      <div class="stat-card">
+        <div class="stat-label"><span class="status-dot green"></span>Deletes</div>
+        <div class="stat-value">34<span class="stat-unit">/ 20k</span></div>
+        <div class="bar-wrap">
+          <div class="bar-track"><div class="bar-fill green" style="width:0.2%"></div></div>
+          <div class="bar-meta">
+            <span class="bar-used">0.2%</span>
+            <span class="bar-limit">limit: 20,000</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bandwidth -->
+      <div class="stat-card">
+        <div class="stat-label"><span class="status-dot yellow"></span>Bandwidth (month)</div>
+        <div class="stat-value">7.2<span class="stat-unit">GB / 10 GB</span></div>
+        <div class="bar-wrap">
+          <div class="bar-track"><div class="bar-fill yellow" style="width:72%"></div></div>
+          <div class="bar-meta">
+            <span class="bar-used">72%</span>
+            <span class="bar-limit">limit: 10 GB/mo</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Storage note -->
+    <div class="section-label">Storage</div>
+    <div class="bw-card">
+      <div class="bw-row">
+        <div>
+          <div class="bw-label">Raw storage bytes</div>
+          <div style="font-size:12px;color:#7E988F;margin-top:3px;">Not available via API — view in Firebase Console</div>
+        </div>
+        <a href="https://console.firebase.google.com/project/meteor-meet/firestore/usage" style="background:#00C281;color:#04261B;font-size:12px;font-weight:700;padding:8px 16px;border-radius:100px;text-decoration:none;">View →</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div class="footer-note">Meteor Meet &middot; no-reply@meteor.co.il</div>
+    <a class="footer-link" href="https://console.firebase.google.com/project/meteor-meet/firestore">Firebase Console →</a>
+  </div>
+
+</div>
+</body>
+</html>
