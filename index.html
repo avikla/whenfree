@@ -1543,7 +1543,7 @@ const LANGS = {
     creatorNameErr:'יש להזין שם.', creatorEmailErr:'יש להזין כתובת מייל תקינה.',
     nextBtn:`הבא ${_AL}`,
     creatorEmailSubject:(name)=>`קישור לפגישה שלך — ${name}`,
-    creatorEmailHtml:(creatorName,eventName,url)=>buildEmailTemplate(`<p style="margin:0 0 5px;font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#7E988F;">הפגישה מוכנה</p><h1 style="margin:0 0 10px;font-size:24px;font-weight:700;color:#0B2018;line-height:1.2;">${eventName}</h1><p style="margin:0 0 28px;font-size:15px;color:#3E5750;line-height:1.65;">שלום ${creatorName}, הפגישה שלך מוכנה לשיתוף. שלח את הקישור למשתתפים כדי שיסמנו את הזמינות שלהם.</p><a href="${url}" style="display:block;text-align:center;background:#00C281;color:#04261B;text-decoration:none;font-size:15px;font-weight:700;padding:16px 24px;border-radius:100px;letter-spacing:0.03em;">פתח פגישה &#8592;</a><p style="margin:16px 0 0;font-size:12px;color:#7E988F;text-align:center;word-break:break-all;">${url}</p>`,'rtl'),
+    creatorEmailHtml:(creatorName,eventName,url)=>buildEmailTemplate(`<p style="margin:0 0 5px;font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#7E988F;">הפגישה מוכנה</p><h1 style="margin:0 0 10px;font-size:24px;font-weight:700;color:#0B2018;line-height:1.2;">${eventName}</h1><p style="margin:0 0 4px;font-size:15px;color:#3E5750;line-height:1.65;">שלום,</p><p style="margin:0 0 28px;font-size:15px;color:#3E5750;line-height:1.65;">הפגישה שלך מוכנה לשיתוף. שלח את הקישור למשתתפים כדי שיסמנו את הזמינות שלהם.</p><a href="${url}" style="display:block;text-align:center;background:#00C281;color:#04261B;text-decoration:none;font-size:15px;font-weight:700;padding:16px 24px;border-radius:100px;letter-spacing:0.03em;">פתח פגישה &#8592;</a><p style="margin:16px 0 0;font-size:12px;color:#7E988F;text-align:center;word-break:break-all;">${url}</p>`,'rtl'),
     emailFailMsg:'לא הצלחנו לשלוח את המייל. העתק את הקישור כדי לשמור אותו:', emailRetrying:'שולח מחדש…', emailRetryFail:'עדיין לא הצלחנו לשלוח — העתק את הקישור למעלה.',
     notFound:'האירוע לא נמצא. צור אירוע חדש.',
     firebaseErr:'לא ניתן ליצור אירוע — בדוק את הגדרות Firebase.',
@@ -2626,7 +2626,7 @@ function buildEmailTemplate(bodyHtml, dir) {
 <table width="100%" cellpadding="0" cellspacing="0" style="background:#C8E8DB;">
 <tr><td align="center" style="padding:32px 16px 0;">
 <table width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;"><tr>
-<td style="background:#E9F6F0;border-radius:20px;padding:36px 32px;box-shadow:0 4px 32px rgba(11,32,24,0.10);">
+<td style="background:#E9F6F0;border-radius:20px;padding:36px 32px;box-shadow:0 4px 32px rgba(11,32,24,0.10);direction:${dir};text-align:${isRtl?'right':'left'};">
 ${bodyHtml}
 </td></tr></table>
 </td></tr>
@@ -2649,10 +2649,16 @@ function buildBestTimesEmailHtml() {
   const lang = t();
   const isRtl = lang.dir === 'rtl';
 
+  const cellDir = `direction:${lang.dir};text-align:${isRtl?'right':'left'};`;
+  const lbl1    = isRtl ? '#1 &#9733; הזמן הטוב ביותר' : currentLang==='fr' ? '#1 &#9733; Meilleur créneau' : '#1 &#9733; Best time';
+  const heading = isRtl ? 'זמנים מומלצים עבור' : currentLang==='fr' ? 'Meilleurs créneaux pour' : 'Best Times For';
+  const subtext = isRtl ? 'הנה הזמנים הטובים ביותר על פי כל המשתתפים:' : currentLang==='fr' ? 'Voici les meilleurs créneaux selon les réponses de tous :' : "Here are the top time slots based on everyone's responses:";
+  const ctaBtn  = isRtl ? 'צפה וסמן זמינות &#8592;' : currentLang==='fr' ? 'Voir et marquer les disponibilités &#8594;' : 'View &amp; Mark Availability &#8594;';
+
   const cardHtml = slots.map((s, i) => i === 0 ? `
     <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:12px;">
-    <tr><td style="background:#C7F4E2;border:1.5px solid #00C281;border-radius:14px;padding:20px 22px;">
-      <div style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:#00A86E;text-transform:uppercase;margin-bottom:8px;">#1 &nbsp;&#9733; Best time</div>
+    <tr><td style="background:#C7F4E2;border:1.5px solid #00C281;border-radius:14px;padding:20px 22px;${cellDir}">
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.08em;color:#00A86E;text-transform:uppercase;margin-bottom:8px;">${lbl1}</div>
       <div style="font-size:19px;font-weight:700;color:#0B2018;margin-bottom:2px;">${s.dateLabel}</div>
       <div style="font-size:14px;color:#3E5750;margin-bottom:14px;">${s.timeLabel}</div>
       <div style="background:#A8E6CE;border-radius:100px;height:5px;margin-bottom:7px;">
@@ -2661,8 +2667,8 @@ function buildBestTimesEmailHtml() {
       <div style="font-size:13px;color:#00382A;font-weight:600;">${s.availLabel}</div>
     </td></tr></table>` : `
     <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:12px;">
-    <tr><td style="background:#DCF0E8;border:1px solid rgba(10,70,52,0.15);border-radius:14px;padding:20px 22px;">
-      <div style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:#7E988F;text-transform:uppercase;margin-bottom:8px;">#${s.rank}</div>
+    <tr><td style="background:#DCF0E8;border:1px solid rgba(10,70,52,0.15);border-radius:14px;padding:20px 22px;${cellDir}">
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.08em;color:#7E988F;text-transform:uppercase;margin-bottom:8px;">#${s.rank}</div>
       <div style="font-size:19px;font-weight:700;color:#0B2018;margin-bottom:2px;">${s.dateLabel}</div>
       <div style="font-size:14px;color:#3E5750;margin-bottom:14px;">${s.timeLabel}</div>
       <div style="background:#B8DECE;border-radius:100px;height:5px;margin-bottom:7px;">
@@ -2672,11 +2678,11 @@ function buildBestTimesEmailHtml() {
     </td></tr></table>`).join('');
 
   const body = `
-    <p style="margin:0 0 5px;font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#7E988F;">Best Times For</p>
+    <p style="margin:0 0 5px;font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#7E988F;">${heading}</p>
     <h1 style="margin:0 0 8px;font-size:24px;font-weight:700;color:#0B2018;line-height:1.2;">${name}</h1>
-    <p style="margin:0 0 28px;font-size:14px;color:#3E5750;line-height:1.65;">Here are the top time slots based on everyone's responses:</p>
+    <p style="margin:0 0 28px;font-size:14px;color:#3E5750;line-height:1.65;">${subtext}</p>
     ${cardHtml}
-    <a href="${url}" style="display:block;text-align:center;background:#00C281;color:#04261B;text-decoration:none;font-size:15px;font-weight:700;padding:16px 24px;border-radius:100px;letter-spacing:0.03em;margin-top:8px;">View &amp; Mark Availability &#8594;</a>
+    <a href="${url}" style="display:block;text-align:center;background:#00C281;color:#04261B;text-decoration:none;font-size:15px;font-weight:700;padding:16px 24px;border-radius:100px;letter-spacing:0.03em;margin-top:8px;">${ctaBtn}</a>
     <p style="margin:16px 0 0;font-size:12px;color:#7E988F;text-align:center;word-break:break-all;">${url}</p>`;
   return buildEmailTemplate(body, lang.dir);
 }
