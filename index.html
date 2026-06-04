@@ -455,7 +455,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
 .you-badge{font-size:10px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:var(--accent);opacity:0.75;margin-left:2px}
 .people-count{font-size:11px;font-weight:600;background:var(--accent-glow);border:1px solid var(--accent-dim);color:var(--accent);border-radius:10px;padding:1px 7px;letter-spacing:0.03em}
 .grid-top-row{display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-.clear-inline-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;background:transparent;border:1px solid var(--border);border-radius:var(--r-sm);font-family:var(--font-body);font-size:12px;font-weight:500;letter-spacing:0.04em;color:var(--muted);cursor:pointer;padding:10px 12px;margin-top:8px;transition:color 0.15s,border-color 0.15s,background 0.15s}
+.clear-inline-btn{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;background:transparent;border:1.5px solid var(--border2);border-radius:var(--r-pill);font-family:var(--font-body);font-size:14px;font-weight:600;color:var(--text);cursor:pointer;padding:11px 14px;margin-top:8px;transition:color 0.15s,border-color 0.15s,background 0.15s}
 .clear-inline-btn:hover{color:#f87171;border-color:rgba(248,113,113,0.35);background:rgba(248,113,113,0.05)}
 .rejoin-prompt{margin-top:10px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--r-sm);text-align:center}
 .rejoin-prompt p{font-size:12px;color:var(--muted);margin-bottom:8px}
@@ -1404,6 +1404,7 @@ const S = {
 // ══════════════════════════════════════
 const _AR = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>`;
 const _AL = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M19 12H5"/><path d="M11 6l-6 6 6 6"/></svg>`;
+const _X  = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M18 6L6 18M6 6l12 12"/></svg>`;
 const LANGS = {
   en: {
     appName:'Meteor Meet',
@@ -1429,7 +1430,7 @@ const LANGS = {
     onboardGotIt:'Got it →', onboardBtnTitle:'Help',
     bestEmpty:'Mark your availability to see best times',
     mobileNotice:'Best experienced on a wider screen', loading:'Loading…',
-    youBadge:'you', clearBtn:'&#10005; Clear my times',
+    youBadge:'you', clearBtn:`${_X} Clear my times`,
     sendBestTimes:'📊 Send best times',
     bestTimesSubject:(name)=>`Best times for: ${name}`,
     bestTimesBody:(name,url)=>`Hi,\n\nHere are the best meeting times for: ${name}\n\n${url}\n\nThanks!`,
@@ -1502,7 +1503,7 @@ const LANGS = {
     onboardGotIt:'הבנתי ←', onboardBtnTitle:'עזרה',
     bestEmpty:'סמן זמינות כדי לראות את הזמנים הטובים ביותר',
     mobileNotice:'מומלץ לצפות במסך רחב יותר', loading:'טוען…',
-    youBadge:'את/ה', clearBtn:'&#10005; נקה זמנים',
+    youBadge:'את/ה', clearBtn:`${_X} נקה זמנים`,
     sendBestTimes:'📊 שלח זמנים מומלצים',
     bestTimesSubject:(name)=>`זמנים מומלצים עבור: ${name}`,
     bestTimesBody:(name,url)=>`שלום,\n\nהזמנים המומלצים לפגישה: ${name}\n\n${url}\n\nתודה!`,
@@ -1576,7 +1577,7 @@ const LANGS = {
     onboardGotIt:'Compris →', onboardBtnTitle:'Aide',
     bestEmpty:'Indiquez vos disponibilités pour voir les meilleurs créneaux',
     mobileNotice:'Meilleure expérience sur un écran plus large', loading:'Chargement…',
-    youBadge:'vous', clearBtn:'&#10005; Effacer mes créneaux',
+    youBadge:'vous', clearBtn:`${_X} Effacer mes créneaux`,
     sendBestTimes:'📊 Envoyer les meilleurs créneaux',
     bestTimesSubject:(name)=>`Meilleurs créneaux pour : ${name}`,
     bestTimesBody:(name,url)=>`Bonjour,\n\nVoici les meilleurs créneaux pour : ${name}\n\n${url}\n\nCordialement !`,
