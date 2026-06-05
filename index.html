@@ -3486,7 +3486,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Close panel when clicking outside
   document.addEventListener('click', e => {
-    if (!a11yPanel.contains(e.target) && e.target !== a11yBtn) {
+    if (!a11yPanel.contains(e.target) && !a11yBtn.contains(e.target)) {
       a11yPanel.classList.remove('open');
     }
   });
