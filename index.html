@@ -662,6 +662,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
   font-size:11.5px;font-weight:400;
   color:var(--muted2);padding:6px;
 }
+.mobile-top-bar{display:none}
 @media(max-width:640px){
   #screen-create{padding:0 16px}
   .site-header{padding-top:48px}
@@ -671,6 +672,16 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
   .time-sep{display:none}
   .time-field{width:100%}
   #screen-event{flex-direction:column;height:auto;min-height:100svh;overflow-y:visible}
+  .mobile-top-bar{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:10px 16px;background:var(--surface);
+    border-bottom:1px solid var(--border);
+    position:sticky;top:0;z-index:50;order:0;
+  }
+  .mobile-top-logo{display:flex;align-items:center;gap:8px}
+  .mobile-logo-mark{width:36px;height:36px;border-radius:9px;flex-shrink:0}
+  .mobile-top-name{font-family:var(--font-display);font-size:17px;font-weight:700;color:var(--text);letter-spacing:-0.01em}
+  .sidebar-logo{display:none}
   .sidebar{order:2;width:100%;min-width:unset;border-right:none;border-top:1px solid var(--border);border-bottom:none;padding:12px 16px;gap:12px;max-height:none;overflow-y:visible}
   .grid-area{order:1;padding:10px 12px;height:auto;overflow:visible}
   .grid-scroll{flex:none;height:auto;overflow-x:auto;overflow-y:visible;display:flex;justify-content:center;align-items:flex-start;padding:0 4px}
@@ -1258,6 +1269,15 @@ body.a11y-adhd .a11y-panel{opacity:1 !important;pointer-events:auto !important}
 ═══════════════════════════════════════ -->
 <div id="screen-event" style="display:none;opacity:0">
 
+  <!-- Mobile sticky top bar -->
+  <div id="mobile-top-bar" class="mobile-top-bar">
+    <div class="mobile-top-logo">
+      <span class="logo-mark mobile-logo-mark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="20" height="20" style="display:block"><rect x="5" y="8.5" width="22" height="17" rx="3" fill="currentColor" fill-opacity="0.15" stroke="currentColor" stroke-width="1.4" stroke-opacity="0.5"/><rect x="5" y="8.5" width="22" height="5.5" rx="3" fill="currentColor" fill-opacity="0.22"/><rect x="5" y="11.5" width="22" height="2.5" fill="currentColor" fill-opacity="0.22"/><rect x="10.5" y="5.5" width="2" height="5" rx="1" fill="currentColor"/><rect x="19.5" y="5.5" width="2" height="5" rx="1" fill="currentColor"/><path d="M10.5 18.5 L14.5 22.5 L21.5 14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span>
+      <span class="mobile-top-name" data-i18n="appName">WhenFree</span>
+    </div>
+    <span id="mobile-people-count" class="people-count">0</span>
+  </div>
+
   <!-- Name entry overlay -->
   <div id="name-overlay" class="name-overlay">
     <div class="name-panel">
@@ -1682,6 +1702,7 @@ function applyLang() {
   if (nb) nb.innerHTML = lang.newEvent;
   const sb = document.getElementById('share-btn');
   if (sb) sb.innerHTML = lang.copyLink;
+  document.querySelectorAll('.mobile-top-name').forEach(el => el.textContent = lang.appName);
   const wb = document.getElementById('whatsapp-btn');
   if (wb) wb.innerHTML = lang.whatsappLink;
   const eb = document.getElementById('email-btn');
@@ -2859,6 +2880,8 @@ function renderParticipants() {
   if (clearInline) clearInline.addEventListener('click', clearMyTimes);
   const countEl = document.getElementById('people-count');
   if (countEl) countEl.textContent = all.length;
+  const mobileCount = document.getElementById('mobile-people-count');
+  if (mobileCount) mobileCount.textContent = all.length;
   syncActionStates();
 }
 
