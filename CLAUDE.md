@@ -95,9 +95,22 @@ Use in i18n strings (template literals) rather than Unicode entities.
 - **Framework:** Vanilla JS (no build step)
 - **Database:** Firebase Firestore (project: `meteor-meet`)
 - **Styling:** CSS custom properties (variables), Verde design system
-- **Time format:** 24-hour, ISO dates
+- **Time format:** 24-hour everywhere (`ampm:false` in all `LANGS` entries)
 - **No backend** — all logic in `index.html` (Firebase rules handle authorization)
 - **Firebase plan:** Blaze (pay-as-you-go) — needed for Cloud Monitoring API. Actual cost: ~$0.
+- **`.gitignore`:** `.claude/` is ignored — never commit it
+
+## RTL / Layout Architecture
+
+- **`.top-controls`** (desktop lang+theme bar): `position:fixed; left:16px; direction:ltr; transform:translateX(calc(100vw - 100% - 32px)); transition:transform 0.35s ease` — appears at top-right in LTR. `[dir="rtl"] .top-controls{transform:none}` slides it to top-left on Hebrew.
+- **`.mobile-top-bar`** and **`.top-controls`**: both have `direction:ltr` to prevent internal flex reorder in RTL.
+- **Mobile controls visibility**: `#top-controls` shows on Screen A (mobile). Hidden via JS in both `transitionToB()` and `showScreenB()` when `window.innerWidth <= 640`. Never use CSS `display:none` to hide it globally.
+- **Name overlay (join dialog)**: `position:fixed` inside `@media(max-width:640px)` — needed because `#screen-event` has `height:auto` on mobile, making `position:absolute;inset:0` center off-screen.
+- **Touch detection**: `navigator.maxTouchPoints > 0` in `applyLang()` swaps `markSub`→`markSubMobile` and `gridHint`→`gridHintMobile` (tap vs drag/click wording).
+
+## Event Listener Patterns
+
+- **Click-outside handlers**: always use `el.contains(e.target)` not `e.target !== el` — SVG children inside a button will be the `e.target`, not the button itself.
 
 ## GAS Daily Report
 
