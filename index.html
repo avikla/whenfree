@@ -1280,6 +1280,7 @@ body.a11y-adhd .a11y-panel{opacity:1 !important;pointer-events:auto !important}
     <div style="margin-top:auto;display:flex;flex-direction:column;gap:6px">
       <button id="share-btn" class="sidebar-btn"><span class="btn-icon">🔗</span> Copy meeting link</button>
       <span id="share-confirm" class="share-confirm" style="display:none" aria-hidden="true">&#10003; Copied!</span>
+      <button id="whatsapp-btn" class="sidebar-btn sidebar-btn-outline" data-i18n="whatsappLink">&#128172; WhatsApp</button>
       <button id="email-btn" class="sidebar-btn sidebar-btn-outline" data-i18n="sendEmail">&#9993; Email meeting link</button>
       <div id="email-panel" style="display:none" class="email-panel">
         <div class="email-panel-row">
@@ -1423,6 +1424,8 @@ const LANGS = {
     markSub:"Enter your name, then drag across the grid to show when you're free.",
     namePH:'Your name', continueBtn:'Continue &#8594;', joinBtn:'Join the event &nbsp;&#8594;', joining:'Joining…',
     people:'People', copyLink:`${_LINK} Copy meeting link`, copied:'&#10003; Copied!',
+    whatsappLink:'&#128172; Send via WhatsApp',
+    whatsappMsg:(name,url)=>`Join my meeting: *${name}*\n${url}`,
     sendEmail:'&#9993; Email meeting link', newEvent:`${_AL}<span class="nav-label">New event</span>`, editTitle:'Edit meeting name',
     gridHint:'Drag to mark your free times.', bestTimes:'Best times',
     legendFewerFree:'Fewer free', legendEveryone:'Everyone',
@@ -1497,6 +1500,8 @@ const LANGS = {
     markSub:'הכנס שם וגרור על הלוח כדי לסמן מתי אתה פנוי.',
     namePH:'השם שלך', continueBtn:'המשך &#8592;', joinBtn:'הצטרף לאירוע &nbsp;&#8592;', joining:'מצטרף…',
     people:'משתתפים', copyLink:`${_LINK} העתק קישור`, copied:'&#10003; הועתק!',
+    whatsappLink:'&#128172; שלח בוואטסאפ',
+    whatsappMsg:(name,url)=>`הצטרפו לפגישה: *${name}*\n${url}`,
     sendEmail:'&#9993; שלח קישור למייל', newEvent:`${_AR}<span class="nav-label">אירוע חדש</span>`, editTitle:'עריכת שם הפגישה',
     gridHint:'גרור כדי לסמן זמינות.', bestTimes:'זמנים מומלצים',
     legendFewerFree:'פחות פנויים', legendEveryone:'כולם',
@@ -1571,6 +1576,8 @@ const LANGS = {
     markSub:'Entrez votre nom, puis cliquez sur les créneaux pour indiquer vos disponibilités.',
     namePH:'Votre nom', continueBtn:'Continuer &#8594;', joinBtn:'Rejoindre l\'événement &nbsp;&#8594;', joining:'Connexion…',
     people:'Participants', copyLink:`${_LINK} Copier le lien`, copied:'&#10003; Copié !',
+    whatsappLink:'&#128172; Envoyer via WhatsApp',
+    whatsappMsg:(name,url)=>`Rejoignez ma réunion : *${name}*\n${url}`,
     sendEmail:'&#9993; Envoyer le lien par e-mail', newEvent:`${_AL}<span class="nav-label">Nouvel événement</span>`, editTitle:'Modifier le nom de la réunion',
     gridHint:'Cliquez pour indiquer vos disponibilités.', bestTimes:'Meilleurs créneaux',
     legendFewerFree:'Moins libres', legendEveryone:'Tous',
@@ -1666,6 +1673,8 @@ function applyLang() {
   if (nb) nb.innerHTML = lang.newEvent;
   const sb = document.getElementById('share-btn');
   if (sb) sb.innerHTML = lang.copyLink;
+  const wb = document.getElementById('whatsapp-btn');
+  if (wb) wb.innerHTML = lang.whatsappLink;
   const eb = document.getElementById('email-btn');
   if (eb) eb.innerHTML = lang.sendEmail;
   const sc = document.getElementById('share-confirm');
@@ -3178,6 +3187,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       panel.querySelector('input').focus();
     }
   }
+  document.getElementById('whatsapp-btn').addEventListener('click', () => {
+    const msg = t().whatsappMsg(S.eventName || '', window.location.href);
+    window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
+  });
   document.getElementById('email-btn').addEventListener('click', () =>
     toggleEmailPanel('email-panel', 'email-btn', 'best-times-email-panel'));
 
