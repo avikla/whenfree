@@ -1718,6 +1718,8 @@ function dismissOnboarding(persist) {
 function setLang(code) {
   currentLang = code;
   localStorage.setItem('lang', code);
+  const newSearch = code === 'en' ? '' : '?lang=' + code;
+  history.replaceState(null, '', location.pathname + newSearch + location.hash);
   applyLang();
   renderCalendar();
   buildDOW();
@@ -3070,16 +3072,15 @@ function downloadIcs(slot, dateStr, startStr, endStr) {
 // INIT
 // ══════════════════════════════════════
 document.addEventListener('DOMContentLoaded', async () => {
-  // Auto-detect language from URL path (/en, /fr, /he)
+  // Auto-detect language from ?lang= query param or URL path (/en, /fr, /he)
+  const langFromQuery = new URLSearchParams(location.search).get('lang');
   const pathMatch = location.pathname.match(/^\/(en|fr|he)(?:\/|$)/);
-  if (pathMatch) {
-    const langFromPath = pathMatch[1];
-    currentLang = langFromPath;
-    localStorage.setItem('lang', langFromPath);
-    applyLang();
-  } else {
-    applyLang();
+  const detectedLang = (langFromQuery && LANGS[langFromQuery]) ? langFromQuery : pathMatch?.[1];
+  if (detectedLang) {
+    currentLang = detectedLang;
+    localStorage.setItem('lang', detectedLang);
   }
+  applyLang();
 
   // Close time pickers when clicking outside
   document.addEventListener('click', e => {
