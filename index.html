@@ -685,7 +685,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
   .mobile-top-right{display:flex;align-items:center;gap:5px}
   .mobile-ctrl-btn{background:none;border:none;cursor:pointer;font-size:15px;color:var(--muted);padding:4px 5px;border-radius:8px;line-height:1}
   .mobile-ctrl-btn:hover{background:var(--surface2);color:var(--text)}
-  .mobile-lang-toggle{display:flex;background:var(--surface2);border:1px solid var(--border2);border-radius:100px;overflow:hidden}
+  .mobile-lang-toggle{display:flex;direction:ltr;background:var(--surface2);border:1px solid var(--border2);border-radius:100px;overflow:hidden}
   .mobile-lang-toggle button{background:none;border:none;cursor:pointer;padding:3px 6px;font-size:10px;font-weight:700;color:var(--muted2);font-family:var(--font-body);letter-spacing:0.02em}
   .mobile-lang-toggle button.active{background:var(--accent);color:var(--on-primary);border-radius:100px}
   .sidebar-logo{display:none}
@@ -777,7 +777,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
 [dir="rtl"] .top-controls{right:auto;left:16px}
 
 .lang-toggle{
-  display:flex;align-items:center;
+  display:flex;align-items:center;direction:ltr;
   background:var(--surface);border:1px solid var(--border2);border-radius:20px;
   overflow:hidden;font-family:var(--font-body);font-size:12px;font-weight:500;
 }
@@ -1099,7 +1099,7 @@ body.a11y-adhd .a11y-panel{opacity:1 !important;pointer-events:auto !important}
   <div class="lang-toggle" id="lang-toggle">
     <button id="lang-en" onclick="setLang('en')">EN</button>
     <button id="lang-fr" onclick="setLang('fr')">FR</button>
-    <button id="lang-he" onclick="setLang('he')">עב</button>
+    <button id="lang-he" onclick="setLang('he')">HE</button>
   </div>
 </div>
 
