@@ -724,7 +724,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
   border-radius:var(--r-pill);
   color:var(--text);font-family:var(--font-body);
   font-size:14px;font-weight:600;
-  cursor:pointer;
+  cursor:pointer;white-space:nowrap;
   display:flex;align-items:center;justify-content:center;gap:7px;
   transition:color 0.15s,border-color 0.15s,background 0.15s;
 }
@@ -742,7 +742,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
   color:var(--text);font-family:var(--font-body);
   font-size:14px;font-weight:600;cursor:pointer;
   transition:color 0.15s,border-color 0.15s,background 0.15s;
-  display:flex;align-items:center;justify-content:center;gap:7px;width:100%;
+  display:flex;align-items:center;justify-content:center;gap:7px;width:100%;white-space:nowrap;
 }
 .new-event-btn:hover{color:var(--accent);border-color:var(--accent-dim);background:var(--accent-glow)}
 .new-event-wrap{border-top:1px solid var(--border);padding-top:10px;margin-top:4px}
@@ -1507,7 +1507,7 @@ const LANGS = {
     markSub:'הכנס שם וגרור על הלוח כדי לסמן מתי אתה פנוי.',
     namePH:'השם שלך', continueBtn:'המשך &#8592;', joinBtn:'הצטרף לאירוע &nbsp;&#8592;', joining:'מצטרף…',
     people:'משתתפים', copyLink:`${_LINK} העתק קישור`, copied:'&#10003; הועתק!',
-    whatsappLink:`${_WA} קישור וואטסאפ`,
+    whatsappLink:`${_WA} שלח קישור לווטסאפ`,
     whatsappMsg:(name,url)=>`הצטרפו לפגישה: *${name}*\n${url}`,
     sendEmail:'&#9993; שלח קישור למייל', newEvent:`${_AR}<span class="nav-label">אירוע חדש</span>`, editTitle:'עריכת שם הפגישה',
     gridHint:'גרור כדי לסמן זמינות.', bestTimes:'זמנים מומלצים',
@@ -1586,7 +1586,7 @@ const LANGS = {
     people:'Participants', copyLink:`${_LINK} Copier le lien`, copied:'&#10003; Copié !',
     whatsappLink:`${_WA} Lien WhatsApp`,
     whatsappMsg:(name,url)=>`Rejoignez ma réunion : *${name}*\n${url}`,
-    sendEmail:'&#9993; Envoyer le lien par e-mail', newEvent:`${_AL}<span class="nav-label">Nouvel événement</span>`, editTitle:'Modifier le nom de la réunion',
+    sendEmail:'&#9993; Envoyer par e-mail', newEvent:`${_AL}<span class="nav-label">Nouvel événement</span>`, editTitle:'Modifier le nom de la réunion',
     gridHint:'Cliquez pour indiquer vos disponibilités.', bestTimes:'Meilleurs créneaux',
     legendFewerFree:'Moins libres', legendEveryone:'Tous',
     onboardTitle:'Comment ça marche', onboardIntro:'L\'app aide les gens à trouver le bon moment — sans inscription, sans 47 emails, sans "quelqu\'un est libre mardi ?" Juste un lien. Juste des réponses.',
@@ -1598,7 +1598,7 @@ const LANGS = {
     bestEmpty:'Indiquez vos disponibilités pour voir les meilleurs créneaux',
     mobileNotice:'Meilleure expérience sur un écran plus large', loading:'Chargement…',
     youBadge:'vous', clearBtn:`${_X} Effacer mes créneaux`,
-    sendBestTimes:'📊 Envoyer les meilleurs créneaux',
+    sendBestTimes:'📊 Meilleurs créneaux',
     bestTimesSubject:(name)=>`Meilleurs créneaux pour : ${name}`,
     bestTimesBody:(name,url)=>`Bonjour,\n\nVoici les meilleurs créneaux pour : ${name}\n\n${url}\n\nCordialement !`,
     emailBtnPH:'E-mail du destinataire',
