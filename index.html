@@ -668,20 +668,26 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
   .site-header{padding-top:48px}
   .logo{font-size:30px}
   .mobile-notice{display:block}
-  .top-controls{top:65px}
   .time-row{flex-direction:column;gap:8px}
   .time-sep{display:none}
   .time-field{width:100%}
   #screen-event{flex-direction:column;height:auto;min-height:100svh;overflow-y:visible}
+  #top-controls{display:none}
   .mobile-top-bar{
     display:flex;align-items:center;justify-content:space-between;
-    padding:10px 16px;background:var(--surface);
+    padding:8px 12px;background:var(--surface);
     border-bottom:1px solid var(--border);
     position:fixed;top:0;left:0;right:0;z-index:50;
   }
   .mobile-top-logo{display:flex;align-items:center;gap:8px}
   .mobile-logo-mark{width:36px;height:36px;border-radius:9px;flex-shrink:0}
-  .mobile-top-name{font-family:var(--font-display);font-size:17px;font-weight:700;color:var(--text);letter-spacing:-0.01em}
+  .mobile-top-name{font-family:var(--font-display);font-size:16px;font-weight:700;color:var(--text);letter-spacing:-0.01em}
+  .mobile-top-right{display:flex;align-items:center;gap:5px}
+  .mobile-ctrl-btn{background:none;border:none;cursor:pointer;font-size:15px;color:var(--muted);padding:4px 5px;border-radius:8px;line-height:1}
+  .mobile-ctrl-btn:hover{background:var(--surface2);color:var(--text)}
+  .mobile-lang-toggle{display:flex;background:var(--surface2);border:1px solid var(--border2);border-radius:100px;overflow:hidden}
+  .mobile-lang-toggle button{background:none;border:none;cursor:pointer;padding:3px 6px;font-size:10px;font-weight:700;color:var(--muted2);font-family:var(--font-body);letter-spacing:0.02em}
+  .mobile-lang-toggle button.active{background:var(--accent);color:var(--on-primary);border-radius:100px}
   .sidebar-logo{display:none}
   #screen-event{padding-top:57px}
   .sidebar{order:2;width:100%;min-width:unset;border-right:none;border-top:1px solid var(--border);border-bottom:none;padding:12px 16px;gap:12px;max-height:none;overflow-y:visible}
@@ -1277,7 +1283,16 @@ body.a11y-adhd .a11y-panel{opacity:1 !important;pointer-events:auto !important}
       <span class="logo-mark mobile-logo-mark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="20" height="20" style="display:block"><rect x="5" y="8.5" width="22" height="17" rx="3" fill="currentColor" fill-opacity="0.15" stroke="currentColor" stroke-width="1.4" stroke-opacity="0.5"/><rect x="5" y="8.5" width="22" height="5.5" rx="3" fill="currentColor" fill-opacity="0.22"/><rect x="5" y="11.5" width="22" height="2.5" fill="currentColor" fill-opacity="0.22"/><rect x="10.5" y="5.5" width="2" height="5" rx="1" fill="currentColor"/><rect x="19.5" y="5.5" width="2" height="5" rx="1" fill="currentColor"/><path d="M10.5 18.5 L14.5 22.5 L21.5 14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span>
       <span class="mobile-top-name" data-i18n="appName">WhenFree</span>
     </div>
-    <span id="mobile-people-count" class="people-count">0</span>
+    <div class="mobile-top-right">
+      <span id="mobile-people-count" class="people-count">0</span>
+      <button id="mobile-theme-btn" class="mobile-ctrl-btn" onclick="setTheme(currentTheme==='dark'?'light':'dark')" title="Toggle theme">🌙</button>
+      <div class="mobile-lang-toggle">
+        <button id="mobile-lang-en" onclick="setLang('en')">EN</button>
+        <button id="mobile-lang-fr" onclick="setLang('fr')">FR</button>
+        <button id="mobile-lang-he" onclick="setLang('he')">עב</button>
+      </div>
+      <button class="mobile-ctrl-btn" onclick="showOnboarding()" title="Help">?</button>
+    </div>
   </div>
 
   <!-- Name entry overlay -->
@@ -1715,6 +1730,9 @@ function applyLang() {
   document.getElementById('lang-en')?.classList.toggle('active', currentLang === 'en');
   document.getElementById('lang-fr')?.classList.toggle('active', currentLang === 'fr');
   document.getElementById('lang-he')?.classList.toggle('active', currentLang === 'he');
+  document.getElementById('mobile-lang-en')?.classList.toggle('active', currentLang === 'en');
+  document.getElementById('mobile-lang-fr')?.classList.toggle('active', currentLang === 'fr');
+  document.getElementById('mobile-lang-he')?.classList.toggle('active', currentLang === 'he');
   const op = document.querySelector('.onboard-panel');
   if (op) op.dir = t().dir;
 }
@@ -1728,6 +1746,8 @@ function applyTheme() {
     lightBtn.classList.toggle('active', currentTheme === 'light');
     darkBtn.classList.toggle('active', currentTheme === 'dark');
   }
+  const mobileThemeBtn = document.getElementById('mobile-theme-btn');
+  if (mobileThemeBtn) mobileThemeBtn.textContent = currentTheme === 'dark' ? '☀' : '🌙';
 }
 function setTheme(mode) {
   currentTheme = mode;
