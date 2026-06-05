@@ -190,7 +190,7 @@ function buildEmailHtml_(data) {
     // Header
     '<tr><td style="background:#0B2018;padding:28px 36px 24px;">' +
       '<table width="100%" cellpadding="0" cellspacing="0"><tr>' +
-        '<td style="color:#00C281;font-size:22px;font-weight:700;letter-spacing:-0.5px;"><span style="color:#fff;">Meteor</span> Meet</td>' +
+        '<td style="color:#00C281;font-size:22px;font-weight:700;letter-spacing:-0.5px;"><span style="color:#fff;">When</span>Free</td>' +
         '<td align="right"><span style="background:rgba(0,194,129,.15);color:#00C281;font-size:12px;font-weight:600;padding:4px 12px;border-radius:100px;">' + dateLabel + '</span></td>' +
       '</tr></table>' +
       '<div style="color:#5A7D6E;font-size:13px;margin-top:6px;">Daily DB Report &mdash; midnight to midnight (IST)</div>' +
@@ -267,16 +267,16 @@ function sendDailyReport() {
       dateLabel:  win.dateLabel,
     });
 
-    GmailApp.sendEmail(REPORT_CONFIG.recipient, 'Meteor · Daily DB Report — ' + win.dateLabel, '', {
+    GmailApp.sendEmail(REPORT_CONFIG.recipient, 'WhenFree · Daily DB Report — ' + win.dateLabel, '', {
       htmlBody: html,
-      name:     'Meteor Meet',
+      name:     'WhenFree',
     });
 
     console.log('Report sent for ' + win.dateLabel + ': events=' + eventCount +
       ', reads=' + reads + ', writes=' + writes + ', deletes=' + deletes + ', storage=' + storage);
   } catch (err) {
     console.error('sendDailyReport failed: ' + err.message);
-    GmailApp.sendEmail(REPORT_CONFIG.recipient, 'Meteor · Daily DB Report FAILED',
+    GmailApp.sendEmail(REPORT_CONFIG.recipient, 'WhenFree · Daily DB Report FAILED',
       'The daily report script failed with error: ' + err.message);
   }
 }
