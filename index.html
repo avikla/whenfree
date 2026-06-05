@@ -2310,6 +2310,7 @@ function showScreenB() {
   const B = document.getElementById('screen-event');
   A.style.display = 'none';
   B.style.display = 'flex';
+  if (window.innerWidth <= 640) document.getElementById('top-controls').style.display = 'none';
   B.style.opacity = '1';
   renderEventTitle();
   S.participants = [];
