@@ -665,14 +665,13 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
 .mobile-top-bar{display:none}
 @media(max-width:640px){
   #screen-create{padding:0 16px}
-  .site-header{padding-top:48px}
+  .site-header{padding-top:64px}
   .logo{font-size:30px}
   .mobile-notice{display:block}
   .time-row{flex-direction:column;gap:8px}
   .time-sep{display:none}
   .time-field{width:100%}
   #screen-event{flex-direction:column;height:auto;min-height:100svh;overflow-y:visible}
-  #top-controls{display:none}
   .mobile-top-bar{
     display:flex;align-items:center;justify-content:space-between;direction:ltr;
     padding:8px 12px;background:var(--surface);
@@ -773,7 +772,8 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
 .sidebar .dev-footer{text-align:left;font-size:11px}
 
 /* Language toggle */
-.top-controls{position:fixed;top:14px;right:16px;z-index:1001;display:flex;align-items:center;gap:6px;direction:ltr}
+.top-controls{position:fixed;top:14px;left:16px;z-index:1001;display:flex;align-items:center;gap:6px;direction:ltr;transform:translateX(calc(100vw - 100% - 32px));transition:transform 0.35s ease}
+[dir="rtl"] .top-controls{transform:none}
 
 .lang-toggle{
   display:flex;align-items:center;direction:ltr;
@@ -915,20 +915,6 @@ body.a11y-adhd .a11y-panel{opacity:1 !important;pointer-events:auto !important}
   .a11y-panel{bottom:72px;right:16px;width:calc(100vw - 32px);max-width:300px}
   #screen-event{overflow-x:hidden}
 
-  /* On mobile: pin controls bottom-left so they're visible on both screens */
-  .top-controls{
-    position:fixed;
-    bottom:16px;
-    left:16px;
-    right:auto;
-    top:auto;
-    padding:0;
-    z-index:999;
-  }
-  [dir="rtl"] .top-controls{
-    left:auto;
-    right:80px;
-  }
 }
 
 /* Onboarding modal */
@@ -2273,6 +2259,7 @@ function transitionToB() {
 
   A.style.transition = 'opacity 0.45s ease';
   A.style.opacity = '0';
+  if (window.innerWidth <= 640) document.getElementById('top-controls').style.display = 'none';
 
   setTimeout(() => {
     A.style.display = 'none';
