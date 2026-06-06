@@ -1,0 +1,13 @@
+Hey,
+
+If you've ever spent too much time trying to find a meeting time, I built something for that.
+
+It's called WhenFree — a free tool where you create a link, share it with whoever needs to show up, and everyone marks when they're available.
+
+The app automatically finds the best time. No sign-up, no app to install, just a link.
+
+Try it: whenfree.org
+
+Would love to know what you think!
+
+Avi

@@ -98,7 +98,16 @@ Use in i18n strings (template literals) rather than Unicode entities.
 - **Time format:** 24-hour everywhere (`ampm:false` in all `LANGS` entries)
 - **No backend** — all logic in `index.html` (Firebase rules handle authorization)
 - **Firebase plan:** Blaze (pay-as-you-go) — needed for Cloud Monitoring API. Actual cost: ~$0.
+- **Firebase project ID:** `meteor-meet` — **permanent, cannot be renamed.** The ID is hardcoded in the SDK config (`projectId:"meteor-meet"`), all Firestore URLs, and the `daily-report.gs` console links. Only the display name in Firebase Console can be changed cosmetically. Creating a new project would require full data migration — do not suggest it.
 - **`.gitignore`:** `.claude/` is ignored — never commit it
+
+## Firestore Event Fields
+
+Each event document stores:
+- `createdAt` — Firestore server timestamp (added June 2026; older events lack this field)
+- `lastDate` — ISO date string of the latest date in `selectedDates` (e.g. `"2026-07-15"`); `null` for `days` mode events (recurring days of week have no end date)
+
+**Manual cleanup:** To delete expired events, filter Firestore Console → `events` → `lastDate` < today. `null` entries are days-of-week events — review separately. Do not suggest automating this unless the user asks.
 
 ## RTL / Layout Architecture
 
