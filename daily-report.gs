@@ -61,6 +61,42 @@ function fetchEventCount_() {
   return val ? parseInt(val, 10) : null;
 }
 
+// ── Firestore: count events created in a time window ─────────────────────────
+function fetchNewEventsCount_(startIso, endIso) {
+  const { projectId, apiKey, collection } = REPORT_CONFIG;
+  const url = 'https://firestore.googleapis.com/v1/projects/' + projectId +
+              '/databases/(default)/documents:runAggregationQuery?key=' + apiKey;
+  const payload = {
+    structuredAggregationQuery: {
+      structuredQuery: {
+        from: [{ collectionId: collection }],
+        where: {
+          compositeFilter: {
+            op: 'AND',
+            filters: [
+              { fieldFilter: { field: { fieldPath: 'createdAt' }, op: 'GREATER_THAN_OR_EQUAL', value: { timestampValue: startIso } } },
+              { fieldFilter: { field: { fieldPath: 'createdAt' }, op: 'LESS_THAN',             value: { timestampValue: endIso   } } },
+            ],
+          },
+        },
+      },
+      aggregations: [{ count: {}, alias: 'count' }],
+    },
+  };
+  const res = UrlFetchApp.fetch(url, {
+    method:             'post',
+    contentType:        'application/json',
+    payload:            JSON.stringify(payload),
+    muteHttpExceptions: true,
+  });
+  const json = JSON.parse(res.getContentText());
+  const val  = json[0] && json[0].result &&
+               json[0].result.aggregateFields &&
+               json[0].result.aggregateFields.count &&
+               json[0].result.aggregateFields.count.integerValue;
+  return val ? parseInt(val, 10) : 0;
+}
+
 // ── Cloud Monitoring: sum a DELTA metric (reads/writes/deletes/bandwidth) ────
 function fetchMonitoringMetric_(metricType, startIso, endIso) {
   const { projectId } = REPORT_CONFIG;
@@ -179,7 +215,8 @@ function buildEmailHtml_(data) {
   var writesPct  = writes  / limits.writes;
   var delPct     = deletes / limits.deletes;
   var storagePct = storage / limits.storage;
-  var countStr   = eventCount !== null ? fmtNum_(eventCount) : 'N/A';
+  var countStr    = eventCount !== null ? fmtNum_(eventCount) : 'N/A';
+  var newEventsStr = data.newEvents !== null && data.newEvents !== undefined ? fmtNum_(data.newEvents) : '—';
 
   return '<!DOCTYPE html><html lang="en"><head>' +
     '<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
@@ -203,8 +240,12 @@ function buildEmailHtml_(data) {
       '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#7E988F;margin-bottom:14px;">Database</div>' +
       '<div style="background:#0B2018;border-radius:12px;padding:20px 22px;margin-bottom:24px;">' +
         '<table width="100%" cellpadding="0" cellspacing="0"><tr>' +
-          '<td><div style="font-size:12px;color:#5A7D6E;font-weight:500;margin-bottom:4px;">Total events stored</div>' +
-              '<div style="font-size:42px;font-weight:700;color:#fff;line-height:1;">' + countStr + '</div></td>' +
+          '<td>' +
+            '<div style="font-size:12px;color:#5A7D6E;font-weight:500;margin-bottom:4px;">Total events stored</div>' +
+            '<div style="font-size:42px;font-weight:700;color:#fff;line-height:1;">' + countStr + '</div>' +
+            '<div style="margin-top:8px;font-size:12px;color:#5A7D6E;font-weight:500;">New today</div>' +
+            '<div style="font-size:28px;font-weight:700;color:#00C281;line-height:1;">' + newEventsStr + '</div>' +
+          '</td>' +
           '<td align="right"><a href="https://console.firebase.google.com/project/meteor-meet/firestore" ' +
             'style="background:#00C281;color:#04261B;font-size:12px;font-weight:700;padding:8px 16px;border-radius:100px;text-decoration:none;">Console &#8594;</a></td>' +
         '</tr></table>' +
@@ -253,6 +294,7 @@ function sendDailyReport() {
   try {
     var win        = getYesterdayWindow_();
     var eventCount = fetchEventCount_();
+    var newEvents  = fetchNewEventsCount_(win.start, win.end);
     var reads   = fetchMonitoringMetric_('firestore.googleapis.com/document/read_count',   win.start, win.end);
     var writes  = fetchMonitoringMetric_('firestore.googleapis.com/document/write_count',  win.start, win.end);
     var deletes = fetchMonitoringMetric_('firestore.googleapis.com/document/delete_count', win.start, win.end);
@@ -260,6 +302,7 @@ function sendDailyReport() {
 
     var html = buildEmailHtml_({
       eventCount: eventCount,
+      newEvents:  newEvents,
       reads:      reads,
       writes:     writes,
       deletes:    deletes,

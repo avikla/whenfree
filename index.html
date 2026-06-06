@@ -2239,6 +2239,7 @@ async function createEvent() {
       notifyOnResponse,
       lang: currentLang,
       participants: {},
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
     });
     location.hash = S.eventSlug;
     sessionStorage.setItem('meteor-creator-name-' + S.eventSlug, creatorName);
