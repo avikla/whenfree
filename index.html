@@ -700,6 +700,13 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
   .heat-legend{align-self:stretch;justify-content:center;flex-wrap:nowrap;gap:3px}
   .legend-swatch{width:14px;height:11px}
   .legend-label{font-size:10.5px}
+  .sidebar::after{content:'';position:fixed;bottom:0;left:0;right:0;height:56px;background:linear-gradient(to bottom,transparent,var(--bg));pointer-events:none;z-index:10;transition:opacity 0.3s}
+  .sidebar.scrolled-to-bottom::after{opacity:0}
+}
+@media(max-width:390px){
+  .mobile-top-name{display:none}
+  .mobile-top-bar{padding:8px 10px}
+  .mobile-lang-toggle button{padding:3px 5px}
 }
 @media(max-width:430px){
   #screen-create{padding:0 12px}
@@ -3149,6 +3156,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     localStorage.setItem('lang', detectedLang);
   }
   applyLang();
+
+  // Mobile scroll hint — hide bottom gradient once user reaches the end
+  if(window.innerWidth <= 640){
+    const onScroll = () => {
+      const atBottom = window.scrollY + window.innerHeight >= document.body.scrollHeight - 20;
+      document.querySelector('.sidebar')?.classList.toggle('scrolled-to-bottom', atBottom);
+    };
+    window.addEventListener('scroll', onScroll, {passive:true});
+    onScroll();
+  }
 
   // Close time pickers when clicking outside
   document.addEventListener('click', e => {
