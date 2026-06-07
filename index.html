@@ -532,6 +532,60 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
 .bt-card-top .bt-cal-btn{border-color:var(--accent-dim);color:var(--on-primary-ctr)}
 .bt-card-top .bt-cal-btn:hover{background:rgba(0,194,129,0.18)}
 
+/* Confirm dialog */
+.confirm-overlay{
+  position:fixed;inset:0;
+  background:rgba(8,28,19,0.50);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  z-index:1000;
+  display:none;align-items:center;justify-content:center;padding:20px;
+  opacity:0;transition:opacity 0.2s ease;
+}
+.confirm-overlay.visible{display:flex;opacity:1}
+.confirm-panel{
+  background:var(--surface);
+  border:1px solid var(--border2);
+  border-radius:var(--r);
+  padding:28px 28px 24px;
+  width:340px;max-width:100%;
+  box-shadow:0 32px 80px rgba(11,32,24,0.18);
+  display:flex;flex-direction:column;gap:20px;
+  animation:confirm-in 0.2s ease;
+}
+[data-theme="dark"] .confirm-panel{box-shadow:0 32px 80px rgba(200,255,230,0.08)}
+@keyframes confirm-in{from{transform:scale(0.94) translateY(6px);opacity:0}to{transform:none;opacity:1}}
+.confirm-icon{
+  width:44px;height:44px;border-radius:50%;
+  background:rgba(220,38,38,0.10);
+  display:flex;align-items:center;justify-content:center;
+  color:#DC2626;font-size:20px;flex-shrink:0;
+}
+.confirm-header{display:flex;align-items:center;gap:14px}
+.confirm-title{font-family:var(--font-display);font-size:17px;font-weight:700;color:var(--text);line-height:1.2}
+.confirm-body{font-family:var(--font-body);font-size:14px;color:var(--muted);line-height:1.55;margin:0}
+.confirm-actions{display:flex;gap:10px;justify-content:flex-end}
+[dir="rtl"] .confirm-actions{flex-direction:row-reverse}
+.confirm-cancel-btn{
+  padding:9px 20px;border-radius:var(--r-pill);
+  font-family:var(--font-body);font-size:14px;font-weight:600;cursor:pointer;
+  background:var(--surface2);color:var(--text);border:1px solid var(--border2);
+  transition:opacity 0.15s;
+}
+.confirm-cancel-btn:hover{opacity:0.8}
+.confirm-ok-btn{
+  padding:9px 20px;border-radius:var(--r-pill);
+  font-family:var(--font-body);font-size:14px;font-weight:600;cursor:pointer;
+  background:#DC2626;color:#fff;border:none;
+  transition:opacity 0.15s;
+}
+.confirm-ok-btn:hover{opacity:0.88}
+@media(max-width:640px){
+  .confirm-panel{padding:24px 20px 20px}
+  .confirm-actions{flex-direction:column-reverse}
+  [dir="rtl"] .confirm-actions{flex-direction:column-reverse}
+  .confirm-cancel-btn,.confirm-ok-btn{width:100%;text-align:center;padding:12px}
+}
+
 /* Calendar modal */
 .cal-overlay{
   position:fixed;inset:0;
@@ -1418,6 +1472,21 @@ body.a11y-adhd .a11y-panel{opacity:1 !important;pointer-events:auto !important}
 <div id="grid-tooltip" class="grid-tooltip" style="display:none"></div>
 
 
+<!-- Confirm dialog -->
+<div id="confirm-overlay" class="confirm-overlay" role="dialog" aria-modal="true">
+  <div class="confirm-panel">
+    <div class="confirm-header">
+      <div class="confirm-icon">✕</div>
+      <div class="confirm-title" id="confirm-title"></div>
+    </div>
+    <p class="confirm-body" id="confirm-body"></p>
+    <div class="confirm-actions">
+      <button id="confirm-cancel-btn" class="confirm-cancel-btn"></button>
+      <button id="confirm-ok-btn" class="confirm-ok-btn"></button>
+    </div>
+  </div>
+</div>
+
 <!-- Loading overlay (shown while fetching event from Firestore) -->
 <div id="loading-overlay" style="position:fixed;inset:0;background:var(--bg);display:none;align-items:center;justify-content:center;z-index:9000">
   <div style="color:var(--accent);font-family:var(--font-display);font-size:18px;font-weight:400;letter-spacing:0.15em;opacity:0.8" data-i18n="loading">Loading…</div>
@@ -1507,6 +1576,7 @@ const LANGS = {
     mobileNotice:'Best experienced on a wider screen', loading:'Loading…',
     youBadge:'you', clearBtn:`${_X} Clear my times`,
     removeParticipant:'Remove participant', removeConfirm:(name)=>`Remove "${name}" from this event?`,
+    confirmRemove:'Remove', confirmCancel:'Cancel',
     sendBestTimes:'📊 Send best times',
     bestTimesSubject:(name)=>`Best times for: ${name}`,
     bestTimesBody:(name,url)=>`Hi,\n\nHere are the best meeting times for: ${name}\n\n${url}\n\nThanks!`,
@@ -1590,6 +1660,7 @@ const LANGS = {
     mobileNotice:'מומלץ לצפות במסך רחב יותר', loading:'טוען…',
     youBadge:'את/ה', clearBtn:`${_X} נקה זמנים`,
     removeParticipant:'הסר משתתף', removeConfirm:(name)=>`להסיר את "${name}" מהאירוע?`,
+    confirmRemove:'הסר', confirmCancel:'ביטול',
     sendBestTimes:'📊 שלח זמנים מומלצים',
     bestTimesSubject:(name)=>`זמנים מומלצים עבור: ${name}`,
     bestTimesBody:(name,url)=>`שלום,\n\nהזמנים המומלצים לפגישה: ${name}\n\n${url}\n\nתודה!`,
@@ -1673,6 +1744,7 @@ const LANGS = {
     mobileNotice:'Meilleure expérience sur un écran plus large', loading:'Chargement…',
     youBadge:'vous', clearBtn:`${_X} Effacer créneaux`,
     removeParticipant:'Retirer le participant', removeConfirm:(name)=>`Retirer "${name}" de cet événement ?`,
+    confirmRemove:'Retirer', confirmCancel:'Annuler',
     sendBestTimes:'📊 Meilleurs créneaux',
     bestTimesSubject:(name)=>`Meilleurs créneaux pour : ${name}`,
     bestTimesBody:(name,url)=>`Bonjour,\n\nVoici les meilleurs créneaux pour : ${name}\n\n${url}\n\nCordialement !`,
@@ -2965,15 +3037,38 @@ function renderParticipants() {
   syncActionStates();
 }
 
+// ── Custom confirm dialog ─────────────────────────────────────────────────────
+function showConfirm({ title, body, okLabel, cancelLabel, onOk }) {
+  const overlay = document.getElementById('confirm-overlay');
+  document.getElementById('confirm-title').textContent = title;
+  document.getElementById('confirm-body').textContent = body || '';
+  document.getElementById('confirm-ok-btn').textContent = okLabel;
+  document.getElementById('confirm-cancel-btn').textContent = cancelLabel;
+
+  function close() { overlay.style.opacity = '0'; setTimeout(() => { overlay.style.display = 'none'; overlay.classList.remove('visible'); }, 200); }
+  document.getElementById('confirm-ok-btn').onclick = () => { close(); onOk(); };
+  document.getElementById('confirm-cancel-btn').onclick = close;
+  overlay.onclick = e => { if (e.target === overlay) close(); };
+
+  overlay.style.display = 'flex';
+  requestAnimationFrame(() => overlay.classList.add('visible'));
+  document.getElementById('confirm-cancel-btn').focus();
+}
+
 // ══════════════════════════════════════
 // SCREEN B: CLEAR MY TIMES
 // ══════════════════════════════════════
 async function removeParticipant(name) {
   if (!S.isCreator) return;
-  if (!confirm(t().removeConfirm(name))) return;
-  await db.collection('events').doc(S.eventSlug).update({
-    [`participants.${name}`]: firebase.firestore.FieldValue.delete()
-  }).catch(e => console.error('Failed to remove participant:', e));
+  showConfirm({
+    title: t().removeParticipant,
+    body: t().removeConfirm(name),
+    okLabel: t().confirmRemove || 'Remove',
+    cancelLabel: t().confirmCancel || 'Cancel',
+    onOk: () => db.collection('events').doc(S.eventSlug).update({
+      [`participants.${name}`]: firebase.firestore.FieldValue.delete()
+    }).catch(e => console.error('Failed to remove participant:', e)),
+  });
 }
 
 async function clearMyTimes() {
