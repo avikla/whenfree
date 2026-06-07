@@ -449,7 +449,11 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
   color:var(--muted);
 }
 .participant-list{display:flex;flex-direction:column;gap:12px}
-.participant-item{display:flex;align-items:center;gap:12px;font-size:14px;font-weight:400}
+.participant-item{display:flex;align-items:center;gap:12px;font-size:14px;font-weight:400;position:relative}
+.p-remove-btn{margin-left:auto;background:none;border:none;cursor:pointer;color:var(--muted2);padding:2px 5px;border-radius:var(--r-xs);font-size:16px;line-height:1;opacity:0;transition:opacity 0.15s;flex-shrink:0}
+.participant-item:hover .p-remove-btn{opacity:1}
+.p-remove-btn:hover{color:#DC2626}
+[dir="rtl"] .p-remove-btn{margin-left:0;margin-right:auto}
 .p-dot{width:36px;height:36px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px;color:#ffffff;box-shadow:0 2px 8px rgba(10,70,52,0.12)}
 .you-badge{font-size:10px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:var(--accent);opacity:0.75;margin-left:2px}
 .people-count{font-size:11px;font-weight:600;background:var(--accent-glow);border:1px solid var(--accent-dim);color:var(--accent);border-radius:10px;padding:1px 7px;letter-spacing:0.03em}
@@ -1502,6 +1506,7 @@ const LANGS = {
     bestEmpty:'Mark your availability to see best times',
     mobileNotice:'Best experienced on a wider screen', loading:'Loading…',
     youBadge:'you', clearBtn:`${_X} Clear my times`,
+    removeParticipant:'Remove participant', removeConfirm:(name)=>`Remove "${name}" from this event?`,
     sendBestTimes:'📊 Send best times',
     bestTimesSubject:(name)=>`Best times for: ${name}`,
     bestTimesBody:(name,url)=>`Hi,\n\nHere are the best meeting times for: ${name}\n\n${url}\n\nThanks!`,
@@ -1584,6 +1589,7 @@ const LANGS = {
     bestEmpty:'סמן זמינות כדי לראות את הזמנים הטובים ביותר',
     mobileNotice:'מומלץ לצפות במסך רחב יותר', loading:'טוען…',
     youBadge:'את/ה', clearBtn:`${_X} נקה זמנים`,
+    removeParticipant:'הסר משתתף', removeConfirm:(name)=>`להסיר את "${name}" מהאירוע?`,
     sendBestTimes:'📊 שלח זמנים מומלצים',
     bestTimesSubject:(name)=>`זמנים מומלצים עבור: ${name}`,
     bestTimesBody:(name,url)=>`שלום,\n\nהזמנים המומלצים לפגישה: ${name}\n\n${url}\n\nתודה!`,
@@ -1666,6 +1672,7 @@ const LANGS = {
     bestEmpty:'Indiquez vos disponibilités pour voir les meilleurs créneaux',
     mobileNotice:'Meilleure expérience sur un écran plus large', loading:'Chargement…',
     youBadge:'vous', clearBtn:`${_X} Effacer créneaux`,
+    removeParticipant:'Retirer le participant', removeConfirm:(name)=>`Retirer "${name}" de cet événement ?`,
     sendBestTimes:'📊 Meilleurs créneaux',
     bestTimesSubject:(name)=>`Meilleurs créneaux pour : ${name}`,
     bestTimesBody:(name,url)=>`Bonjour,\n\nVoici les meilleurs créneaux pour : ${name}\n\n${url}\n\nCordialement !`,
@@ -2938,14 +2945,19 @@ function renderParticipants() {
     const lastName = rest ? rest.charAt(0).toUpperCase() + rest.slice(1).toLowerCase() : '';
     const displayName = lastName ? `${first}<br>${lastName}` : first;
     const initials = (parts[0]?.charAt(0) || '') + (parts[1]?.charAt(0) || '');
+    const showRemove = S.isCreator && !isYou;
+    const safeName = p.name.replace(/"/g, '&quot;');
     return `<div class="participant-item">
       <span class="p-dot" style="background:${p.color}">${initials.toUpperCase()}</span>
       <span style="line-height:1.2">${displayName}</span>
       ${isYou ? `<span class="you-badge">${t().youBadge}</span>` : ''}
+      ${showRemove ? `<button class="p-remove-btn" data-name="${safeName}" aria-label="${t().removeParticipant}" title="${t().removeParticipant}">&times;</button>` : ''}
     </div>${isYou ? `<button class="clear-inline-btn">${t().clearBtn}</button>` : ''}`;
   }).join('');
   const clearInline = container.querySelector('.clear-inline-btn');
   if (clearInline) clearInline.addEventListener('click', clearMyTimes);
+  container.querySelectorAll('.p-remove-btn').forEach(btn =>
+    btn.addEventListener('click', () => removeParticipant(btn.dataset.name)));
   const countEl = document.getElementById('people-count');
   if (countEl) countEl.textContent = all.length;
   const mobileCount = document.getElementById('mobile-people-count');
@@ -2956,6 +2968,14 @@ function renderParticipants() {
 // ══════════════════════════════════════
 // SCREEN B: CLEAR MY TIMES
 // ══════════════════════════════════════
+async function removeParticipant(name) {
+  if (!S.isCreator) return;
+  if (!confirm(t().removeConfirm(name))) return;
+  await db.collection('events').doc(S.eventSlug).update({
+    [`participants.${name}`]: firebase.firestore.FieldValue.delete()
+  }).catch(e => console.error('Failed to remove participant:', e));
+}
+
 async function clearMyTimes() {
   if (!S.currentUser) return;
   S.currentUser.availability = new Set();
