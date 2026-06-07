@@ -825,10 +825,22 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
 .grid-cell.past{opacity:0.3;cursor:not-allowed;pointer-events:none}
 
 /* ─── Sidebar email panel ─── */
-.email-panel{position:fixed;z-index:200;display:none;flex-direction:column;gap:8px;background:var(--surface);border:1px solid var(--border2);border-radius:var(--r-sm);padding:10px 12px;box-shadow:0 4px 20px rgba(10,70,52,0.14)}
+.email-panel{position:fixed;z-index:200;display:none;flex-direction:column;gap:6px;background:var(--surface);border:1px solid var(--border2);border-radius:var(--r-sm);padding:10px 12px;box-shadow:0 4px 20px rgba(10,70,52,0.14)}
 .email-panel-row{display:flex;gap:6px}
-.email-panel-input{flex:1;font-size:12px;padding:6px 9px;height:32px}
+.email-panel-input{font-size:12px;padding:6px 9px;height:32px;width:100%}
 [dir="rtl"] .email-panel-row{flex-direction:row-reverse}
+.email-chips{display:flex;flex-wrap:wrap;gap:5px}
+.email-chip{display:flex;align-items:center;gap:3px;background:var(--primary-ctr);color:var(--on-primary-ctr);border-radius:var(--r-pill);padding:3px 6px 3px 9px;font-size:11px;font-family:'DM Sans',system-ui;max-width:220px;min-width:0}
+.email-chip span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.email-chip button{background:none;border:none;cursor:pointer;color:inherit;padding:0 1px;line-height:1;font-size:14px;opacity:0.6;flex-shrink:0}
+.email-chip button:hover{opacity:1}
+.email-input-wrap{position:relative;flex:1;min-width:0}
+.email-suggestions{position:absolute;top:calc(100% + 2px);left:0;right:0;z-index:300;background:var(--surface);border:1px solid var(--border2);border-radius:var(--r-xs);box-shadow:0 4px 12px rgba(10,70,52,0.12);max-height:150px;overflow-y:auto;display:none}
+.email-suggestion{padding:7px 10px;font-size:12px;cursor:pointer;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.email-suggestion:hover{background:var(--primary-ctr);color:var(--on-primary-ctr)}
+.email-contacts-btn{background:none;border:1px solid var(--border);border-radius:var(--r-xs);padding:0 7px;cursor:pointer;color:var(--muted);display:none;align-items:center;height:32px;flex-shrink:0}
+.email-contacts-btn:hover{color:var(--accent);border-color:var(--accent)}
+[dir="rtl"] .email-chip{flex-direction:row-reverse;padding:3px 9px 3px 6px}
 
 /* ─── Link banner ─── */
 .link-banner-btn{
@@ -1317,18 +1329,32 @@ body.a11y-adhd .a11y-panel{opacity:1 !important;pointer-events:auto !important}
       <button id="whatsapp-btn" class="sidebar-btn sidebar-btn-outline" data-i18n="whatsappLink">WhatsApp meeting link</button>
       <button id="email-btn" class="sidebar-btn sidebar-btn-outline" data-i18n="sendEmail">&#9993; Email meeting link</button>
       <div id="email-panel" style="display:none" class="email-panel">
+        <div id="email-chips" class="email-chips"></div>
         <div class="email-panel-row">
-          <input type="email" id="email-panel-input" class="text-input email-panel-input"
-            placeholder="Recipient's email" data-i18n-ph="emailBtnPH">
+          <div class="email-input-wrap">
+            <input type="email" id="email-panel-input" class="text-input email-panel-input"
+              placeholder="Add email…" data-i18n-ph="emailBtnPH" autocomplete="off">
+            <div id="email-suggestions" class="email-suggestions"></div>
+          </div>
+          <button id="email-contacts-btn" class="email-contacts-btn" type="button">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </button>
           <button id="email-panel-send" class="link-banner-btn" data-i18n="linkBannerSend">Send</button>
         </div>
         <div id="email-panel-status" class="link-banner-status"></div>
       </div>
       <button id="best-times-email-btn" class="sidebar-btn" data-i18n="sendBestTimes">📊 Send best times</button>
       <div id="best-times-email-panel" style="display:none" class="email-panel">
+        <div id="best-times-chips" class="email-chips"></div>
         <div class="email-panel-row">
-          <input type="email" id="best-times-email-input" class="text-input email-panel-input"
-            placeholder="Recipient's email" data-i18n-ph="emailBtnPH">
+          <div class="email-input-wrap">
+            <input type="email" id="best-times-email-input" class="text-input email-panel-input"
+              placeholder="Add email…" data-i18n-ph="emailBtnPH" autocomplete="off">
+            <div id="best-times-suggestions" class="email-suggestions"></div>
+          </div>
+          <button id="best-times-contacts-btn" class="email-contacts-btn" type="button">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </button>
           <button id="best-times-email-send" class="link-banner-btn" data-i18n="linkBannerSend">Send</button>
         </div>
         <div id="best-times-email-status" class="link-banner-status"></div>
@@ -1479,9 +1505,12 @@ const LANGS = {
     sendBestTimes:'📊 Send best times',
     bestTimesSubject:(name)=>`Best times for: ${name}`,
     bestTimesBody:(name,url)=>`Hi,\n\nHere are the best meeting times for: ${name}\n\n${url}\n\nThanks!`,
-    emailBtnPH:"Recipient's email",
+    emailBtnPH:'Add email…',
+    fromContacts:'From contacts',
     linkBannerSend:'Send', linkBannerSending:'Sending…',
     linkBannerSent:'&#10003; Sent! Check your inbox.',
+    linkBannerSentN:(n)=>`&#10003; Sent to ${n} recipients`,
+    linkBannerPartial:(s,f)=>`Sent ${s}, failed ${f} — try again.`,
     linkBannerError:'Could not send — try again.',
     allPeople:(n)=>n===1?'All 1 person':`All ${n} people`,
     ofPeople:(x,n)=>n===1?`${x} of 1 person`:`${x} of ${n} people`,
@@ -1558,9 +1587,12 @@ const LANGS = {
     sendBestTimes:'📊 שלח זמנים מומלצים',
     bestTimesSubject:(name)=>`זמנים מומלצים עבור: ${name}`,
     bestTimesBody:(name,url)=>`שלום,\n\nהזמנים המומלצים לפגישה: ${name}\n\n${url}\n\nתודה!`,
-    emailBtnPH:'אימייל של הנמען',
+    emailBtnPH:'הוסף אימייל…',
+    fromContacts:'מאנשי קשר',
     linkBannerSend:'שלח', linkBannerSending:'שולח…',
     linkBannerSent:'&#10003; נשלח! בדוק את תיבת הדואר שלך.',
+    linkBannerSentN:(n)=>`&#10003; נשלח ל-${n} נמענים`,
+    linkBannerPartial:(s,f)=>`נשלח ${s}, נכשל ${f} — נסה שוב.`,
     linkBannerError:'שליחה נכשלה — נסה שוב.',
     allPeople:(n)=>n===1?'כל משתתף אחד':`כל ${n} המשתתפים`,
     ofPeople:(x,n)=>`${x} מתוך ${n}`,
@@ -1637,10 +1669,13 @@ const LANGS = {
     sendBestTimes:'📊 Meilleurs créneaux',
     bestTimesSubject:(name)=>`Meilleurs créneaux pour : ${name}`,
     bestTimesBody:(name,url)=>`Bonjour,\n\nVoici les meilleurs créneaux pour : ${name}\n\n${url}\n\nCordialement !`,
-    emailBtnPH:'E-mail du destinataire',
+    emailBtnPH:'Ajouter un e-mail…',
+    fromContacts:'Depuis les contacts',
     linkBannerSend:'Envoyer', linkBannerSending:'Envoi…',
     linkBannerSent:'&#10003; Envoyé ! Vérifiez votre boîte mail.',
-    linkBannerError:'Échec de l\'envoi — réessayez.',
+    linkBannerSentN:(n)=>`&#10003; Envoyé à ${n} destinataires`,
+    linkBannerPartial:(s,f)=>`Envoyé ${s}, échec ${f} — réessayez.`,
+    linkBannerError:`Échec de l'envoi — réessayez.`,
     allPeople:(n)=>n===1?'1 personne au total':`${n} personnes au total`,
     ofPeople:(x,n)=>n===1?`${x} sur 1 personne`:`${x} sur ${n} personnes`,
     rejoinPrompt:(name)=>`"${name}" a déjà rejoint cette réunion. Continuer en tant que cette personne ?`,
@@ -3236,6 +3271,121 @@ document.addEventListener('DOMContentLoaded', async () => {
     btn.disabled = true;
     setTimeout(() => { btn.innerHTML = original; btn.disabled = false; }, 2000);
   });
+  // ─── Contact history ───
+  const WF_CONTACTS_KEY = 'wf_contacts';
+  function loadContactHistory() {
+    try { return JSON.parse(localStorage.getItem(WF_CONTACTS_KEY) || '[]'); } catch { return []; }
+  }
+  function saveToContactHistory(email) {
+    const list = [email, ...loadContactHistory().filter(e => e !== email)].slice(0, 100);
+    try { localStorage.setItem(WF_CONTACTS_KEY, JSON.stringify(list)); } catch {}
+  }
+
+  // ─── Chip management ───
+  function getChipEmails(chipsId) {
+    return [...document.getElementById(chipsId).querySelectorAll('.email-chip')].map(c => c.dataset.email);
+  }
+  function addEmailChip(chipsId, inputId, email) {
+    email = email.trim().toLowerCase();
+    if (!email || !email.includes('@') || !email.includes('.')) return false;
+    if (getChipEmails(chipsId).includes(email)) { document.getElementById(inputId).value = ''; return false; }
+    const chip = document.createElement('div');
+    chip.className = 'email-chip';
+    chip.dataset.email = email;
+    chip.innerHTML = `<span title="${email}">${email}</span><button type="button" aria-label="Remove">&times;</button>`;
+    chip.querySelector('button').onclick = () => chip.remove();
+    document.getElementById(chipsId).appendChild(chip);
+    document.getElementById(inputId).value = '';
+    return true;
+  }
+
+  // ─── Autocomplete ───
+  function showEmailSuggestions(inputId, suggestionsId, chipsId) {
+    const q = document.getElementById(inputId).value.trim().toLowerCase();
+    const box = document.getElementById(suggestionsId);
+    if (!q) { box.style.display = 'none'; return; }
+    const existing = getChipEmails(chipsId);
+    const matches = loadContactHistory().filter(e => e.includes(q) && !existing.includes(e)).slice(0, 6);
+    if (!matches.length) { box.style.display = 'none'; return; }
+    box.innerHTML = '';
+    matches.forEach(email => {
+      const item = document.createElement('div');
+      item.className = 'email-suggestion';
+      item.textContent = email;
+      item.onmousedown = ev => { ev.preventDefault(); addEmailChip(chipsId, inputId, email); box.style.display = 'none'; };
+      box.appendChild(item);
+    });
+    box.style.display = 'block';
+  }
+
+  // ─── Native Contact Picker (mobile, feature-detected) ───
+  async function pickFromContacts(chipsId, inputId) {
+    try {
+      const contacts = await navigator.contacts.select(['email'], { multiple: true });
+      contacts.forEach(c => (c.email || []).forEach(e => addEmailChip(chipsId, inputId, e)));
+    } catch {}
+  }
+
+  // ─── Wire keyboard/autocomplete for one email panel ───
+  function initEmailPanelInput(inputId, suggestionsId, chipsId, contactsBtnId) {
+    const input = document.getElementById(inputId);
+    const box   = document.getElementById(suggestionsId);
+    if ('contacts' in navigator && 'ContactsManager' in window) {
+      const btn = document.getElementById(contactsBtnId);
+      btn.style.display = 'flex';
+      btn.title = t().fromContacts || 'From contacts';
+      btn.addEventListener('click', () => pickFromContacts(chipsId, inputId));
+    }
+    input.addEventListener('input', () => showEmailSuggestions(inputId, suggestionsId, chipsId));
+    input.addEventListener('blur',  () => setTimeout(() => { box.style.display = 'none'; }, 150));
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ',') {
+        e.preventDefault();
+        if (input.value.trim()) { addEmailChip(chipsId, inputId, input.value); box.style.display = 'none'; }
+      } else if (e.key === 'Backspace' && !input.value) {
+        document.getElementById(chipsId).lastElementChild?.remove();
+      }
+    });
+  }
+
+  // ─── Send to all chips ───
+  async function sendToAllChips(cfg, buildArgs) {
+    // cfg: { inputId, chipsId, statusId, sendBtnId }
+    // buildArgs: (addr) => [subject, body, htmlBody, eventName, url]
+    const input    = document.getElementById(cfg.inputId);
+    const statusEl = document.getElementById(cfg.statusId);
+    const btn      = document.getElementById(cfg.sendBtnId);
+    if (input.value.trim()) addEmailChip(cfg.chipsId, cfg.inputId, input.value);
+    const recipients = getChipEmails(cfg.chipsId);
+    if (!recipients.length) return;
+    btn.disabled = true;
+    btn.textContent = t().linkBannerSending;
+    let sent = 0, failed = 0;
+    for (const addr of recipients) {
+      if (recipients.length > 1) statusEl.textContent = `${sent + failed + 1} / ${recipients.length}`;
+      try {
+        await sendEmailViaGAS(addr, ...buildArgs(addr));
+        saveToContactHistory(addr);
+        sent++;
+      } catch { failed++; }
+    }
+    if (failed === 0) {
+      statusEl.innerHTML = sent > 1 ? t().linkBannerSentN(sent) : t().linkBannerSent;
+      btn.textContent = '✓';
+      document.getElementById(cfg.chipsId).innerHTML = '';
+      setTimeout(() => { statusEl.innerHTML = ''; btn.disabled = false; btn.textContent = t().linkBannerSend; }, 2500);
+    } else if (sent === 0) {
+      statusEl.style.color = '#DC2626';
+      statusEl.textContent = t().linkBannerError;
+      btn.disabled = false; btn.textContent = t().linkBannerSend;
+      setTimeout(() => { statusEl.textContent = ''; statusEl.style.color = ''; }, 5000);
+    } else {
+      statusEl.innerHTML = t().linkBannerPartial(sent, failed);
+      btn.disabled = false; btn.textContent = t().linkBannerSend;
+      setTimeout(() => { statusEl.innerHTML = ''; }, 5000);
+    }
+  }
+
   function toggleEmailPanel(panelId, btnId, otherPanelId) {
     const panel = document.getElementById(panelId);
     const btn   = document.getElementById(btnId);
@@ -3268,81 +3418,26 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
   document.getElementById('email-btn').addEventListener('click', () =>
     toggleEmailPanel('email-panel', 'email-btn', 'best-times-email-panel'));
-
-  document.getElementById('email-panel-send').addEventListener('click', async () => {
-    const email  = document.getElementById('email-panel-input').value.trim();
-    const status = document.getElementById('email-panel-status');
-    const btn    = document.getElementById('email-panel-send');
-
-    if (!email) return;
-
-    btn.disabled = true;
-    btn.textContent = t().linkBannerSending;
-
-    try {
-      await sendEmailViaGAS(
-        email,
-        t().emailSubject(S.eventName),
-        t().emailBody(S.eventName, window.location.href),
-        t().emailHtmlBody ? t().emailHtmlBody(S.eventName, window.location.href) : null,
-        S.eventName,
-        window.location.href
-      );
-      status.innerHTML = t().linkBannerSent;
-      btn.textContent = '✓';
-      const input = document.getElementById('email-panel-input');
-      setTimeout(() => {
-        input.value = '';
-        status.textContent = '';
-        btn.disabled = false;
-        btn.textContent = t().linkBannerSend;
-      }, 2500);
-    } catch(e) {
-      status.style.color = '#DC2626';
-      status.textContent = t().linkBannerError;
-      btn.disabled = false;
-      btn.textContent = t().linkBannerSend;
-      setTimeout(() => { status.textContent = ''; status.style.color = ''; }, 5000);
-      console.error('Email send failed:', e);
-    }
-  });
-  // Best times email
   document.getElementById('best-times-email-btn').addEventListener('click', () =>
     toggleEmailPanel('best-times-email-panel', 'best-times-email-btn', 'email-panel'));
-  document.getElementById('best-times-email-send').addEventListener('click', async () => {
-    const email  = document.getElementById('best-times-email-input').value.trim();
-    const status = document.getElementById('best-times-email-status');
-    const btn    = document.getElementById('best-times-email-send');
-    if (!email) return;
-    btn.disabled = true;
-    btn.textContent = t().linkBannerSending;
-    try {
-      await sendEmailViaGAS(
-        email,
-        t().bestTimesSubject(S.eventName),
-        t().bestTimesBody(S.eventName, window.location.href),
-        buildBestTimesEmailHtml(),
-        S.eventName,
-        window.location.href
-      );
-      status.innerHTML = t().linkBannerSent;
-      btn.textContent = '✓';
-      const input = document.getElementById('best-times-email-input');
-      setTimeout(() => {
-        input.value = '';
-        status.textContent = '';
-        btn.disabled = false;
-        btn.textContent = t().linkBannerSend;
-      }, 2500);
-    } catch(e) {
-      status.style.color = '#DC2626';
-      status.textContent = t().linkBannerError;
-      btn.disabled = false;
-      btn.textContent = t().linkBannerSend;
-      setTimeout(() => { status.textContent = ''; status.style.color = ''; }, 5000);
-      console.error('Email send failed:', e);
-    }
-  });
+
+  initEmailPanelInput('email-panel-input', 'email-suggestions', 'email-chips', 'email-contacts-btn');
+  initEmailPanelInput('best-times-email-input', 'best-times-suggestions', 'best-times-chips', 'best-times-contacts-btn');
+
+  document.getElementById('email-panel-send').addEventListener('click', () =>
+    sendToAllChips(
+      { inputId:'email-panel-input', chipsId:'email-chips', statusId:'email-panel-status', sendBtnId:'email-panel-send' },
+      addr => [t().emailSubject(S.eventName), t().emailBody(S.eventName, window.location.href),
+               t().emailHtmlBody ? t().emailHtmlBody(S.eventName, window.location.href) : null,
+               S.eventName, window.location.href]
+    ));
+
+  document.getElementById('best-times-email-send').addEventListener('click', () =>
+    sendToAllChips(
+      { inputId:'best-times-email-input', chipsId:'best-times-chips', statusId:'best-times-email-status', sendBtnId:'best-times-email-send' },
+      addr => [t().bestTimesSubject(S.eventName), t().bestTimesBody(S.eventName, window.location.href),
+               buildBestTimesEmailHtml(), S.eventName, window.location.href]
+    ));
 
   document.addEventListener('click', e => {
     if (!e.target.closest('#email-panel') && !e.target.closest('#email-btn'))
