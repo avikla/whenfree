@@ -273,19 +273,13 @@ code{
   border-radius:var(--r-sm);
   box-shadow:0 4px 24px rgba(0,0,0,0.15);
   z-index:9998;
-  display:flex;
+  display:none;
   flex-direction:column;
   overflow:hidden;
-  transform:translateY(20px);
-  opacity:0;
-  pointer-events:none;
-  transition:all 0.3s ease;
 }
 
 .a11y-panel.open{
-  transform:translateY(0);
-  opacity:1;
-  pointer-events:auto;
+  display:flex;
 }
 
 .a11y-header{
@@ -734,9 +728,9 @@ const LANGS = {
     dir: 'ltr',
   },
   he: {
-    appName: 'מטאור מפגישות',
+    appName: 'WhenFree',
     a11yStmtTitle: 'הצהרת נגישות',
-    backHome: 'חזרה למטאור',
+    backHome: 'חזרה ל-WhenFree',
     a11yStmtIntro: 'WhenFree מחויב לספק חוויה נגישה לכל המשתמשים, כולל אנשים עם מוגבלויות. הצהרה זו מתארת את התחייבותנו לנגישות והאמצעים שנקחנו כדי להבטיח שאתר הרשת שלנו עומד בתקנים בינלאומיים של נגישות.',
     a11yStmtCompliance: 'עמידה בנגישות',
     a11yStmtStandard: 'תקן:',

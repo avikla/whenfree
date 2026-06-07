@@ -372,18 +372,13 @@ code{
   border-radius:var(--r-sm);
   box-shadow:0 4px 24px rgba(0,0,0,0.15);
   z-index:9998;
+  display:none;
   flex-direction:column;
   overflow:hidden;
-  transform:translateY(20px);
-  opacity:0;
-  pointer-events:none;
-  transition:all 0.3s ease;
 }
 
 .a11y-panel.open{
-  transform:translateY(0);
-  opacity:1;
-  pointer-events:auto;
+  display:flex;
 }
 
 .a11y-header{
@@ -1108,7 +1103,7 @@ a11yCloseBtn.addEventListener('click', e => {
 
 // Close panel when clicking outside
 document.addEventListener('click', e => {
-  if (!a11yPanel.contains(e.target) && e.target !== a11yBtn) {
+  if (!a11yPanel.contains(e.target) && !a11yBtn.contains(e.target)) {
     a11yPanel.classList.remove('open');
   }
 });
