@@ -839,6 +839,9 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
 .dev-footer a:hover{color:var(--accent);border-bottom-color:var(--accent)}
 .sidebar .dev-footer{text-align:left;font-size:11px}
 
+/* Hide desktop top-controls on mobile when Screen B is active */
+@media(max-width:640px){.on-screen-b #top-controls{display:none}}
+
 /* Language toggle */
 .top-controls{position:fixed;top:14px;left:16px;z-index:1001;display:flex;align-items:center;gap:6px;direction:ltr;transform:translateX(calc(100vw - 100% - 32px));transition:transform 0.35s ease}
 [dir="rtl"] .top-controls{transform:none}
@@ -2384,6 +2387,7 @@ function transitionToB() {
   const A = document.getElementById('screen-create');
   const B = document.getElementById('screen-event');
 
+  document.body.classList.add('on-screen-b');
   A.style.transition = 'opacity 0.45s ease';
   A.style.opacity = '0';
   if (window.innerWidth <= 640) document.getElementById('top-controls').style.display = 'none';
@@ -2435,6 +2439,7 @@ function initScreenB() {
 function showScreenB() {
   const A = document.getElementById('screen-create');
   const B = document.getElementById('screen-event');
+  document.body.classList.add('on-screen-b');
   A.style.display = 'none';
   B.style.display = 'flex';
   if (window.innerWidth <= 640) document.getElementById('top-controls').style.display = 'none';
