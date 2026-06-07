@@ -862,10 +862,9 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
   background:var(--surface);border-radius:var(--r);
   box-shadow:0 8px 32px rgba(0,0,0,0.15);
   max-height:70vh;overflow-y:auto;
-  transform:translateY(20px);opacity:0;pointer-events:none;
-  transition:all 0.3s ease;
+  display:none;flex-direction:column;
 }
-.a11y-panel.open{transform:translateY(0);opacity:1;pointer-events:auto}
+.a11y-panel.open{display:flex;}
 
 .a11y-header{padding:16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
 .a11y-title{font-family:var(--font-display);font-weight:600;font-size:16px;color:var(--text)}
@@ -3353,59 +3352,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
   document.addEventListener('dragstart', e => e.preventDefault());
 
-  // Check URL hash for an existing event
-  const hashId = location.hash.slice(1);
-  if (hashId) {
-    const loading = document.getElementById('loading-overlay');
-    loading.style.display = 'flex';
-    try {
-      const snap = await db.collection('events').doc(hashId).get();
-      loading.style.display = 'none';
-      if (snap.exists) {
-        const data = snap.data();
-        S.eventName     = data.name;
-        S.mode          = data.mode;
-        S.selectedDates = new Set(data.selectedDates || []);
-        S.selectedDays  = new Set(data.selectedDays  || []);
-        S.earlierThan   = data.earlierThan;
-        S.laterThan     = data.laterThan;
-        S.timezone      = data.timezone;
-        S.eventSlug     = hashId;
-        S.notifyOnResponse = data.notifyOnResponse || false;
-        S.creatorEmail  = data.creatorEmail || '';
-        S.creatorName   = data.creatorName || '';
-        const storedToken = sessionStorage.getItem('meteor-creator-' + hashId);
-        S.isCreator = !!(storedToken && storedToken === data.creatorToken);
-        // Apply meeting language as default if user has no stored preference
-        if (!localStorage.getItem('lang') && data.lang && LANGS[data.lang]) {
-          currentLang = data.lang;
-        }
-        applyLang();
-
-        // Restore participant from sessionStorage if they already joined
-        const savedName = sessionStorage.getItem('meteor-user-' + hashId);
-        if (savedName && data.participants?.[savedName]) {
-          S.currentUser = {
-            name: savedName,
-            color: data.participants[savedName].color,
-            availability: new Set(data.participants[savedName].availability || []),
-          };
-        }
-        showScreenB();
-        return;
-      } else {
-        // Event not found — show Screen A with a message
-        const err = document.getElementById('cal-error');
-        err.textContent = t().notFound;
-        err.style.display = 'block';
-      }
-    } catch(e) {
-      document.getElementById('loading-overlay').style.display = 'none';
-    }
-  }
-
   // ════════════════════════════════════════════════════════════════════
   // ACCESSIBILITY WIDGET INITIALIZATION
+  // Must run before the hash-check block to avoid being skipped by its early return
   // ════════════════════════════════════════════════════════════════════
 
   const a11yPanel = document.getElementById('a11y-panel');
@@ -3576,6 +3525,57 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Apply saved preferences on load
   const savedPrefs = loadA11yPrefs();
   applyA11yPrefs(savedPrefs);
+
+  // Check URL hash for an existing event
+  const hashId = location.hash.slice(1);
+  if (hashId) {
+    const loading = document.getElementById('loading-overlay');
+    loading.style.display = 'flex';
+    try {
+      const snap = await db.collection('events').doc(hashId).get();
+      loading.style.display = 'none';
+      if (snap.exists) {
+        const data = snap.data();
+        S.eventName     = data.name;
+        S.mode          = data.mode;
+        S.selectedDates = new Set(data.selectedDates || []);
+        S.selectedDays  = new Set(data.selectedDays  || []);
+        S.earlierThan   = data.earlierThan;
+        S.laterThan     = data.laterThan;
+        S.timezone      = data.timezone;
+        S.eventSlug     = hashId;
+        S.notifyOnResponse = data.notifyOnResponse || false;
+        S.creatorEmail  = data.creatorEmail || '';
+        S.creatorName   = data.creatorName || '';
+        const storedToken = sessionStorage.getItem('meteor-creator-' + hashId);
+        S.isCreator = !!(storedToken && storedToken === data.creatorToken);
+        // Apply meeting language as default if user has no stored preference
+        if (!localStorage.getItem('lang') && data.lang && LANGS[data.lang]) {
+          currentLang = data.lang;
+        }
+        applyLang();
+
+        // Restore participant from sessionStorage if they already joined
+        const savedName = sessionStorage.getItem('meteor-user-' + hashId);
+        if (savedName && data.participants?.[savedName]) {
+          S.currentUser = {
+            name: savedName,
+            color: data.participants[savedName].color,
+            availability: new Set(data.participants[savedName].availability || []),
+          };
+        }
+        showScreenB();
+        return;
+      } else {
+        // Event not found — show Screen A with a message
+        const err = document.getElementById('cal-error');
+        err.textContent = t().notFound;
+        err.style.display = 'block';
+      }
+    } catch(e) {
+      document.getElementById('loading-overlay').style.display = 'none';
+    }
+  }
 
   initScreenA();
   applyLang();
