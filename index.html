@@ -450,10 +450,11 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
 }
 .participant-list{display:flex;flex-direction:column;gap:12px}
 .participant-item{display:flex;align-items:center;gap:12px;font-size:14px;font-weight:400;position:relative}
-.p-remove-btn{margin-left:auto;background:none;border:none;cursor:pointer;color:var(--muted2);padding:2px 5px;border-radius:var(--r-xs);font-size:16px;line-height:1;opacity:0;transition:opacity 0.15s;flex-shrink:0}
+.p-remove-btn{margin-left:auto;background:none;border:none;cursor:pointer;color:var(--muted2);padding:4px 7px;border-radius:var(--r-xs);font-size:20px;line-height:1;opacity:0;transition:opacity 0.15s;flex-shrink:0;min-width:32px;min-height:32px;display:flex;align-items:center;justify-content:center}
 .participant-item:hover .p-remove-btn{opacity:1}
 .p-remove-btn:hover{color:#DC2626}
 [dir="rtl"] .p-remove-btn{margin-left:0;margin-right:auto}
+@media(max-width:640px){.p-remove-btn{opacity:0.45;font-size:22px}}
 .p-dot{width:36px;height:36px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px;color:#ffffff;box-shadow:0 2px 8px rgba(10,70,52,0.12)}
 .you-badge{font-size:10px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:var(--accent);opacity:0.75;margin-left:2px}
 .people-count{font-size:11px;font-weight:600;background:var(--accent-glow);border:1px solid var(--accent-dim);color:var(--accent);border-radius:10px;padding:1px 7px;letter-spacing:0.03em}
