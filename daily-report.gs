@@ -3,7 +3,7 @@ const REPORT_CONFIG = {
   projectId:  'meteor-meet',
   apiKey:     PropertiesService.getScriptProperties().getProperty('API_KEY'),
   collection: 'events',
-  recipient:  'avi@whenfree.org',
+  recipient:  'avi.klayman@gmail.com',
   tz:         'Asia/Jerusalem',
   limits: {
     reads:   50000,
