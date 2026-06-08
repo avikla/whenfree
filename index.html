@@ -1616,7 +1616,8 @@ const LANGS = {
     creatorEmailHint:"We'll send you a link so you can return\nto check responses anytime.",
     notifyResponses:'Email me when someone responds',
     notifySubject:(name,event)=>`${name} responded to: ${event}`,
-    notifyBody:(name,event,url)=>`Hi,\n\n${name} just updated their availability for: ${event}\n\n${url}\n\nThanks!`,
+    notifyBody:(name,event,url)=>`Hi,\n\n${name} just responded to your meeting: ${event}\n\n${url}\n\nThanks!`,
+    notifyHtml:(name,event,url)=>buildEmailTemplate(`<div style="display:flex;align-items:center;gap:14px;background:#C7F4E2;border-radius:12px;padding:14px 16px;margin-bottom:20px;direction:ltr;"><div style="width:42px;height:42px;border-radius:50%;background:${nameToColor(name)};display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:700;color:#0B2018;flex-shrink:0;">${name.charAt(0).toUpperCase()}</div><div><div style="font-size:14px;font-weight:700;color:#0B2018;">${name}</div><div style="font-size:12px;color:#3E5750;margin-top:2px;">just responded</div></div></div><p style="margin:0 0 4px;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#7E988F;">Meeting</p><h1 style="margin:0 0 20px;font-size:22px;font-weight:700;color:#0B2018;line-height:1.2;">${escHtml(event)}</h1><a href="${escHtml(url)}" style="display:block;text-align:center;background:#00C281;color:#04261B;text-decoration:none;font-size:15px;font-weight:700;padding:16px 24px;border-radius:100px;letter-spacing:0.03em;">View Responses &#8594;</a><p style="margin:14px 0 0;font-size:12px;color:#7E988F;text-align:center;word-break:break-all;">${escHtml(url)}</p>`,'ltr'),
     skipLink:'Skip to main content',
     a11yTitle:'Accessibility',
     a11yTextSize:'Text Size',
@@ -1700,8 +1701,9 @@ const LANGS = {
     step4:'מי מארגן?', creatorNamePH:'השם שלך', creatorEmailPH:'המייל שלך',
     creatorEmailHint:'נשלח לך קישור כדי שתוכל לחזור לבדוק תשובות בכל עת.',
     notifyResponses:'שלח לי מייל כשמישהו עדכן',
-    notifySubject:(name,event)=>`${name} עדכן את הזמינות שלו עבור: ${event}`,
-    notifyBody:(name,event,url)=>`שלום,\n\n${name} זה עתה עדכן את הזמינות שלו עבור: ${event}\n\n${url}\n\nתודה!`,
+    notifySubject:(name,event)=>`${name} הגיב/ה עבור: ${event}`,
+    notifyBody:(name,event,url)=>`שלום,\n\n${name} זה עתה הגיב/ה לפגישה: ${event}\n\n${url}\n\nתודה!`,
+    notifyHtml:(name,event,url)=>buildEmailTemplate(`<div style="display:flex;align-items:center;gap:14px;background:#C7F4E2;border-radius:12px;padding:14px 16px;margin-bottom:20px;direction:ltr;"><div style="width:42px;height:42px;border-radius:50%;background:${nameToColor(name)};display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:700;color:#0B2018;flex-shrink:0;">${name.charAt(0).toUpperCase()}</div><div><div style="font-size:14px;font-weight:700;color:#0B2018;">${name}</div><div style="font-size:12px;color:#3E5750;margin-top:2px;">הגיב/ה כרגע</div></div></div><p style="margin:0 0 4px;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#7E988F;">פגישה</p><h1 style="margin:0 0 20px;font-size:22px;font-weight:700;color:#0B2018;line-height:1.2;">${escHtml(event)}</h1><a href="${escHtml(url)}" style="display:block;text-align:center;background:#00C281;color:#04261B;text-decoration:none;font-size:15px;font-weight:700;padding:16px 24px;border-radius:100px;letter-spacing:0.03em;">&#8592; צפה בתגובות</a><p style="margin:14px 0 0;font-size:12px;color:#7E988F;text-align:center;word-break:break-all;">${escHtml(url)}</p>`,'rtl'),
     skipLink:'דלג לתוכן הראשי',
     a11yTitle:'נגישות',
     a11yTextSize:'גודל הטקסט',
@@ -1784,7 +1786,8 @@ const LANGS = {
     creatorEmailHint:'Nous vous enverrons un lien pour revenir\nconsulter les réponses à tout moment.',
     notifyResponses:'M\'avertir quand quelqu\'un répond',
     notifySubject:(name,event)=>`${name} a répondu à : ${event}`,
-    notifyBody:(name,event,url)=>`Bonjour,\n\n${name} vient de mettre à jour sa disponibilité pour : ${event}\n\n${url}\n\nCordialement !`,
+    notifyBody:(name,event,url)=>`Bonjour,\n\n${name} vient de répondre à votre réunion : ${event}\n\n${url}\n\nCordialement !`,
+    notifyHtml:(name,event,url)=>buildEmailTemplate(`<div style="display:flex;align-items:center;gap:14px;background:#C7F4E2;border-radius:12px;padding:14px 16px;margin-bottom:20px;direction:ltr;"><div style="width:42px;height:42px;border-radius:50%;background:${nameToColor(name)};display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:700;color:#0B2018;flex-shrink:0;">${name.charAt(0).toUpperCase()}</div><div><div style="font-size:14px;font-weight:700;color:#0B2018;">${name}</div><div style="font-size:12px;color:#3E5750;margin-top:2px;">vient de répondre</div></div></div><p style="margin:0 0 4px;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#7E988F;">Réunion</p><h1 style="margin:0 0 20px;font-size:22px;font-weight:700;color:#0B2018;line-height:1.2;">${escHtml(event)}</h1><a href="${escHtml(url)}" style="display:block;text-align:center;background:#00C281;color:#04261B;text-decoration:none;font-size:15px;font-weight:700;padding:16px 24px;border-radius:100px;letter-spacing:0.03em;">Voir les réponses &#8594;</a><p style="margin:14px 0 0;font-size:12px;color:#7E988F;text-align:center;word-break:break-all;">${escHtml(url)}</p>`,'ltr'),
     skipLink:'Accéder au contenu principal',
     a11yTitle:'Accessibilité',
     a11yTextSize:'Taille du texte',
@@ -2771,11 +2774,12 @@ function scheduleNotifyOrganizer(participantName) {
   if (S.isCreator || !S.notifyOnResponse || !S.creatorEmail) return;
   clearTimeout(_notifyTimer);
   _notifyTimer = setTimeout(() => {
-    const subject = t().notifySubject(participantName, S.eventName);
-    const body    = t().notifyBody(participantName, S.eventName, window.location.href);
-    sendEmailViaGAS(S.creatorEmail, subject, body, null, S.eventName, window.location.href)
+    const subject  = t().notifySubject(participantName, S.eventName);
+    const body     = t().notifyBody(participantName, S.eventName, window.location.href);
+    const htmlBody = t().notifyHtml(participantName, S.eventName, window.location.href);
+    sendEmailViaGAS(S.creatorEmail, subject, body, htmlBody, S.eventName, window.location.href)
       .catch(() => {});
-  }, 60000);
+  }, 120000);
 }
 
 function showCreatorEmailError(toEmail, eventName, meetingUrl, creatorName) {
@@ -3007,7 +3011,6 @@ async function joinEvent() {
   overlay.style.opacity = '0';
   setTimeout(() => { overlay.style.display = 'none'; }, 400);
 
-  scheduleNotifyOrganizer(S.currentUser.name);
   renderParticipants();
   renderHeatmap();
 }
