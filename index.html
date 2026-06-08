@@ -851,7 +851,8 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
     padding:8px 12px calc(8px + env(safe-area-inset-bottom));
     margin-top:0;flex-direction:row;flex-wrap:wrap;gap:6px;
   }
-  .on-screen-b #screen-event{padding-bottom:68px}
+  .on-screen-b #screen-event{padding-bottom:116px}
+  .on-screen-b .new-event-wrap{border-top:none;padding-top:0;margin-top:0;width:100%}
 }
 
 /* Language toggle */
@@ -1435,6 +1436,9 @@ body.a11y-adhd .a11y-panel{opacity:1 !important;pointer-events:auto !important}
         </div>
         <div id="best-times-email-status" class="link-banner-status"></div>
       </div>
+      <div class="new-event-wrap">
+        <button id="new-event-btn" class="new-event-btn"><span class="nav-arrow">⬅</span><span class="nav-label">New event</span></button>
+      </div>
     </div>
     <div id="creator-email-fail" style="display:none" class="link-banner">
       <span id="creator-email-fail-msg" data-i18n="emailFailMsg"></span>
@@ -1443,9 +1447,6 @@ body.a11y-adhd .a11y-panel{opacity:1 !important;pointer-events:auto !important}
         <button id="creator-retry-btn"     class="sidebar-btn sidebar-btn-outline" style="flex:1"></button>
       </div>
       <span id="creator-retry-status" style="font-size:12px;color:var(--muted2);margin-top:4px;display:none"></span>
-    </div>
-    <div class="new-event-wrap">
-      <button id="new-event-btn" class="new-event-btn"><span class="nav-arrow">⬅</span><span class="nav-label">New event</span></button>
     </div>
     <p class="dev-footer">Avi Klayman &mdash; <a href="mailto:avi@whenfree.org">avi@whenfree.org</a><br><a href="help.html">Help</a> &middot; <a href="terms.html">Terms &amp; Privacy</a></p>
   </aside>
