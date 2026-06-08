@@ -125,13 +125,20 @@ Each event document stores:
 
 - **Click-outside handlers**: always use `el.contains(e.target)` not `e.target !== el` — SVG children inside a button will be the `e.target`, not the button itself.
 
-## GAS Daily Report
+## GAS Deployment
 
 **GAS project:** `https://script.google.com/d/1MCoKYf2EVaueAzpjWAmHdvzubUcj3NqLAXzrBic6oRZgxacpnf44uYBD/edit`
 
+Push + deploy in one command (no GAS editor needed):
+
 ```powershell
-clasp push --force
+clasp push --force && clasp deploy --deploymentId AKfycbz7hknVlxm_K7RdFBV1gd7MbBz3KYsq7PQ2UgqHHByTxM2PI2W21T8p3sZ6qIenPMPDNg
 ```
+
+- `@HEAD` deployment ID: `AKfycbwVGimKBjWg3PRYpkRLPFcW1vbdQV7KxpJepNOwcSzg` (dev/test only)
+- Production deployment ID: `AKfycbz7hknVlxm_K7RdFBV1gd7MbBz3KYsq7PQ2UgqHHByTxM2PI2W21T8p3sZ6qIenPMPDNg`
+
+## GAS Daily Report
 
 One-time trigger: select `createTrigger` → Run in GAS editor after deploy.
 
