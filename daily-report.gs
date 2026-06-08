@@ -275,6 +275,23 @@ function buildEmailHtml_(data) {
         '</td>' +
       '</tr></table>' +
 
+      // Email section
+      '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#7E988F;margin-bottom:14px;margin-top:8px;">Email</div>' +
+      '<table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:8px;"><tr>' +
+        '<td style="padding:6px;">' +
+          '<div style="background:#F4FAF7;border:1px solid #D6EDE4;border-radius:12px;padding:14px 18px;">' +
+            '<table width="100%" cellpadding="0" cellspacing="0"><tr>' +
+              '<td>' +
+                '<div style="font-size:12px;color:#3E5750;font-weight:500;">Transactional emails</div>' +
+                '<div style="font-size:12px;color:#7E988F;margin-top:2px;">Sent via ZeptoMail — view delivery stats, bounces, and logs</div>' +
+              '</td>' +
+              '<td align="right"><a href="https://zeptomail.zoho.com/zem/927167870#agents/4db6f9fa7dd3976f/processed-emails" ' +
+                'style="background:#00C281;color:#04261B;font-size:12px;font-weight:700;padding:8px 16px;border-radius:100px;text-decoration:none;white-space:nowrap;">View &#8594;</a></td>' +
+            '</tr></table>' +
+          '</div>' +
+        '</td>' +
+      '</tr></table>' +
+
     '</td></tr>' +
 
     // Footer
