@@ -24,7 +24,7 @@ git push
 | File | Role |
 |------|------|
 | `index.html` | Single-page app (HTML, CSS, JS inline) with Firebase Firestore integration |
-| `mailer.gs` | Google Apps Script — sends emails from `no-reply@meteor.co.il` (verified SMTP alias, display name "WhenFree") |
+| `mailer.gs` | Google Apps Script — sends all emails via Brevo API from `no-reply@whenfree.org` (display name "WhenFree"). API key stored in GAS Script Properties as `BREVO_API_KEY`. |
 | `daily-report.gs` | GAS — daily DB usage report to `avi@whenfree.org` at midnight IST |
 | `appsscript.json` | GAS manifest — OAuth scopes, timezone (Asia/Jerusalem), runtime |
 | `icons/favicon.svg` | App favicon (calendar + checkmark icon) |
@@ -37,9 +37,10 @@ git push
 
 ## Domain & Redirects
 
-- **Live site:** `whenfree.org` → GitHub Pages (via ImprovMX MX records)
+- **Live site:** `whenfree.org` → GitHub Pages (Cloudflare DNS)
 - **Legacy redirect:** `meet.meteor.co.il` → `whenfree.org` via Cloudflare Redirect Rule (Dynamic, preserves query string)
-- **Email forwarding:** `*@whenfree.org` forwards to `avi@meteor.co.il` via ImprovMX catch-all
+- **Email forwarding (incoming):** Cloudflare Email Routing catch-all → `avi.klayman@gmail.com`
+- **Email sending (outgoing):** Brevo API from `no-reply@whenfree.org`
 - **Contact:** `avi@whenfree.org`
 
 ## Features
@@ -58,9 +59,11 @@ git push
 
 ## Email System
 
-- **Sender:** GAS `GmailApp.sendEmail()`, display name "WhenFree", from `no-reply@meteor.co.il`
+- **Sender:** Brevo transactional API via `UrlFetchApp.fetch()` in GAS, from `no-reply@whenfree.org`, display name "WhenFree"
+- **API key:** stored in GAS Script Properties (`BREVO_API_KEY`) — never in source code
 - **Template:** `buildEmailTemplate(bodyHtml, dir)` — dark forest header with calendar-check icon + "WhenFree" wordmark, verde palette card, sage background
-- **Email types:** creator confirmation, invite to mark availability, best times (all localized EN/HE/FR with RTL support)
+- **Email types:** creator confirmation, invite to mark availability, best times, organizer notification (all localized EN/HE/FR with RTL support)
+- **Organizer notification:** `scheduleNotifyOrganizer(name)` — debounced 120s after last cell mark (not on join). Sends branded HTML with participant avatar initial chip.
 - **ICS UID format:** `${eventSlug}-${Date.now()}@whenfree.org`
 
 ## Key Functions
@@ -74,6 +77,7 @@ git push
 | `downloadIcs(slot, ...)` | Generates RFC 5545 `.ics` blob and triggers download |
 | `buildEmailTemplate(bodyHtml, dir)` | Wraps email content in branded HTML template |
 | `buildBestTimesEmailHtml()` | Builds localized best-times email (uses `currentLang`) |
+| `scheduleNotifyOrganizer(name)` | Debounced (120s) notification to creator when a participant marks cells — only fires on cell marks, not on join |
 | `toggleEmailPanel(panelId, btnId, otherPanelId)` | Opens/closes floating email input panels via `position:fixed` |
 | `setLang(code)` | Sets language, updates localStorage and URL (`?lang=`) |
 
