@@ -2,17 +2,18 @@ const SENDER_EMAIL = 'no-reply@whenfree.org';
 const SENDER_NAME  = 'WhenFree';
 const ALERT_EMAIL  = 'avi.klayman@gmail.com';
 
+
 function doPost(e) {
   try {
     const data = JSON.parse(e.postData.contents);
     const { to_email, event_name, meeting_url, subject, body, html_body } = data;
 
-    const apiKey = PropertiesService.getScriptProperties().getProperty('ZEPTO_API_KEY');
+    const apiKey = PropertiesService.getScriptProperties().getProperty('ZEPTO_API_KEY').trim();
     const response = UrlFetchApp.fetch('https://api.zeptomail.com/v1.1/email', {
       method: 'post',
       contentType: 'application/json',
       headers: {
-        'Authorization': 'Zoho-enczapikey ' + apiKey,
+        'Authorization': apiKey,
         'Accept': 'application/json'
       },
       payload: JSON.stringify({
@@ -20,6 +21,7 @@ function doPost(e) {
         to: [{ email_address: { address: to_email } }],
         subject: subject || `Your meeting link: ${event_name}`,
         htmlbody: html_body || `<p>Hi,</p><p>Here is your meeting link: <a href="${meeting_url}">${meeting_url}</a></p>`,
+        textbody: body || `Hi,\n\nHere is your meeting link:\n${meeting_url}`,
       }),
       muteHttpExceptions: true,
     });
