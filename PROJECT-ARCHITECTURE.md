@@ -33,17 +33,17 @@ Three distinct roles:
 
 ## Email Sending
 
-**Brevo** (brevo.com)
+**ZeptoMail** (zeptomail.com)
 Transactional email API. Sends all 4 outgoing email types from `no-reply@whenfree.org`:
 1. **Creator confirmation** — "Your meeting link" sent when a meeting is created
 2. **Participant invite** — sent when organizer uses the "Email meeting link" panel
 3. **Best times** — sent to participants showing ranked available slots
 4. **Organizer notification** — "X responded to your meeting" sent 120s after a participant's last cell mark
 
-Domain `whenfree.org` is authenticated in Brevo via DKIM CNAMEs + DMARC + SPF (`include:spf.brevo.com`) in Cloudflare. Free tier: 300 emails/day. API key stored in GAS Script Properties (`BREVO_API_KEY`) — never in source code.
+Endpoint: `https://api.zeptomail.com/v1.1/email` (US region). Auth: `Authorization: Zoho-enczapikey <token>` — full token (including `Zoho-enczapikey` prefix) stored in GAS Script Properties as `ZEPTO_API_KEY` and used directly. On failure, a GmailApp alert is sent to `avi.klayman@gmail.com`.
 
 **Google Apps Script (GAS)**
-Serverless middleware between the frontend and Brevo. The app (`index.html`) can't call Brevo directly (CORS + API key exposure), so it POSTs to the GAS web app URL (`mailer.gs`), which then calls Brevo's API via `UrlFetchApp.fetch()`. Also hosts `daily-report.gs` — a nightly cron that queries Firestore's REST API and emails a usage report (reads/writes/deletes vs. free-tier limits) to `avi.klayman@gmail.com`.
+Serverless middleware between the frontend and ZeptoMail. The app (`index.html`) can't call ZeptoMail directly (CORS + API key exposure), so it POSTs to the GAS web app URL (`mailer.gs`), which then calls ZeptoMail's API via `UrlFetchApp.fetch()`. Also hosts `daily-report.gs` — a nightly cron that queries Firestore's REST API and emails a usage report (reads/writes/deletes vs. free-tier limits) to `avi.klayman@gmail.com`.
 
 GAS project: `https://script.google.com/d/1MCoKYf2EVaueAzpjWAmHdvzubUcj3NqLAXzrBic6oRZgxacpnf44uYBD/edit`
 
@@ -56,7 +56,10 @@ Google's CLI for pushing local `.gs` files to GAS:
 ```powershell
 clasp push --force
 ```
-After every push, a new version must be manually deployed in the GAS editor (**Deploy → Manage deployments → New version**) for web app changes to take effect.
+One-command push + deploy (no GAS editor needed):
+```powershell
+clasp push --force && clasp deploy --deploymentId AKfycbz7hknVlxm_K7RdFBV1gd7MbBz3KYsq7PQ2UgqHHByTxM2PI2W21T8p3sZ6qIenPMPDNg
+```
 
 ---
 
@@ -89,7 +92,7 @@ User browser
     │               │
     │               └── mailer.gs (Google Apps Script)
     │                       │
-    │                       └── Brevo API ──── no-reply@whenfree.org
+    │                       └── ZeptoMail API  no-reply@whenfree.org
     │
 whenfree.org
     │

@@ -24,7 +24,7 @@ git push
 | File | Role |
 |------|------|
 | `index.html` | Single-page app (HTML, CSS, JS inline) with Firebase Firestore integration |
-| `mailer.gs` | Google Apps Script — sends all emails via Brevo API from `no-reply@whenfree.org` (display name "WhenFree"). API key stored in GAS Script Properties as `BREVO_API_KEY`. |
+| `mailer.gs` | Google Apps Script — sends all emails via ZeptoMail API from `no-reply@whenfree.org` (display name "WhenFree"). Token stored in GAS Script Properties as `ZEPTO_API_KEY`. |
 | `daily-report.gs` | GAS — daily DB usage report to `avi@whenfree.org` at midnight IST |
 | `appsscript.json` | GAS manifest — OAuth scopes, timezone (Asia/Jerusalem), runtime |
 | `icons/favicon.svg` | App favicon (calendar + checkmark icon) |
@@ -59,8 +59,9 @@ git push
 
 ## Email System
 
-- **Sender:** Brevo transactional API via `UrlFetchApp.fetch()` in GAS, from `no-reply@whenfree.org`, display name "WhenFree"
-- **API key:** stored in GAS Script Properties (`BREVO_API_KEY`) — never in source code
+- **Sender:** ZeptoMail transactional API via `UrlFetchApp.fetch()` in GAS, from `no-reply@whenfree.org`, display name "WhenFree"
+- **Endpoint:** `https://api.zeptomail.com/v1.1/email` (US region)
+- **Auth:** `Authorization: <ZEPTO_API_KEY>` — token stored in GAS Script Properties as `ZEPTO_API_KEY`, value includes the full `Zoho-enczapikey <base64>` prefix. Used directly (`.trim()` applied). Never in source code.
 - **Template:** `buildEmailTemplate(bodyHtml, dir)` — dark forest header with calendar-check icon + "WhenFree" wordmark, verde palette card, sage background
 - **Email types:** creator confirmation, invite to mark availability, best times, organizer notification (all localized EN/HE/FR with RTL support)
 - **Organizer notification:** `scheduleNotifyOrganizer(name)` — debounced 120s after last cell mark (not on join). Sends branded HTML with participant avatar initial chip.
@@ -158,6 +159,7 @@ One-time trigger: select `createTrigger` → Run in GAS editor after deploy.
 - `--on-primary-ctr: #00382A` — text on tonal container
 - `--on-primary: #04261B` — text on accent buttons
 - `--border: rgba(10, 70, 52, 0.15)` / `--border2: rgba(10, 70, 52, 0.20)`
+- `--cell-empty: #ECF8F2` — empty grid cell fill (lighter than bg for clear affordance)
 
 **Dark Mode**
 - `--bg: #081C13` — page background
@@ -165,6 +167,7 @@ One-time trigger: select `createTrigger` → Run in GAS editor after deploy.
 - `--text: #D6F0E6` / `--muted: #81B09A` / `--muted2: #5A7D6E`
 - `--accent: #00D68F`
 - `--primary-ctr: #1A4D38` / `--on-primary-ctr: #7FDBBA`
+- `--cell-empty: #1C3D2C` — empty grid cell fill; cells also get `border: 1.5px solid rgba(100,210,160,0.14)` override for shape definition
 
 **Heatmap:** `--heat-1` through `--heat-5` (light → dark variants per mode)
 
