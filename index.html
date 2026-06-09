@@ -1226,7 +1226,7 @@ body.a11y-adhd .a11y-panel{opacity:1 !important;pointer-events:auto !important}
         <div class="onboard-icon">⭐</div>
         <div class="onboard-text">
           <div class="onboard-step-title" data-i18n="onboardStep3Title">Find the best time</div>
-          <div class="onboard-step-body" data-i18n="onboardStep3Body">The app ranks slots by how many people are available.</div>
+          <div class="onboard-step-body" data-i18n="onboardStep3Body">The app ranks slots by how many participants are available.</div>
         </div>
       </div>
       <div class="onboard-step">
@@ -1597,17 +1597,17 @@ const LANGS = {
     markSub:"Enter your name, then click or drag the slots to show when you're free.",
     markSubMobile:"Enter your name, then tap the slots to show when you're free.",
     namePH:'Your name', continueBtn:'Continue &#8594;', joinBtn:'Join the event &nbsp;&#8594;', joining:'Joining…',
-    people:'People', copyLink:`${_LINK} Copy meeting link`, copied:'&#10003; Copied!',
+    people:'Participants', copyLink:`${_LINK} Copy meeting link`, copied:'&#10003; Copied!',
     whatsappLink:`${_WA} WhatsApp link`,
     whatsappMsg:(name,url)=>`Join my meeting: *${name}*\n${url}`,
     sendEmail:`${_EMAIL} Email meeting link`, newEvent:`${_PLUS}<span class="nav-label">New meeting</span>`, editTitle:'Edit meeting name',
     gridHint:'Click or drag to mark your free times.', gridHintMobile:'Tap to mark your free times.',
     bestTimes:'Best times',
     legendFewerFree:'Fewer free', legendEveryone:'Everyone',
-    onboardTitle:'How it works', onboardIntro:'The app helps people find the best time to meet — no accounts, no 47-message email threads, no "does Tuesday work for anyone?" Just a link. Just answers.',
+    onboardTitle:'How it works', onboardIntro:'The app helps participants find the best time to meet — no accounts, no 47-message email threads, no "does Tuesday work for anyone?" Just a link. Just answers.',
     onboardStep1Title:'Create an event', onboardStep1Body:'Name it, pick dates and a time range, then share the link.',
     onboardStep2Title:'Mark your availability', onboardStep2Body:'Click cells on the grid to show when you\'re free.',
-    onboardStep3Title:'Find the best time', onboardStep3Body:'The app ranks slots by how many people are available.',
+    onboardStep3Title:'Find the best time', onboardStep3Body:'The app ranks slots by how many participants are available.',
     onboardStep4Title:'Share the link', onboardStep4Body:'Send via WhatsApp, email, or copy the link — participants join instantly, no account needed.',
     onboardGotIt:'Got it →', onboardBtnTitle:'Help',
     bestEmpty:'Mark your availability to see best times',
@@ -1625,8 +1625,8 @@ const LANGS = {
     linkBannerSentN:(n)=>`&#10003; Sent to ${n} recipients`,
     linkBannerPartial:(s,f)=>`Sent ${s}, failed ${f} — try again.`,
     linkBannerError:'Could not send — try again.',
-    allPeople:(n)=>n===1?'All 1 person':`All ${n} people`,
-    ofPeople:(x,n)=>n===1?`${x} of 1 person`:`${x} of ${n} people`,
+    allPeople:(n)=>n===1?'All 1 participant':`All ${n} participants`,
+    ofPeople:(x,n)=>n===1?`${x} of 1 participant`:`${x} of ${n} participants`,
     rejoinPrompt:(name)=>`"${name}" already joined this meeting. Continue as them?`,
     dateCount:(n)=>n===1?'1 date':`${n} dates`,
     emailSubject:(name)=>`You're invited: ${name}`,
