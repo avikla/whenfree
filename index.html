@@ -29,7 +29,7 @@
   --on-primary:      #04261B;
   --primary-ctr:     #C7F4E2;
   --on-primary-ctr:  #00382A;
-  --cell-empty:  #DEEFE8;
+  --cell-empty:  #ECF8F2;
   --heat-1: #CBEFE0;
   --heat-2: #97E2C4;
   --heat-3: #56D0A2;
@@ -59,7 +59,7 @@
   --on-primary:      #04261B;
   --primary-ctr:     #1A4D38;
   --on-primary-ctr:  #7FDBBA;
-  --cell-empty:  #163526;
+  --cell-empty:  #1C3D2C;
   --heat-1: #193828;
   --heat-2: #1B5840;
   --heat-3: #1F7A59;
@@ -709,6 +709,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
   border:1.5px solid rgba(10,70,52,0.10);border-radius:var(--r-xs);
   pointer-events:none;transition:border-color 0.1s;
 }
+[data-theme="dark"] .grid-cell::after{border-color:rgba(100,210,160,0.14)}
 .grid-cell:hover::after{border-color:rgba(10,70,52,0.20)}
 .grid-cell.user-selected::after{border-color:rgba(10,70,52,0.45);box-shadow:inset 0 0 8px rgba(10,70,52,0.08)}
 
@@ -1679,7 +1680,7 @@ const LANGS = {
     onboardGotIt:'הבנתי ←', onboardBtnTitle:'עזרה',
     bestEmpty:'סמן זמינות כדי לראות את הזמנים הטובים ביותר',
     mobileNotice:'מומלץ לצפות במסך רחב יותר', loading:'טוען…',
-    youBadge:'את/ה', clearBtn:`${_X} נקה זמנים`,
+    youBadge:'את/ה', clearBtn:`נקה זמנים ${_X}`,
     removeParticipant:'הסר משתתף', removeConfirm:(name)=>`להסיר את "${name}" מהאירוע?`,
     confirmRemove:'הסר', confirmCancel:'ביטול',
     sendBestTimes:'📊 שלח זמנים מומלצים',
