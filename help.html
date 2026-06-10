@@ -621,7 +621,7 @@ code{
     </div>
   </div>
 
-  <div class="content">
+  <div class="content" id="main-content">
     <!-- GETTING STARTED SECTION -->
     <div class="section">
       <h2 data-i18n="guideTitle">How to Use WhenFree</h2>
@@ -656,6 +656,8 @@ code{
         <li data-i18n="tipMultiple">You can create multiple meetings and share different links for different groups.</li>
         <li data-i18n="tipClick">Click individual time slots to mark or unmark when you're available — no need to drag.</li>
         <li data-i18n="tipShare">Share the link without creating an account — anyone can join with just their name.</li>
+        <li data-i18n="tipCalendar">After picking the best time, click "Add to Calendar" to save it to Google Calendar or download an .ics file for Apple Calendar or Outlook.</li>
+        <li data-i18n="tipDays">For recurring weekly meetings, choose "Days of the week" mode when creating your event to find a slot that works every week.</li>
       </ul>
     </div>
 
@@ -759,7 +761,47 @@ code{
           <span class="faq-toggle">▼</span>
         </div>
         <div class="faq-answer">
-          <p data-i18n="faq10A">If you checked "Email me when someone responds" when creating the meeting, you'll get one email after someone finishes marking their availability (we wait 60 seconds for them to finish). You can disable this anytime by unchecking the box before creating a new meeting.</p>
+          <p data-i18n="faq10A">If you checked "Email me when someone responds" when creating the meeting, you'll get one email after someone finishes marking their availability (we wait 120 seconds after their last change). You can disable this anytime by unchecking the box before creating a new meeting.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFAQ(this)">
+          <span data-i18n="faq11Q">Is WhenFree free to use?</span>
+          <span class="faq-toggle">▼</span>
+        </div>
+        <div class="faq-answer">
+          <p data-i18n="faq11A">Yes, completely free - no accounts, no subscriptions, and no hidden fees. WhenFree is an independent project with no premium tiers.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFAQ(this)">
+          <span data-i18n="faq12Q">What is "days of the week" mode?</span>
+          <span class="faq-toggle">▼</span>
+        </div>
+        <div class="faq-answer">
+          <p data-i18n="faq12A">When creating an event, you can pick specific calendar dates (e.g., "March 15, 16, 17") or recurring days of the week (e.g., "Monday, Wednesday, Friday"). Days-of-the-week mode is ideal for finding a weekly recurring slot - like a standing team meeting. Specific dates are better for one-time events.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFAQ(this)">
+          <span data-i18n="faq13Q">Can I delete a meeting or remove a participant?</span>
+          <span class="faq-toggle">▼</span>
+        </div>
+        <div class="faq-answer">
+          <p data-i18n="faq13A">Meetings can't be deleted from the app, but since only people with the link can access them, you can simply stop sharing it. A participant can clear their own responses by reopening the meeting, re-entering their name, and choosing "Clear my times."</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFAQ(this)">
+          <span data-i18n="faq14Q">Does WhenFree work on mobile?</span>
+          <span class="faq-toggle">▼</span>
+        </div>
+        <div class="faq-answer">
+          <p data-i18n="faq14A">Yes - WhenFree is fully responsive on phones and tablets. Tap individual slots to mark your availability. When sending invitations or best-times summaries, tap the contacts icon to pick recipients directly from your phone's address book.</p>
         </div>
       </div>
     </div>
@@ -792,14 +834,16 @@ const LANGS = {
     step2Title: 'Share the link with participants',
     step2Desc: 'Once your meeting is created, you\'ll get a unique link. Copy it to share directly, or use the email button to send invitations. Add multiple recipients by typing an email and pressing Enter - previously used addresses appear as suggestions. On mobile, tap the contacts icon to pick directly from your phone contacts.',
     step3Title: 'Participants mark their availability',
-    step3Desc: 'Each person who opens your link enters their name and clicks on the dates and times when they\'re free. The calendar shows the heat map of when most people are available — darker green means more people can meet then.',
+    step3Desc: 'Each person who opens your link enters their name and clicks on the dates and times when they\'re free. The calendar shows the heat map of when most people are available - darker green means more people can meet then.',
     step4Title: 'Find the best time',
     step4Desc: 'At the top of the page, you\'ll see "Best times" — the time slots ranked by how many people are free. Pick the slot that works best and schedule your meeting!',
     tips: 'Tips',
     tipTheme: 'Use the light/dark theme toggle in the top right to match your preference.',
     tipMultiple: 'You can create multiple meetings and share different links for different groups.',
-    tipClick: 'Click individual time slots to mark or unmark when you\'re available — no need to drag.',
+    tipClick: 'Click individual time slots to mark or unmark when you\'re available - no need to drag.',
     tipShare: 'Share the link without creating an account — anyone can join with just their name.',
+    tipCalendar: 'After picking the best time, click "Add to Calendar" to save it to Google Calendar or download an .ics file for Apple Calendar or Outlook.',
+    tipDays: 'For recurring weekly meetings, choose "Days of the week" mode when creating your event to find a slot that works every week.',
     faqTitle: 'Frequently Asked Questions',
     faq1Q: 'Do I need to create an account?',
     faq1A: 'No! WhenFree works without accounts. The organizer just needs an email address to receive the meeting link. Participants only need to enter their name.',
@@ -810,7 +854,7 @@ const LANGS = {
     faq4Q: 'What if someone enters the wrong name?',
     faq4A: 'If someone rejoins with a slightly different spelling, WhenFree will recognize them as a returning user and ask if they want to continue as that person or use a new name. They can also clear their times and start fresh with a different name.',
     faq5Q: 'How long are meetings stored?',
-    faq5A: 'Meetings stay available as long as needed. You can bookmark the link and come back to check responses anytime. If you don\'t use a meeting, it will still be there — nothing expires automatically.',
+    faq5A: 'Meetings stay available as long as needed. You can bookmark the link and come back to check responses anytime. If you don\'t use a meeting, it will still be there - nothing expires automatically.',
     faq6Q: 'Can I send the "Best Times" summary to people?',
     faq6A: 'Yes! Click the "📊 Send best times" button in the sidebar to email a nicely formatted summary of the top time slots. Add multiple recipients by typing an email and pressing Enter - previously used addresses appear as suggestions. On mobile, tap the contacts icon to pick directly from your phone.',
     faq7Q: 'What languages does WhenFree support?',
@@ -820,7 +864,15 @@ const LANGS = {
     faq9Q: 'Is there a limit to how many people can join?',
     faq9A: 'No limit! WhenFree can handle meetings with dozens or hundreds of participants. The interface updates in real time as people mark their availability.',
     faq10Q: 'Will I be notified when people respond?',
-    faq10A: 'If you checked "Email me when someone responds" when creating the meeting, you\'ll get one email after someone finishes marking their availability (we wait 60 seconds for them to finish). You can disable this anytime by unchecking the box before creating a new meeting.',
+    faq10A: 'If you checked "Email me when someone responds" when creating the meeting, you\'ll get one email after someone finishes marking their availability (we wait 120 seconds after their last change). You can disable this anytime by unchecking the box before creating a new meeting.',
+    faq11Q: 'Is WhenFree free to use?',
+    faq11A: 'Yes, completely free - no accounts, no subscriptions, and no hidden fees. WhenFree is an independent project with no premium tiers.',
+    faq12Q: 'What is "days of the week" mode?',
+    faq12A: 'When creating an event, you can pick specific calendar dates (e.g., "March 15, 16, 17") or recurring days of the week (e.g., "Monday, Wednesday, Friday"). Days-of-the-week mode is ideal for finding a weekly recurring slot - like a standing team meeting. Specific dates are better for one-time events.',
+    faq13Q: 'Can I delete a meeting or remove a participant?',
+    faq13A: 'Meetings can\'t be deleted from the app, but since only people with the link can access them, you can simply stop sharing it. A participant can clear their own responses by reopening the meeting, re-entering their name, and choosing "Clear my times."',
+    faq14Q: 'Does WhenFree work on mobile?',
+    faq14A: 'Yes - WhenFree is fully responsive on phones and tablets. Tap individual slots to mark your availability. When sending invitations or best-times summaries, tap the contacts icon to pick recipients directly from your phone\'s address book.',
     supportTitle: 'Need Help?',
     supportDesc: 'Have questions, found a bug, or want to suggest a feature? We\'d love to hear from you!',
     contactEmail: 'Contact Avi Klayman',
@@ -857,6 +909,8 @@ const LANGS = {
     tipMultiple: 'Vous pouvez créer plusieurs réunions et partager différents liens pour différents groupes.',
     tipClick: 'Cliquez sur les créneaux horaires individuels pour marquer ou démarquer quand vous êtes disponible — pas besoin de glisser.',
     tipShare: 'Partagez le lien sans créer de compte — n\'importe qui peut rejoindre avec juste son nom.',
+    tipCalendar: 'Après avoir choisi le meilleur créneau, cliquez sur « Ajouter au calendrier » pour l\'enregistrer dans Google Agenda ou télécharger un fichier .ics pour Apple Agenda ou Outlook.',
+    tipDays: 'Pour les réunions hebdomadaires régulières, choisissez le mode « Jours de la semaine » lors de la création de votre événement pour trouver un créneau qui convient chaque semaine.',
     faqTitle: 'Questions fréquemment posées',
     faq1Q: 'Dois-je créer un compte ?',
     faq1A: 'Non ! WhenFree fonctionne sans comptes. L\'organisateur a seulement besoin d\'une adresse e-mail pour recevoir le lien de la réunion. Les participants ne doivent que saisir leur nom.',
@@ -877,7 +931,15 @@ const LANGS = {
     faq9Q: 'Y a-t-il une limite au nombre de personnes pouvant rejoindre ?',
     faq9A: 'Pas de limite ! WhenFree peut gérer des réunions avec des dizaines ou des centaines de participants. L\'interface se met à jour en temps réel à mesure que les gens indiquent leur disponibilité.',
     faq10Q: 'Serai-je avisé quand les gens répondent ?',
-    faq10A: 'Si vous avez coché « M\'avertir quand quelqu\'un répond » lors de la création de la réunion, vous recevrez un e-mail après que quelqu\'un ait fini d\'indiquer sa disponibilité (nous attendons 60 secondes qu\'il finisse). Vous pouvez désactiver cela à tout moment en décochant la case avant de créer une nouvelle réunion.',
+    faq10A: 'Si vous avez coché « M\'avertir quand quelqu\'un répond » lors de la création de la réunion, vous recevrez un e-mail après que quelqu\'un ait fini d\'indiquer sa disponibilité (nous attendons 120 secondes après sa dernière modification). Vous pouvez désactiver cela à tout moment en décochant la case avant de créer une nouvelle réunion.',
+    faq11Q: 'WhenFree est-il gratuit ?',
+    faq11A: 'Oui, totalement gratuit - pas de compte, pas d\'abonnement et pas de frais cachés. WhenFree est un projet indépendant sans niveau premium.',
+    faq12Q: 'Qu\'est-ce que le mode « jours de la semaine » ?',
+    faq12A: 'Lors de la création d\'un événement, vous pouvez choisir des dates spécifiques (par exemple, « 15, 16, 17 mars ») ou des jours récurrents de la semaine (par exemple, « lundi, mercredi, vendredi »). Le mode jours de la semaine est idéal pour trouver un créneau hebdomadaire récurrent - comme une réunion d\'équipe fixe. Les dates spécifiques conviennent mieux aux événements ponctuels.',
+    faq13Q: 'Puis-je supprimer une réunion ou un participant ?',
+    faq13A: 'Les réunions ne peuvent pas être supprimées de l\'application, mais puisque seules les personnes ayant le lien peuvent y accéder, vous pouvez simplement arrêter de le partager. Un participant peut effacer ses réponses en rouvrant la réunion, en ressaisissant son nom et en choisissant « Effacer mes créneaux ».',
+    faq14Q: 'WhenFree fonctionne-t-il sur mobile ?',
+    faq14A: 'Oui - WhenFree est entièrement responsive sur téléphones et tablettes. Appuyez sur les créneaux individuels pour indiquer votre disponibilité. Lors de l\'envoi d\'invitations ou de résumés de meilleurs créneaux, appuyez sur l\'icône de contacts pour sélectionner les destinataires directement depuis votre répertoire téléphonique.',
     supportTitle: 'Besoin d\'aide ?',
     supportDesc: 'Vous avez des questions, trouvé un bug ou voulez suggérer une fonctionnalité ? Nous aimerions vous écouter !',
     contactEmail: 'Contacter Avi Klayman',
@@ -914,6 +976,8 @@ const LANGS = {
     tipMultiple: 'אתה יכול ליצור מספר פגישות ולשתף קישורים שונים לקבוצות שונות.',
     tipClick: 'לחץ על משבצות שעות בודדות כדי לסמן או להסיר סימן כאשר אתה פנוי — אין צורך לגרור.',
     tipShare: 'שתף את הקישור ללא יצירת חשבון — כל אחד יכול להצטרף עם רק השם שלו.',
+    tipCalendar: 'לאחר בחירת הזמן הטוב ביותר, לחץ על "הוסף ליומן" כדי לשמור ב-Google Calendar או להוריד קובץ .ics עבור Apple Calendar או Outlook.',
+    tipDays: 'לפגישות שבועיות קבועות, בחר מצב "ימות השבוע" בעת יצירת האירוע כדי למצוא משבצת שמתאימה כל שבוע.',
     faqTitle: 'שאלות נפוצות',
     faq1Q: 'האם אני צריך ליצור חשבון?',
     faq1A: 'לא! WhenFree עובד ללא חשבונות. המארגן פשוט צריך כתובת דוא"ל כדי לקבל את קישור הפגישה. המשתתפים צריכים רק להזין את שמם.',
@@ -934,7 +998,15 @@ const LANGS = {
     faq9Q: 'האם יש מגבלה על כמה אנשים יכולים להצטרף?',
     faq9A: 'אין מגבלה! WhenFree יכול להתמודד עם פגישות עם עשרות או מאות משתתפים. הממשק מתעדכן בזמן אמת כשאנשים מסמנים את הזמינות שלהם.',
     faq10Q: 'האם אני מודיע כאשר אנשים משיבים?',
-    faq10A: 'אם סימנת "שלח לי מייל כשמישהו עדכן" בעת יצירת הפגישה, תקבל דוא"ל לאחר שמישהו סיים לסמן את הזמינות שלו (אנחנו מחכים 60 שניות שהוא יסיים). אתה יכול להשבית זאת בכל עת בהסרת הסימון לפני יצירת פגישה חדשה.',
+    faq10A: 'אם סימנת "שלח לי מייל כשמישהו עדכן" בעת יצירת הפגישה, תקבל דוא"ל לאחר שמישהו סיים לסמן את הזמינות שלו (אנחנו מחכים 120 שניות לאחר השינוי האחרון שלו). אתה יכול להשבית זאת בכל עת בהסרת הסימון לפני יצירת פגישה חדשה.',
+    faq11Q: 'האם WhenFree חינמי?',
+    faq11A: 'כן, לגמרי חינמי - אין חשבונות, אין מנויים ואין עמלות נסתרות. WhenFree הוא פרויקט עצמאי ללא רמות פרמיום.',
+    faq12Q: 'מה זה מצב "ימות השבוע"?',
+    faq12A: 'בעת יצירת אירוע, אתה יכול לבחור בין תאריכים ספציפיים (למשל, "15, 16, 17 במרץ") לבין ימים שבועיים חוזרים (למשל, "שני, רביעי, שישי"). מצב ימות השבוע אידיאלי למציאת משבצת שבועית קבועה - כמו פגישת צוות קבועה. תאריכים ספציפיים מתאימים יותר לאירועים חד-פעמיים.',
+    faq13Q: 'האם אני יכול למחוק פגישה או להסיר משתתף?',
+    faq13A: 'לא ניתן למחוק פגישות מהאפליקציה, אך מכיוון שרק אנשים עם הקישור יכולים לגשת אליהן, אתה יכול פשוט להפסיק לשתף אותו. משתתף יכול לנקות את תגובותיו על ידי פתיחת הפגישה מחדש, הזנת שמו שוב ובחירת "נקה את הזמנים שלי".',
+    faq14Q: 'האם WhenFree עובד על מובייל?',
+    faq14A: 'כן - WhenFree מגיב לחלוטין על טלפונים וטאבלטים. הקש על משבצות בודדות לסימון הזמינות שלך. בעת שליחת הזמנות או סיכומי זמנים מומלצים, הקש על סמל אנשי הקשר לבחירת נמענים ישירות מספר הטלפון שלך.',
     supportTitle: 'צריך עזרה?',
     supportDesc: 'יש שאלות, מצאת באג, או רוצה להציע תכונה? היינו שמחים לשמוע ממך!',
     contactEmail: 'צור קשר עם Avi Klayman',
