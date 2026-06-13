@@ -11,3 +11,82 @@ Try it: whenfree.org
 Would love to know what you think!
 
 Avi
+
+---
+
+Meet Scheduler: Find the Time. Finally.
+
+WhenFree is an intuitive online meeting scheduler designed to simplify the often-complex process of finding the best time for group events. It eliminates the back-and-forth communication by allowing participants to quickly and easily mark their availability on a shared grid, making it an ideal solution for coordinating schedules efficiently.
+
+This SaaS is perfect for anyone organising group activities, meetings, or social gatherings – from professional teams and community organisers to friends and families – who need to coordinate schedules without the hassle of account creation for participants.
+
+Key Features
+
+
+
+
+
+Effortless Event Creation: Name your event, select specific dates, and define a time range with ease.
+
+
+
+Simple Availability Marking: Participants can quickly drag across a grid to indicate their free times, requiring no account registration.
+
+
+
+Intelligent Time Ranking: The application automatically ranks potential meeting slots by how many participants are available, highlighting the optimal times.
+
+
+
+Instant Sharing & Access: Share event links via WhatsApp, email, or direct copy; participants can join instantly without needing an account.
+
+
+
+Comprehensive Accessibility: Includes features like text size adjustment, high contrast, reduced motion, and an ADHD-friendly mode to reduce distractions.
+
+
+
+Organizer Notifications: Organizers can opt to receive email notifications whenever someone responds to their event.
+
+Use Cases
+
+WhenFree is an invaluable tool for streamlining various scheduling challenges. For professional environments, it excels at coordinating team meetings, project discussions, or cross-departmental collaborations, especially when dealing with diverse schedules or time zones. It ensures maximum attendance by identifying the most convenient slot for everyone, allowing teams to focus on productive discussions rather than logistical hurdles.
+
+Beyond the workplace, WhenFree simplifies social planning. Organising dinner parties, game nights, group outings, or family gatherings becomes effortless. Instead of lengthy group chats or email chains, a single WhenFree link gathers everyone's availability, making event planning quick and stress-free. Educators can also leverage it for parent-teacher conferences or study group sessions, and community leaders for volunteer shifts or club meetings.
+
+Pricing Information
+
+Based on the provided information, WhenFree appears to operate on a free model. There is no mention of costs, subscriptions, or premium features, and the emphasis on "no account needed" for participants suggests a commitment to accessible, free-to-use scheduling.
+
+User Experience and Support
+
+The user interface of WhenFree is remarkably clean, straightforward, and highly intuitive. It guides users through a clear, step-by-step event creation process, and the drag-and-drop grid for marking availability is exceptionally user-friendly. The inclusion of robust accessibility options, such as high contrast and reduced motion, significantly enhances usability for a diverse audience. Support is readily available via a "Help" link, and direct contact information for the organiser (Avi Klayman) is provided for further assistance.
+
+Technical Details
+
+While specific programming languages or frameworks are not explicitly detailed, WhenFree functions as a web-based application, indicating its foundation in standard web development technologies. Its strong emphasis on a smooth user experience, instant sharing capabilities, and comprehensive accessibility features points towards a well-engineered and responsive front-end design, likely optimized for various devices, though it notes it's "Best experienced on a wider screen."
+
+
+Pros:
+
+Extremely easy to use for both organisers and participants.
+
+
+No account registration is required for participants, significantly reducing friction.
+
+
+Intelligent ranking of best available times simplifies decision-making.
+
+
+Comprehensive accessibility features cater to a wider user base.
+
+
+Quick sharing options across multiple communication platforms.
+
+
+Direct calendar and contact integration on mobile.
+
+
+Conclusion
+
+WhenFree offers a refreshingly simple and highly effective solution for group scheduling, truly helping users "Find the time. Finally." Its unwavering focus on ease of use, accessibility, and participant convenience makes it an invaluable tool for anyone looking to streamline event coordination and eliminate scheduling headaches. Explore WhenFree today to simplify your next group gathering and experience hassle-free planning.
