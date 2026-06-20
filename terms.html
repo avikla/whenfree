@@ -114,7 +114,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);padding
     <a href="index.html" class="back-link">&#8592; Back to WhenFree</a>
     <div class="page-logo">WhenFree</div>
     <h1 class="page-title">Terms of Use &amp; Privacy Policy</h1>
-    <p class="page-updated">Last updated: May 2026</p>
+    <p class="page-updated">Last updated: June 2026</p>
   </div>
 
   <div class="section">
@@ -129,8 +129,10 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);padding
       <li>The name you enter when joining a meeting (stored in the meeting record)</li>
       <li>The time slots you mark as available (stored in the meeting record)</li>
       <li>The event name, date range, and time range you set when creating a meeting</li>
+      <li>The organizer's email address, if provided — used only to send a confirmation with the meeting link</li>
+      <li>Email addresses entered when sending invitations or best-time summaries — used only to deliver those messages and not stored in the meeting record</li>
     </ul>
-    <p style="margin-top:12px">We do not collect email addresses, passwords, device identifiers, or any information beyond what you explicitly enter in the app.</p>
+    <p style="margin-top:12px">No passwords or account credentials are collected. Anonymous usage statistics are collected via Google Analytics and Microsoft Clarity (see Third-party services below).</p>
   </div>
 
   <div class="section">
@@ -146,21 +148,26 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);padding
       <li>To calculate and show the best meeting times</li>
       <li>To allow real-time collaboration between participants</li>
     </ul>
-    <p style="margin-top:12px">We do not sell, share, or use your data for advertising or analytics purposes.</p>
+    <p style="margin-top:12px">We do not sell or share your meeting data with third parties. Anonymous, aggregated usage statistics are collected via Google Analytics and Microsoft Clarity to help improve the service.</p>
   </div>
 
   <div class="section">
     <div class="section-title">Cookies &amp; local storage</div>
-    <p>The app uses <strong style="font-weight:500;color:var(--text)">sessionStorage</strong> (cleared when you close the tab) to remember your name within a browser session. No persistent cookies or tracking cookies are used.</p>
+    <p>The app uses <strong style="font-weight:500;color:var(--text)">sessionStorage</strong> (cleared when you close the tab) to remember your name within a browser session.</p>
+    <p><strong style="font-weight:500;color:var(--text)">localStorage</strong> is used to save your language and theme preferences across sessions.</p>
+    <p>Third-party analytics services set persistent cookies: Google Analytics sets a <code>_ga</code> cookie (retained for 2 years) to count unique visitors; Microsoft Clarity sets cookies for session behavior analysis. These are analytics cookies, not advertising cookies.</p>
   </div>
 
   <div class="section">
     <div class="section-title">Third-party services</div>
     <ul>
       <li>Google Firebase / Firestore — database and real-time sync</li>
-      <li>Google Fonts — typography (Outfit, Manrope)</li>
+      <li>Google Fonts — typography (Figtree, DM Sans)</li>
+      <li>Google Analytics (GA4) — anonymous usage statistics</li>
+      <li>Microsoft Clarity — session behavior analysis (heatmaps, recordings)</li>
+      <li>ZeptoMail (Zoho) — transactional email delivery when you send invitations or best-time summaries</li>
     </ul>
-    <p style="margin-top:12px">These services are governed by Google's own privacy policies.</p>
+    <p style="margin-top:12px">Each of these services is governed by its own privacy policy. Meeting content data is never shared with analytics providers.</p>
   </div>
 
   <div class="section">

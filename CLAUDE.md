@@ -40,7 +40,7 @@ git push
 - **Live site:** `whenfree.org` → GitHub Pages (Cloudflare DNS)
 - **Legacy redirect:** `meet.meteor.co.il` → `whenfree.org` via Cloudflare Redirect Rule (Dynamic, preserves query string)
 - **Email forwarding (incoming):** Cloudflare Email Routing catch-all → `avi.klayman@gmail.com`
-- **Email sending (outgoing):** Brevo API from `no-reply@whenfree.org`
+- **Email sending (outgoing):** ZeptoMail transactional API from `no-reply@whenfree.org` (via GAS `mailer.gs`)
 - **Contact:** `avi@whenfree.org`
 
 ## Features
@@ -121,6 +121,13 @@ Each event document stores:
 - **Mobile controls visibility**: `#top-controls` shows on Screen A (mobile). Hidden via JS in both `transitionToB()` and `showScreenB()` when `window.innerWidth <= 640`. Never use CSS `display:none` to hide it globally.
 - **Name overlay (join dialog)**: `position:fixed` inside `@media(max-width:640px)` — needed because `#screen-event` has `height:auto` on mobile, making `position:absolute;inset:0` center off-screen.
 - **Touch detection**: `navigator.maxTouchPoints > 0` in `applyLang()` swaps `markSub`→`markSubMobile` and `gridHint`→`gridHintMobile` (tap vs drag/click wording).
+
+## Security Patterns
+
+- **`escHtml()` is mandatory for all `innerHTML` injection** — any user-supplied string (participant name, event name, etc.) must go through `escHtml()` before being interpolated into an HTML template string. Using `textContent` is always safe and preferred; switch to `innerHTML` only when you need to embed tags (e.g. `<br>` between name parts). The `escHtml` helper is defined near the bottom of the script block.
+- **Crypto tokens use `crypto.getRandomValues()`** — never `Math.random()` for anything used as a security identifier. Event slugs: `Uint8Array(5)` → base-36. Creator tokens: `Uint8Array(24)` → hex (192 bits).
+- **Firebase scripts are in `<body>`** — the two Firebase CDN `<script>` tags live just before the inline app `<script>` (near line 1546), not in `<head>`. This prevents them from blocking initial HTML render. Do not move them back to `<head>`.
+- **GAS mailer is an open relay** — `mailer.gs` `doPost()` accepts any `to_email` with no auth check. The endpoint URL is visible in client JS. If email abuse becomes a concern, add a shared secret in GAS Script Properties and validate it in `doPost`.
 
 ## Event Listener Patterns
 

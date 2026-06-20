@@ -14,7 +14,7 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
@@ -451,8 +451,9 @@ code{
 
 <!-- ACCESSIBILITY: Overlay widget -->
 <button class="a11y-widget-btn" id="a11y-widget-btn" aria-label="Accessibility options" title="Accessibility adjustments">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" class="a11y-icon" fill="white">
-    <path d="M423.5-743.5Q400-767 400-800t23.5-56.5Q447-880 480-880t56.5 23.5Q560-833 560-800t-23.5 56.5Q513-720 480-720t-56.5-23.5ZM680-80v-200H480q-33 0-56.5-23.5T400-360v-240q0-33 23.5-56.5T480-680q24 0 41.5 10.5T559-636q55 66 99.5 90.5T760-520v80q-53 0-107-23t-93-55v138h120q33 0 56.5 23.5T760-300v220h-80Zm-280 0q-83 0-141.5-58.5T200-280q0-72 45.5-127T360-476v82q-35 14-57.5 44.5T280-280q0 50 35 85t85 35q39 0 69.5-22.5T514-240h82q-14 69-69 114.5T400-80Z"/>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2160 2160" class="a11y-icon" fill="white">
+    <path d="M820.0921,500.2994c81.4852-7.5218,144.7921-77.7248,144.7921-159.8362,0-88.38-72.0826-160.4632-160.463-160.4632s-160.4617,72.0832-160.4617,160.4632c0,26.9527,7.5214,54.5319,20.0574,77.7246l57.175,804.5238,588.8577.161,241.5254,565.9059,317.1013-124.3625-49.1036-116.923-177.4651,64.06-233.6879-539.5145-547.5099,3.6787-7.5173-101.8869,396.3556.1584v-150.7529l-411.4722-.1603-18.1838-322.7761Z" fill-rule="evenodd"/>
+    <path d="M1412.3283,1654.099c-99.3879,196.4652-307.4101,325.901-529.2995,325.901-325.9,0-591.7051-265.8058-591.7051-591.7061,0-228.8246,138.6814-441.4683,345.6229-535.731l13.3909,174.7597c-122.3991,77.1286-197.8512,216.2961-197.8512,362.1696,0,236.4158,192.8213,429.2382,429.2369,429.2382,216.2951,0,400.7333-165.9942,425.8839-378.9373l104.7213,214.3059Z" fill-rule="evenodd"/>
   </svg>
 </button>
 <div class="a11y-panel" id="a11y-panel">
@@ -564,7 +565,7 @@ code{
 
     <h2 data-i18n="a11yStmtToolbar">Accessibility Toolbar</h2>
 
-    <p data-i18n="a11yStmtToolbarDesc">Click the ♿ button in the bottom-right corner to open the accessibility toolbar. This widget provides the following features:</p>
+    <p data-i18n="a11yStmtToolbarDesc">Click the accessibility button in the bottom-right corner of the page to open the accessibility toolbar. This widget provides the following features:</p>
 
     <ul>
       <li data-i18n="a11yToolbar1"><strong data-i18n="a11yTextSize">Text Size:</strong> <span data-i18n="a11yToolbar1Desc">Choose between Normal, Large, and Extra Large text sizes</span></li>
@@ -634,7 +635,7 @@ const LANGS = {
     a11yFeature8: 'Multilingual support — available in English, French, and Hebrew with RTL support',
     a11yFeature9: 'Accessibility toolbar — floating widget with toggles for text size, high contrast, reduced motion, and more',
     a11yStmtToolbar: 'Accessibility Toolbar',
-    a11yStmtToolbarDesc: 'Click the ♿ button in the bottom-right corner to open the accessibility toolbar. This widget provides the following features:',
+    a11yStmtToolbarDesc: 'Click the accessibility button in the bottom-right corner of the page to open the accessibility toolbar. This widget provides the following features:',
     a11yToolbar1: 'Text Size: Choose between Normal, Large, and Extra Large text sizes',
     a11yToolbar1Desc: 'Choose between Normal, Large, and Extra Large text sizes',
     a11yToolbar2: 'High Contrast: Increase color contrast and brightness for better visibility',
@@ -695,7 +696,7 @@ const LANGS = {
     a11yFeature8: 'Support multilingue — disponible en anglais, français et hébreu avec support RTL',
     a11yFeature9: 'Barre d\'outils d\'accessibilité — widget flottant avec des bascules pour la taille du texte, le contraste élevé, le mouvement réduit, etc.',
     a11yStmtToolbar: 'Barre d\'outils d\'accessibilité',
-    a11yStmtToolbarDesc: 'Cliquez sur le bouton ♿ dans le coin inférieur droit pour ouvrir la barre d\'outils d\'accessibilité. Ce widget fournit les fonctionnalités suivantes :',
+    a11yStmtToolbarDesc: 'Cliquez sur le bouton d\'accessibilité dans le coin inférieur droit de la page pour ouvrir la barre d\'outils d\'accessibilité. Ce widget fournit les fonctionnalités suivantes :',
     a11yToolbar1: 'Taille du texte : Choisissez entre Normal, Grand et Très Grand',
     a11yToolbar1Desc: 'Choisissez entre Normal, Grand et Très Grand',
     a11yToolbar2: 'Contraste élevé : Augmenter le contraste des couleurs et la luminosité',
@@ -756,7 +757,7 @@ const LANGS = {
     a11yFeature8: 'תמיכה רב-לשונית — זמינה באנגלית, צרפתית ועברית עם תמיכה RTL',
     a11yFeature9: 'סרגל כלים נגישות — וויג\'ט צף עם מתגים לגודל טקסט, ניגודיות גבוהה, תנועה מופחתת ועוד',
     a11yStmtToolbar: 'סרגל כלים נגישות',
-    a11yStmtToolbarDesc: 'לחץ על כפתור ♿ בפינה התחתונה הימנית כדי לפתוח את סרגל כלים הנגישות. וויג\'ט זה מספק את התכונות הבאות:',
+    a11yStmtToolbarDesc: 'לחץ על כפתור הנגישות בפינה התחתונה הימנית של הדף כדי לפתוח את סרגל כלים הנגישות. וויג\'ט זה מספק את התכונות הבאות:',
     a11yToolbar1: 'גודל טקסט: בחר בין רגיל, גדול וגדול מאוד',
     a11yToolbar1Desc: 'בחר בין רגיל, גדול וגדול מאוד',
     a11yToolbar2: 'ניגודיות גבוהה: הגבר ניגודיות צבע ובהירות',
