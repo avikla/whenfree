@@ -794,7 +794,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
   .legend-swatch{width:14px;height:11px}
   .legend-label{font-size:10.5px}
   .sidebar::after{content:'';position:fixed;bottom:0;left:0;right:0;height:56px;background:linear-gradient(to bottom,transparent,var(--bg));pointer-events:none;z-index:10;transition:opacity 0.3s}
-  .sidebar.scrolled-to-bottom::after{opacity:0}
+  body.scrolled-to-bottom .sidebar::after{opacity:0}
 }
 @media(max-width:390px){
   .mobile-top-name{display:none}
@@ -883,8 +883,29 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
     padding:8px 12px calc(8px + env(safe-area-inset-bottom));
     margin-top:0;flex-direction:row;flex-wrap:wrap;gap:6px;
   }
-  .on-screen-b #screen-event{padding-bottom:116px}
+  .on-screen-b #sidebar-actions .sidebar-btn{width:calc(50% - 3px);font-size:13px;padding:10px 6px}
+  .on-screen-b #screen-event{padding-bottom:100px}
   .on-screen-b .new-event-wrap{border-top:none;padding-top:0;margin-top:0;width:100%}
+}
+
+/* Scroll hint — shown on mobile Screen B when best times are below the fold */
+#scroll-hint{display:none}
+@media(max-width:640px){
+  .on-screen-b #scroll-hint{
+    display:flex;align-items:center;gap:5px;
+    position:fixed;bottom:92px;left:50%;transform:translateX(-50%);
+    z-index:52;pointer-events:none;
+    background:var(--surface);border:1px solid var(--border2);
+    border-radius:var(--r-pill);padding:5px 12px;
+    font-size:11.5px;font-weight:500;color:var(--muted);
+    box-shadow:0 2px 8px rgba(0,0,0,0.08);white-space:nowrap;
+    animation:scrollBounce 1.6s ease-in-out infinite;
+  }
+  body.scrolled-to-bottom .on-screen-b #scroll-hint{display:none!important}
+}
+@keyframes scrollBounce{
+  0%,100%{transform:translateX(-50%) translateY(0)}
+  50%{transform:translateX(-50%) translateY(5px)}
 }
 
 /* Language toggle */
@@ -1432,6 +1453,7 @@ body.a11y-adhd .a11y-panel{opacity:1 !important;pointer-events:auto !important}
       <div class="sidebar-sec-label" style="display:flex;align-items:center;gap:7px"><span data-i18n="people">People</span> <span id="people-count" class="people-count">0</span></div>
       <div id="participant-list" class="participant-list"></div>
     </div>
+    <div id="scroll-hint" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg><span data-i18n="scrollHint">Best times below</span></div>
     <div id="sidebar-actions" style="margin-top:auto;display:flex;flex-direction:column;gap:6px">
       <button id="share-btn" class="sidebar-btn"><span class="btn-icon">🔗</span> Copy meeting link</button>
       <span id="share-confirm" class="share-confirm" style="display:none" aria-hidden="true">&#10003; Copied!</span>
@@ -1614,6 +1636,7 @@ const LANGS = {
     markSubMobile:"Enter your name, then tap the slots to show when you're free.",
     namePH:'Your name', continueBtn:'Continue &#8594;', joinBtn:'Join the event &nbsp;&#8594;', joining:'Joining…',
     people:'Participants', copyLink:`${_LINK} Copy meeting link`, copied:'&#10003; Copied!',
+    copyLinkMobile:`${_LINK} Copy link`, whatsappLinkMobile:`${_WA} WhatsApp`, sendEmailMobile:`${_EMAIL} Email`, sendBestTimesMobile:'📊 Best times', scrollHint:'Best times below',
     whatsappLink:`${_WA} WhatsApp link`,
     whatsappMsg:(name,url)=>`Join my meeting: *${name}*\n${url}`,
     sendEmail:`${_EMAIL} Email meeting link`, newEvent:`${_PLUS}<span class="nav-label">New meeting</span>`, editTitle:'Edit meeting name',
@@ -1645,7 +1668,7 @@ const LANGS = {
     ofPeople:(x,n)=>n===1?`${x} of 1 participant`:`${x} of ${n} participants`,
     rejoinPrompt:(name)=>`"${name}" already joined this meeting. Continue as them?`,
     dateCount:(n)=>n===1?'1 date':`${n} dates`,
-    emailSubject:(name)=>`You're invited — ${name}`,
+    emailSubject:(name)=>`You're invited - ${name}`,
     emailBody:(name,url)=>`Hi,\n\nI'd like to find a time for: ${name}\n\nMark your availability:\n${url}\n\nThanks!`,
     step4:"Who's organizing this?", creatorNamePH:'Your name', creatorEmailPH:'Your email',
     creatorEmailHint:"We'll send you a link so you can return\nto check responses anytime.",
@@ -1668,9 +1691,9 @@ const LANGS = {
     a11yReset:'Reset All',
     creatorNameErr:'Please enter your name.', creatorEmailErr:'Please enter a valid email address.',
     nextBtn:`Next ${_AR}`,
-    creatorEmailSubject:(name)=>`Your meeting link — ${name}`,
+    creatorEmailSubject:(name)=>`Your meeting link - ${name}`,
     creatorEmailHtml:(creatorName,eventName,url)=>buildEmailTemplate(`<p style="margin:0 0 5px;font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#7E988F;">Meeting Ready</p><h1 style="margin:0 0 10px;font-size:24px;font-weight:700;color:#0B2018;line-height:1.2;">${eventName}</h1><p style="margin:0 0 28px;font-size:15px;color:#3E5750;line-height:1.65;">Hi ${creatorName}, your meeting is ready to share. Send the link to participants so they can mark their availability.</p><a href="${url}" style="display:block;text-align:center;background:#00C281;color:#04261B;text-decoration:none;font-size:15px;font-weight:700;padding:16px 24px;border-radius:100px;letter-spacing:0.03em;">Open Meeting &#8594;</a><p style="margin:16px 0 0;font-size:12px;color:#7E988F;text-align:center;word-break:break-all;">${url}</p>`,'ltr'),
-    emailHtmlBody:(name,url)=>buildEmailTemplate(`<p style="margin:0 0 5px;font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#7E988F;">You're Invited</p><h1 style="margin:0 0 10px;font-size:24px;font-weight:700;color:#0B2018;line-height:1.2;">${name}</h1><p style="margin:0 0 28px;font-size:15px;color:#3E5750;line-height:1.65;">You've been invited to mark your availability. Click below and select the times that work for you — it only takes a minute.</p><a href="${url}" style="display:block;text-align:center;background:#00C281;color:#04261B;text-decoration:none;font-size:15px;font-weight:700;padding:16px 24px;border-radius:100px;letter-spacing:0.03em;">Mark My Availability &#8594;</a><p style="margin:16px 0 0;font-size:12px;color:#7E988F;text-align:center;word-break:break-all;">${url}</p>`,'ltr'),
+    emailHtmlBody:(name,url)=>buildEmailTemplate(`<p style="margin:0 0 5px;font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#7E988F;">You're Invited</p><h1 style="margin:0 0 10px;font-size:24px;font-weight:700;color:#0B2018;line-height:1.2;">${name}</h1><p style="margin:0 0 28px;font-size:15px;color:#3E5750;line-height:1.65;">You've been invited to mark your availability. Click below and select the times that work for you - it only takes a minute.</p><a href="${url}" style="display:block;text-align:center;background:#00C281;color:#04261B;text-decoration:none;font-size:15px;font-weight:700;padding:16px 24px;border-radius:100px;letter-spacing:0.03em;">Mark My Availability &#8594;</a><p style="margin:16px 0 0;font-size:12px;color:#7E988F;text-align:center;word-break:break-all;">${url}</p>`,'ltr'),
     emailFailMsg:"We couldn't send the confirmation email. Copy this link to save it:", emailRetrying:'Retrying…', emailRetryFail:'Still couldn\'t send — please copy the link above.',
     notFound:'Event not found. Create a new one below.',
     firebaseErr:'Could not create event — check your Firebase config.',
@@ -1699,6 +1722,7 @@ const LANGS = {
     markSubMobile:'הכנס שם ולחץ על התאים כדי לסמן מתי אתה פנוי.',
     namePH:'השם שלך', continueBtn:'המשך &#8592;', joinBtn:'הצטרף לאירוע &nbsp;&#8592;', joining:'מצטרף…',
     people:'משתתפים', copyLink:`${_LINK} העתק קישור`, copied:'&#10003; הועתק!',
+    copyLinkMobile:`${_LINK} קישור`, whatsappLinkMobile:`${_WA} וואטסאפ`, sendEmailMobile:`${_EMAIL} מייל`, sendBestTimesMobile:'📊 זמנים', scrollHint:'זמנים מומלצים למטה',
     whatsappLink:`${_WA} שלח קישור לווטסאפ`,
     whatsappMsg:(name,url)=>`הצטרפו לפגישה: *${name}*\n${url}`,
     sendEmail:`${_EMAIL} שלח קישור למייל`, newEvent:`${_PLUS}<span class="nav-label">פגישה חדשה</span>`, editTitle:'עריכת שם הפגישה',
@@ -1754,7 +1778,7 @@ const LANGS = {
     a11yReset:'אפס הכל',
     creatorNameErr:'יש להזין שם.', creatorEmailErr:'יש להזין כתובת מייל תקינה.',
     nextBtn:`הבא ${_AL}`,
-    creatorEmailSubject:(name)=>`קישור לפגישה שלך — ${name}`,
+    creatorEmailSubject:(name)=>`קישור לפגישה שלך - ${name}`,
     creatorEmailHtml:(creatorName,eventName,url)=>buildEmailTemplate(`<p style="margin:0 0 5px;font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#7E988F;">הפגישה מוכנה</p><h1 style="margin:0 0 10px;font-size:24px;font-weight:700;color:#0B2018;line-height:1.2;">${eventName}</h1><p style="margin:0 0 28px;font-size:15px;color:#3E5750;line-height:1.65;">שלום ${creatorName}, הפגישה שלך מוכנה לשיתוף. שלח את הקישור למשתתפים כדי שיסמנו את הזמינות שלהם.</p><a href="${url}" style="display:block;text-align:center;background:#00C281;color:#04261B;text-decoration:none;font-size:15px;font-weight:700;padding:16px 24px;border-radius:100px;letter-spacing:0.03em;">פתח פגישה &#8592;</a><p style="margin:16px 0 0;font-size:12px;color:#7E988F;text-align:center;word-break:break-all;">${url}</p>`,'rtl'),
     emailFailMsg:'לא הצלחנו לשלוח את המייל. העתק את הקישור כדי לשמור אותו:', emailRetrying:'שולח מחדש…', emailRetryFail:'עדיין לא הצלחנו לשלוח — העתק את הקישור למעלה.',
     notFound:'הפגישה לא נמצאה. צור פגישה חדשה.',
@@ -1784,6 +1808,7 @@ const LANGS = {
     markSubMobile:'Entrez votre nom, puis appuyez sur les créneaux pour indiquer vos disponibilités.',
     namePH:'Votre nom', continueBtn:'Continuer &#8594;', joinBtn:'Rejoindre l\'événement &nbsp;&#8594;', joining:'Connexion…',
     people:'Participants', copyLink:`${_LINK} Copier le lien`, copied:'&#10003; Copié !',
+    copyLinkMobile:`${_LINK} Copier`, whatsappLinkMobile:`${_WA} WhatsApp`, sendEmailMobile:`${_EMAIL} E-mail`, sendBestTimesMobile:'📊 Créneaux', scrollHint:'Meilleurs créneaux ci-dessous',
     whatsappLink:`${_WA} Lien WhatsApp`,
     whatsappMsg:(name,url)=>`Rejoignez ma réunion : *${name}*\n${url}`,
     sendEmail:`${_EMAIL} Lien par e-mail`, newEvent:`${_PLUS}<span class="nav-label">Nouvelle réunion</span>`, editTitle:'Modifier le nom de la réunion',
@@ -1838,7 +1863,7 @@ const LANGS = {
     a11yReset:'Réinitialiser tout',
     creatorNameErr:'Veuillez entrer votre nom.', creatorEmailErr:'Veuillez entrer une adresse e-mail valide.',
     nextBtn:`Suivant ${_AR}`,
-    creatorEmailSubject:(name)=>`Votre lien de réunion — ${name}`,
+    creatorEmailSubject:(name)=>`Votre lien de réunion - ${name}`,
     creatorEmailHtml:(creatorName,eventName,url)=>buildEmailTemplate(`<p style="margin:0 0 5px;font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#7E988F;">Réunion Prête</p><h1 style="margin:0 0 10px;font-size:24px;font-weight:700;color:#0B2018;line-height:1.2;">${eventName}</h1><p style="margin:0 0 28px;font-size:15px;color:#3E5750;line-height:1.65;">Bonjour ${creatorName}, votre réunion est prête à partager. Envoyez le lien aux participants pour qu'ils indiquent leurs disponibilités.</p><a href="${url}" style="display:block;text-align:center;background:#00C281;color:#04261B;text-decoration:none;font-size:15px;font-weight:700;padding:16px 24px;border-radius:100px;letter-spacing:0.03em;">Ouvrir la réunion &#8594;</a><p style="margin:16px 0 0;font-size:12px;color:#7E988F;text-align:center;word-break:break-all;">${url}</p>`,'ltr'),
     emailHtmlBody:(name,url)=>buildEmailTemplate(`<p style="margin:0 0 5px;font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#7E988F;">Invitation</p><h1 style="margin:0 0 10px;font-size:24px;font-weight:700;color:#0B2018;line-height:1.2;">${name}</h1><p style="margin:0 0 28px;font-size:15px;color:#3E5750;line-height:1.65;">Invitation à indiquer vos disponibilités. Cliquez ci-dessous et sélectionnez les créneaux qui vous conviennent.</p><a href="${url}" style="display:block;text-align:center;background:#00C281;color:#04261B;text-decoration:none;font-size:15px;font-weight:700;padding:16px 24px;border-radius:100px;letter-spacing:0.03em;">Indiquer mes disponibilités &#8594;</a><p style="margin:16px 0 0;font-size:12px;color:#7E988F;text-align:center;word-break:break-all;">${url}</p>`,'ltr'),
     emailFailMsg:'Nous n\'avons pas pu envoyer l\'e-mail de confirmation. Copiez ce lien pour le sauvegarder :', emailRetrying:'Nouvel essai…', emailRetryFail:'Toujours impossible d\'envoyer — veuillez copier le lien ci-dessus.',
@@ -1901,6 +1926,13 @@ function applyLang() {
     if (ms && lang.markSubMobile) ms.textContent = lang.markSubMobile;
     const gh = document.querySelector('[data-i18n="gridHint"]');
     if (gh && lang.gridHintMobile) gh.textContent = lang.gridHintMobile;
+    if (sb && lang.copyLinkMobile) sb.innerHTML = lang.copyLinkMobile;
+    if (wb && lang.whatsappLinkMobile) wb.innerHTML = lang.whatsappLinkMobile;
+    if (eb && lang.sendEmailMobile) eb.innerHTML = lang.sendEmailMobile;
+    const btb = document.getElementById('best-times-email-btn');
+    if (btb && lang.sendBestTimesMobile) btb.innerHTML = lang.sendBestTimesMobile;
+    const sh = document.querySelector('#scroll-hint span');
+    if (sh && lang.scrollHint) sh.textContent = lang.scrollHint;
   }
   document.getElementById('lang-en')?.classList.toggle('active', currentLang === 'en');
   document.getElementById('lang-fr')?.classList.toggle('active', currentLang === 'fr');
@@ -3385,11 +3417,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
   applyLang();
 
-  // Mobile scroll hint — hide bottom gradient once user reaches the end
+  // Mobile scroll hint — bouncing chip above action bar, hides when scrolled to bottom
   if(window.innerWidth <= 640){
     const onScroll = () => {
       const atBottom = window.scrollY + window.innerHeight >= document.body.scrollHeight - 20;
-      document.querySelector('.sidebar')?.classList.toggle('scrolled-to-bottom', atBottom);
+      document.body.classList.toggle('scrolled-to-bottom', atBottom);
     };
     window.addEventListener('scroll', onScroll, {passive:true});
     onScroll();
