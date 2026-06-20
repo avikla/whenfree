@@ -875,6 +875,9 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
 /* Hide desktop top-controls on mobile when Screen B is active */
 @media(max-width:640px){.on-screen-b #top-controls{display:none}}
 
+/* Default sidebar-actions layout (desktop) */
+#sidebar-actions{margin-top:auto;display:flex;flex-direction:column;gap:6px}
+
 /* Fixed action bar at bottom of viewport on mobile Screen B */
 @media(max-width:640px){
   .on-screen-b #sidebar-actions{
@@ -892,11 +895,11 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
 #scroll-hint{display:none}
 @media(max-width:640px){
   .on-screen-b #scroll-hint{
-    display:flex;align-items:center;gap:5px;
-    position:fixed;bottom:92px;left:50%;transform:translateX(-50%);
+    display:block;
+    position:fixed;bottom:115px;left:50%;transform:translateX(-50%);
     z-index:52;pointer-events:none;
     background:var(--surface);border:1px solid var(--border2);
-    border-radius:var(--r-pill);padding:5px 12px;
+    border-radius:var(--r-pill);padding:5px 14px;
     font-size:11.5px;font-weight:500;color:var(--muted);
     box-shadow:0 2px 8px rgba(0,0,0,0.08);white-space:nowrap;
     animation:scrollBounce 1.6s ease-in-out infinite;
@@ -1453,8 +1456,8 @@ body.a11y-adhd .a11y-panel{opacity:1 !important;pointer-events:auto !important}
       <div class="sidebar-sec-label" style="display:flex;align-items:center;gap:7px"><span data-i18n="people">People</span> <span id="people-count" class="people-count">0</span></div>
       <div id="participant-list" class="participant-list"></div>
     </div>
-    <div id="scroll-hint" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg><span data-i18n="scrollHint">Best times below</span></div>
-    <div id="sidebar-actions" style="margin-top:auto;display:flex;flex-direction:column;gap:6px">
+    <div id="scroll-hint" aria-hidden="true">↓ <span data-i18n="scrollHint">Best times below</span></div>
+    <div id="sidebar-actions">
       <button id="share-btn" class="sidebar-btn"><span class="btn-icon">🔗</span> Copy meeting link</button>
       <span id="share-confirm" class="share-confirm" style="display:none" aria-hidden="true">&#10003; Copied!</span>
       <button id="whatsapp-btn" class="sidebar-btn sidebar-btn-outline" data-i18n="whatsappLink">WhatsApp meeting link</button>
