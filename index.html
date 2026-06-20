@@ -1632,7 +1632,7 @@ const LANGS = {
     removeParticipant:'Remove participant', removeConfirm:(name)=>`Remove "${name}" from this event?`,
     confirmRemove:'Remove', confirmCancel:'Cancel',
     sendBestTimes:'📊 Send best times',
-    bestTimesSubject:(name)=>`Best times for: ${name}`,
+    bestTimesSubject:(name)=>`Best times for ${name}`,
     bestTimesBody:(name,url)=>`Hi,\n\nHere are the best meeting times for: ${name}\n\n${url}\n\nThanks!`,
     emailBtnPH:'Add email…',
     fromContacts:'From contacts',
@@ -1641,16 +1641,16 @@ const LANGS = {
     linkBannerSentN:(n)=>`&#10003; Sent to ${n} recipients`,
     linkBannerPartial:(s,f)=>`Sent ${s}, failed ${f} — try again.`,
     linkBannerError:'Could not send — try again.',
-    allPeople:(n)=>n===1?'All 1 participant':`All ${n} participants`,
+    allPeople:(n)=>n===1?'1 participant':`All ${n} participants`,
     ofPeople:(x,n)=>n===1?`${x} of 1 participant`:`${x} of ${n} participants`,
     rejoinPrompt:(name)=>`"${name}" already joined this meeting. Continue as them?`,
     dateCount:(n)=>n===1?'1 date':`${n} dates`,
-    emailSubject:(name)=>`You're invited: ${name}`,
+    emailSubject:(name)=>`You're invited — ${name}`,
     emailBody:(name,url)=>`Hi,\n\nI'd like to find a time for: ${name}\n\nMark your availability:\n${url}\n\nThanks!`,
     step4:"Who's organizing this?", creatorNamePH:'Your name', creatorEmailPH:'Your email',
     creatorEmailHint:"We'll send you a link so you can return\nto check responses anytime.",
     notifyResponses:'Email me when someone responds',
-    notifySubject:(name,event)=>`${name} responded to: ${event}`,
+    notifySubject:(name,event)=>`${name} responded to ${event}`,
     notifyBody:(name,event,url)=>`Hi,\n\n${name} just responded to your meeting: ${event}\n\n${url}\n\nThanks!`,
     notifyHtml:(name,event,url)=>buildEmailTemplate(`<div style="display:flex;align-items:center;gap:14px;background:#C7F4E2;border-radius:12px;padding:14px 16px;margin-bottom:20px;direction:ltr;"><div style="width:42px;height:42px;border-radius:50%;background:${nameToColor(name)};font-size:19px;font-weight:700;color:#0B2018;flex-shrink:0;text-align:center;line-height:42px;">${escHtml(name.charAt(0).toUpperCase())}</div><div><div style="font-size:14px;font-weight:700;color:#0B2018;">${escHtml(name)}</div><div style="font-size:12px;color:#3E5750;margin-top:2px;">just responded</div></div></div><p style="margin:0 0 4px;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#7E988F;">Meeting</p><h1 style="margin:0 0 20px;font-size:22px;font-weight:700;color:#0B2018;line-height:1.2;">${escHtml(event)}</h1><a href="${escHtml(url)}" style="display:block;text-align:center;background:#00C281;color:#04261B;text-decoration:none;font-size:15px;font-weight:700;padding:16px 24px;border-radius:100px;letter-spacing:0.03em;">View Responses &#8594;</a><p style="margin:14px 0 0;font-size:12px;color:#7E988F;text-align:center;word-break:break-all;">${escHtml(url)}</p>`,'ltr'),
     skipLink:'Skip to main content',
@@ -1726,7 +1726,7 @@ const LANGS = {
     linkBannerSentN:(n)=>`&#10003; נשלח ל-${n} נמענים`,
     linkBannerPartial:(s,f)=>`נשלח ${s}, נכשל ${f} — נסה שוב.`,
     linkBannerError:'שליחה נכשלה — נסה שוב.',
-    allPeople:(n)=>n===1?'כל משתתף אחד':`כל ${n} המשתתפים`,
+    allPeople:(n)=>n===1?'משתתף יחיד':`כל ${n} המשתתפים`,
     ofPeople:(x,n)=>`${x} מתוך ${n}`,
     rejoinPrompt:(name)=>`"${name}" כבר הצטרף לפגישה. להמשיך בתור אותו משתמש?`,
     dateCount:(n)=>n===1?'תאריך אחד':`${n} תאריכים`,
@@ -1738,7 +1738,7 @@ const LANGS = {
     notifyResponses:'שלח לי מייל כשמישהו עדכן',
     notifySubject:(name,event)=>`${name} הגיב/ה ל: ${event}`,
     notifyBody:(name,event,url)=>`שלום,\n\n${name} זה עתה הגיב/ה לפגישה: ${event}\n\n${url}\n\nתודה!`,
-    notifyHtml:(name,event,url)=>buildEmailTemplate(`<div style="display:flex;align-items:center;gap:14px;background:#C7F4E2;border-radius:12px;padding:14px 16px;margin-bottom:20px;direction:ltr;"><div style="width:42px;height:42px;border-radius:50%;background:${nameToColor(name)};font-size:19px;font-weight:700;color:#0B2018;flex-shrink:0;text-align:center;line-height:42px;">${escHtml(name.charAt(0).toUpperCase())}</div><div><div style="font-size:14px;font-weight:700;color:#0B2018;">${escHtml(name)}</div><div style="font-size:12px;color:#3E5750;margin-top:2px;">הגיב/ה כרגע</div></div></div><p style="margin:0 0 4px;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#7E988F;">פגישה</p><h1 style="margin:0 0 20px;font-size:22px;font-weight:700;color:#0B2018;line-height:1.2;">${escHtml(event)}</h1><a href="${escHtml(url)}" style="display:block;text-align:center;background:#00C281;color:#04261B;text-decoration:none;font-size:15px;font-weight:700;padding:16px 24px;border-radius:100px;letter-spacing:0.03em;">&#8592; צפה בתגובות</a><p style="margin:14px 0 0;font-size:12px;color:#7E988F;text-align:center;word-break:break-all;">${escHtml(url)}</p>`,'rtl'),
+    notifyHtml:(name,event,url)=>buildEmailTemplate(`<div style="display:flex;align-items:center;gap:14px;background:#C7F4E2;border-radius:12px;padding:14px 16px;margin-bottom:20px;direction:rtl;"><div style="width:42px;height:42px;border-radius:50%;background:${nameToColor(name)};font-size:19px;font-weight:700;color:#0B2018;flex-shrink:0;text-align:center;line-height:42px;">${escHtml(name.charAt(0).toUpperCase())}</div><div><div style="font-size:14px;font-weight:700;color:#0B2018;">${escHtml(name)}</div><div style="font-size:12px;color:#3E5750;margin-top:2px;">הגיב/ה כרגע</div></div></div><p style="margin:0 0 4px;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#7E988F;">פגישה</p><h1 style="margin:0 0 20px;font-size:22px;font-weight:700;color:#0B2018;line-height:1.2;">${escHtml(event)}</h1><a href="${escHtml(url)}" style="display:block;text-align:center;background:#00C281;color:#04261B;text-decoration:none;font-size:15px;font-weight:700;padding:16px 24px;border-radius:100px;letter-spacing:0.03em;">&#8592; צפה בתגובות</a><p style="margin:14px 0 0;font-size:12px;color:#7E988F;text-align:center;word-break:break-all;">${escHtml(url)}</p>`,'rtl'),
     skipLink:'דלג לתוכן הראשי',
     a11yTitle:'נגישות',
     a11yTextSize:'גודל הטקסט',
@@ -1755,7 +1755,7 @@ const LANGS = {
     creatorNameErr:'יש להזין שם.', creatorEmailErr:'יש להזין כתובת מייל תקינה.',
     nextBtn:`הבא ${_AL}`,
     creatorEmailSubject:(name)=>`קישור לפגישה שלך — ${name}`,
-    creatorEmailHtml:(creatorName,eventName,url)=>buildEmailTemplate(`<p style="margin:0 0 5px;font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#7E988F;">הפגישה מוכנה</p><h1 style="margin:0 0 10px;font-size:24px;font-weight:700;color:#0B2018;line-height:1.2;">${eventName}</h1><p style="margin:0 0 4px;font-size:15px;color:#3E5750;line-height:1.65;">שלום,</p><p style="margin:0 0 28px;font-size:15px;color:#3E5750;line-height:1.65;">הפגישה שלך מוכנה לשיתוף. שלח את הקישור למשתתפים כדי שיסמנו את הזמינות שלהם.</p><a href="${url}" style="display:block;text-align:center;background:#00C281;color:#04261B;text-decoration:none;font-size:15px;font-weight:700;padding:16px 24px;border-radius:100px;letter-spacing:0.03em;">פתח פגישה &#8592;</a><p style="margin:16px 0 0;font-size:12px;color:#7E988F;text-align:center;word-break:break-all;">${url}</p>`,'rtl'),
+    creatorEmailHtml:(creatorName,eventName,url)=>buildEmailTemplate(`<p style="margin:0 0 5px;font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#7E988F;">הפגישה מוכנה</p><h1 style="margin:0 0 10px;font-size:24px;font-weight:700;color:#0B2018;line-height:1.2;">${eventName}</h1><p style="margin:0 0 28px;font-size:15px;color:#3E5750;line-height:1.65;">שלום ${creatorName}, הפגישה שלך מוכנה לשיתוף. שלח את הקישור למשתתפים כדי שיסמנו את הזמינות שלהם.</p><a href="${url}" style="display:block;text-align:center;background:#00C281;color:#04261B;text-decoration:none;font-size:15px;font-weight:700;padding:16px 24px;border-radius:100px;letter-spacing:0.03em;">פתח פגישה &#8592;</a><p style="margin:16px 0 0;font-size:12px;color:#7E988F;text-align:center;word-break:break-all;">${url}</p>`,'rtl'),
     emailFailMsg:'לא הצלחנו לשלוח את המייל. העתק את הקישור כדי לשמור אותו:', emailRetrying:'שולח מחדש…', emailRetryFail:'עדיין לא הצלחנו לשלוח — העתק את הקישור למעלה.',
     notFound:'הפגישה לא נמצאה. צור פגישה חדשה.',
     firebaseErr:'לא ניתן ליצור אירוע — בדוק את הגדרות Firebase.',
@@ -2009,7 +2009,7 @@ const CELL_FULL  = [0, 214, 143];
 // ══════════════════════════════════════
 // SCREEN A: CALENDAR
 // ══════════════════════════════════════
-let calDragging = false, calDragMode = 'add';
+let calDragging = false, calDragMode = 'add', calMousedownFired = false;
 
 function renderMonthBlock(container, year, month, todayStr) {
   const wrapper = document.createElement('div');
@@ -2048,8 +2048,12 @@ function renderMonthBlock(container, year, month, todayStr) {
     if (dateStr < todayStr) el.classList.add('past');
     el.textContent = d;
     el.dataset.date = dateStr;
+    el.addEventListener('mousedown', onCalDown);
+    el.addEventListener('mouseenter', onCalEnter);
     el.addEventListener('click', (e) => {
+      if (calMousedownFired) { calMousedownFired = false; return; }
       const dt = e.currentTarget.dataset.date;
+      calDragMode = S.selectedDates.has(dt) ? 'remove' : 'add';
       applyCalCell(dt);
     });
     grid.appendChild(el);
@@ -2121,6 +2125,7 @@ function nowInEventTz() {
 function onCalDown(e) {
   e.preventDefault();
   calDragging = true;
+  calMousedownFired = true;
   const dt = e.currentTarget.dataset.date;
   calDragMode = S.selectedDates.has(dt) ? 'remove' : 'add';
   applyCalCell(dt);
