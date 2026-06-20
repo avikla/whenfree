@@ -887,7 +887,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
     margin-top:0;flex-direction:row;flex-wrap:wrap;gap:6px;
   }
   .on-screen-b #sidebar-actions .sidebar-btn{width:calc(50% - 3px);font-size:13px;padding:10px 6px}
-  .on-screen-b #screen-event{padding-bottom:100px}
+  .on-screen-b #screen-event{padding-bottom:calc(var(--action-bar-h, 100px) + 16px)}
   .on-screen-b .new-event-wrap{border-top:none;padding-top:0;margin-top:0;width:100%}
 }
 
@@ -896,7 +896,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
 @media(max-width:640px){
   .on-screen-b #scroll-hint{
     display:block;
-    position:fixed;bottom:168px;left:50%;transform:translateX(-50%);
+    position:fixed;bottom:calc(var(--action-bar-h, 160px) + 12px);left:50%;transform:translateX(-50%);
     z-index:52;pointer-events:none;
     background:var(--surface);border:1px solid var(--border2);
     border-radius:var(--r-pill);padding:5px 14px;
@@ -2474,6 +2474,13 @@ async function createEvent() {
   }
 }
 
+function updateActionBarHeight() {
+  if (window.innerWidth > 640) return;
+  const bar = document.getElementById('sidebar-actions');
+  if (!bar) return;
+  document.documentElement.style.setProperty('--action-bar-h', bar.offsetHeight + 'px');
+}
+
 function transitionToB() {
   const A = document.getElementById('screen-create');
   const B = document.getElementById('screen-event');
@@ -2490,6 +2497,7 @@ function transitionToB() {
     requestAnimationFrame(() => requestAnimationFrame(() => {
       B.style.transition = 'opacity 0.45s ease';
       B.style.opacity = '1';
+      updateActionBarHeight();
     }));
   }, 450);
 }
@@ -2535,6 +2543,7 @@ function showScreenB() {
   B.style.display = 'flex';
   if (window.innerWidth <= 640) document.getElementById('top-controls').style.display = 'none';
   B.style.opacity = '1';
+  requestAnimationFrame(updateActionBarHeight);
   renderEventTitle();
   S.participants = [];
   buildGrid();
@@ -3427,6 +3436,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       document.body.classList.toggle('scrolled-to-bottom', atBottom);
     };
     window.addEventListener('scroll', onScroll, {passive:true});
+    window.addEventListener('resize', updateActionBarHeight, {passive:true});
     onScroll();
   }
 
