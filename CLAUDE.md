@@ -132,6 +132,8 @@ Each event document stores:
 ## Event Listener Patterns
 
 - **Click-outside handlers**: always use `el.contains(e.target)` not `e.target !== el` — SVG children inside a button will be the `e.target`, not the button itself.
+- **mousedown + click double-fire**: on desktop, both `mousedown` and `click` fire for a single tap. To avoid double-toggling, `onCalDown` sets `calMousedownFired = true`; the `click` handler checks that flag and returns early if set. Mobile tap fires only `click` (no `mousedown`), so the click handler handles toggling directly. Pattern: `calDragMode` must always be set (based on current `S.selectedDates.has(dt)`) before calling `applyCalCell`.
+- **Calendar drag**: `onCalDown` / `onCalEnter` are attached to each `.cal-cell` via `mousedown` / `mouseenter` in `renderMonthBlock`. Do not remove these — they enable desktop drag-select across multiple dates.
 
 ## GAS Deployment
 
