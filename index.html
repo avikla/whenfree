@@ -794,7 +794,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
   .legend-swatch{width:14px;height:11px}
   .legend-label{font-size:10.5px}
   .sidebar::after{content:'';position:fixed;bottom:0;left:0;right:0;height:56px;background:linear-gradient(to bottom,transparent,var(--bg));pointer-events:none;z-index:10;transition:opacity 0.3s}
-  body.scrolled-to-bottom .sidebar::after{opacity:0}
+  body.best-times-visible .sidebar::after{opacity:0}
 }
 @media(max-width:390px){
   .mobile-top-name{display:none}
@@ -904,7 +904,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
     box-shadow:0 2px 8px rgba(0,0,0,0.08);white-space:nowrap;
     animation:scrollBounce 1.6s ease-in-out infinite;
   }
-  body.scrolled-to-bottom .on-screen-b #scroll-hint{display:none!important}
+
 }
 @keyframes scrollBounce{
   0%,100%{transform:translateX(-50%) translateY(0)}
@@ -3429,15 +3429,19 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
   applyLang();
 
-  // Mobile scroll hint — bouncing chip above action bar, hides when scrolled to bottom
+  // Mobile scroll hint — hides as soon as best-times-section enters viewport
   if(window.innerWidth <= 640){
-    const onScroll = () => {
-      const atBottom = window.scrollY + window.innerHeight >= document.body.scrollHeight - 20;
-      document.body.classList.toggle('scrolled-to-bottom', atBottom);
-    };
-    window.addEventListener('scroll', onScroll, {passive:true});
+    const hint = document.getElementById('scroll-hint');
+    const bestTimes = document.querySelector('.best-times-section');
+    if(hint && bestTimes){
+      const observer = new IntersectionObserver(([entry]) => {
+        const visible = entry.isIntersecting;
+        hint.style.display = visible ? 'none' : '';
+        document.body.classList.toggle('best-times-visible', visible);
+      }, { threshold: 0.1 });
+      observer.observe(bestTimes);
+    }
     window.addEventListener('resize', updateActionBarHeight, {passive:true});
-    onScroll();
   }
 
   // Close time pickers when clicking outside
