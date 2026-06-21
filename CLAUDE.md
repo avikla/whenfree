@@ -122,6 +122,29 @@ Each event document stores:
 - **Name overlay (join dialog)**: `position:fixed` inside `@media(max-width:640px)` — needed because `#screen-event` has `height:auto` on mobile, making `position:absolute;inset:0` center off-screen.
 - **Touch detection**: `navigator.maxTouchPoints > 0` in `applyLang()` swaps `markSub`→`markSubMobile` and `gridHint`→`gridHintMobile` (tap vs drag/click wording).
 
+## Firestore Security Rules
+
+Rules deployed **2026-06-21** — no longer in Test Mode.
+
+**Security model (no Firebase Auth):**
+- `allow read: if true` — events are share-by-link; public reads are intentional
+- `allow create` — validates required fields, `participants == {}`, `creatorToken.size() >= 48`, `name.size() <= 200`
+- `allow update` — protects immutable fields (`creatorToken`, `createdAt`, `mode`, `selectedDates`, `selectedDays`, `earlierThan`, `laterThan`, `timezone`, `creatorEmail`); only `participants` and `name` can change
+- `allow delete: if false` — no client-side event deletion
+- Creator-only ops (remove participant, edit title) remain **client-gated only** — server enforcement requires Firebase Auth, which this app doesn't use
+
+**To update rules:** Firebase Console → Firestore → Rules → Publish. No Firebase CLI is configured in this project.
+
+**To verify deployed rules via CLI:**
+```powershell
+$TOKEN = gcloud auth print-access-token
+curl -s -H "Authorization: Bearer $TOKEN" -H "x-goog-user-project: meteor-meet" `
+  "https://firebaserules.googleapis.com/v1/projects/meteor-meet/releases/cloud.firestore"
+# Then fetch the rulesetName returned above:
+curl -s -H "Authorization: Bearer $TOKEN" -H "x-goog-user-project: meteor-meet" `
+  "https://firebaserules.googleapis.com/v1/{rulesetName}"
+```
+
 ## Security Patterns
 
 - **`escHtml()` is mandatory for all `innerHTML` injection** — any user-supplied string (participant name, event name, etc.) must go through `escHtml()` before being interpolated into an HTML template string. Using `textContent` is always safe and preferred; switch to `innerHTML` only when you need to embed tags (e.g. `<br>` between name parts). The `escHtml` helper is defined near the bottom of the script block.
