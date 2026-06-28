@@ -56,6 +56,7 @@ git push
 - **Daily DB report:** Automated midnight email with Firestore event count, reads/writes/deletes vs. free-tier limits, storage usage
 - **Smart disabled states:** `syncActionStates()` disables "Send best times" when no slots exist; re-enables reactively
 - **Floating email panels:** Email input panels use `position:fixed` (no layout shift when opened)
+- **Onboarding lang picker:** First-time visitors see EN/FR/HE buttons at the top of the help modal — clicking one calls `setLang()` and re-renders the modal content instantly in the chosen language before the user reads it
 
 ## Email System
 
@@ -121,6 +122,7 @@ Each event document stores:
 - **Mobile controls visibility**: `#top-controls` shows on Screen A (mobile). Hidden via JS in both `transitionToB()` and `showScreenB()` when `window.innerWidth <= 640`. Never use CSS `display:none` to hide it globally.
 - **Name overlay (join dialog)**: `position:fixed` inside `@media(max-width:640px)` — needed because `#screen-event` has `height:auto` on mobile, making `position:absolute;inset:0` center off-screen.
 - **Touch detection**: `navigator.maxTouchPoints > 0` in `applyLang()` swaps `markSub`→`markSubMobile` and `gridHint`→`gridHintMobile` (tap vs drag/click wording).
+- **Onboarding modal header**: `.onboard-header` is a `display:flex; justify-content:space-between` row containing `.onboard-lang` (the EN/FR/HE pill) and `.onboard-close` (the ✕ button). The close button is **not** `position:absolute` — it's in normal flow inside the header. Do not make it absolute again; that causes overlap with the lang pill.
 
 ## Firestore Security Rules
 
