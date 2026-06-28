@@ -1145,6 +1145,19 @@ body.a11y-adhd .a11y-panel{opacity:1 !important;pointer-events:auto !important}
   transition:color 0.15s,background 0.15s;
 }
 .onboard-help-btn:hover{color:var(--text)}
+.onboard-lang{
+  display:flex;align-items:center;direction:ltr;
+  background:var(--surface);border:1px solid var(--border2);border-radius:20px;
+  overflow:hidden;font-family:var(--font-body);font-size:12px;font-weight:500;
+  margin-bottom:20px;align-self:flex-start;
+}
+.onboard-lang button{
+  background:none;border:none;cursor:pointer;
+  padding:5px 11px;color:var(--muted2);line-height:1;
+  transition:color 0.15s,background 0.15s;
+}
+.onboard-lang button.active{background:var(--accent);color:var(--on-primary);border-radius:20px}
+.onboard-lang button:not(.active):hover{color:var(--text)}
 /* Mobile bottom sheet (≤640px) */
 @media(max-width:640px){
   .onboard-overlay{align-items:flex-end}
@@ -1243,6 +1256,11 @@ body.a11y-adhd .a11y-panel{opacity:1 !important;pointer-events:auto !important}
 <div id="onboard-overlay" class="onboard-overlay" role="dialog" aria-modal="true" aria-labelledby="onboard-title">
   <div class="onboard-panel">
     <button class="onboard-close" aria-label="Close" onclick="dismissOnboarding(true)">✕</button>
+    <div class="onboard-lang">
+      <button id="onboard-lang-en" onclick="setLang('en')">EN</button>
+      <button id="onboard-lang-fr" onclick="setLang('fr')">FR</button>
+      <button id="onboard-lang-he" onclick="setLang('he')">HE</button>
+    </div>
     <h2 class="onboard-title" id="onboard-title" data-i18n="onboardTitle">How it works</h2>
     <p class="onboard-intro" data-i18n="onboardIntro"></p>
     <div class="onboard-steps">
@@ -1943,6 +1961,9 @@ function applyLang() {
   document.getElementById('mobile-lang-en')?.classList.toggle('active', currentLang === 'en');
   document.getElementById('mobile-lang-fr')?.classList.toggle('active', currentLang === 'fr');
   document.getElementById('mobile-lang-he')?.classList.toggle('active', currentLang === 'he');
+  document.getElementById('onboard-lang-en')?.classList.toggle('active', currentLang === 'en');
+  document.getElementById('onboard-lang-fr')?.classList.toggle('active', currentLang === 'fr');
+  document.getElementById('onboard-lang-he')?.classList.toggle('active', currentLang === 'he');
   const op = document.querySelector('.onboard-panel');
   if (op) op.dir = t().dir;
 }
