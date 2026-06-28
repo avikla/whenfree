@@ -1090,15 +1090,17 @@ body.a11y-adhd .a11y-panel{opacity:1 !important;pointer-events:auto !important}
 [data-theme="dark"] .onboard-panel{
   box-shadow:0 32px 80px rgba(200,255,230,0.08);
 }
+.onboard-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:20px;
+}
 .onboard-close{
-  position:absolute;top:16px;right:16px;
   background:none;border:none;cursor:pointer;
   font-size:16px;color:var(--muted2);padding:4px 8px;
-  border-radius:var(--r-xs);
+  border-radius:var(--r-xs);flex-shrink:0;
   transition:color 0.15s,background 0.15s;
 }
 .onboard-close:hover{color:var(--text);background:var(--surface2)}
-[dir="rtl"] .onboard-close{right:auto;left:16px}
 .onboard-title{
   font-family:var(--font-display);
   font-size:22px;font-weight:700;
@@ -1149,7 +1151,6 @@ body.a11y-adhd .a11y-panel{opacity:1 !important;pointer-events:auto !important}
   display:flex;align-items:center;direction:ltr;
   background:var(--surface);border:1px solid var(--border2);border-radius:20px;
   overflow:hidden;font-family:var(--font-body);font-size:12px;font-weight:500;
-  margin-bottom:20px;align-self:flex-start;
 }
 .onboard-lang button{
   background:none;border:none;cursor:pointer;
@@ -1255,11 +1256,13 @@ body.a11y-adhd .a11y-panel{opacity:1 !important;pointer-events:auto !important}
 <!-- Onboarding modal -->
 <div id="onboard-overlay" class="onboard-overlay" role="dialog" aria-modal="true" aria-labelledby="onboard-title">
   <div class="onboard-panel">
-    <button class="onboard-close" aria-label="Close" onclick="dismissOnboarding(true)">✕</button>
-    <div class="onboard-lang">
-      <button id="onboard-lang-en" onclick="setLang('en')">EN</button>
-      <button id="onboard-lang-fr" onclick="setLang('fr')">FR</button>
-      <button id="onboard-lang-he" onclick="setLang('he')">HE</button>
+    <div class="onboard-header">
+      <div class="onboard-lang">
+        <button id="onboard-lang-en" onclick="setLang('en')">EN</button>
+        <button id="onboard-lang-fr" onclick="setLang('fr')">FR</button>
+        <button id="onboard-lang-he" onclick="setLang('he')">HE</button>
+      </div>
+      <button class="onboard-close" aria-label="Close" onclick="dismissOnboarding(true)">✕</button>
     </div>
     <h2 class="onboard-title" id="onboard-title" data-i18n="onboardTitle">How it works</h2>
     <p class="onboard-intro" data-i18n="onboardIntro"></p>
