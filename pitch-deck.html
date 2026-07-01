@@ -579,6 +579,47 @@
 }
 .milestone { display: flex; align-items: center; gap: 8px; }
 .milestone::before { content: "✓"; font-weight: 800; color: var(--accent-dk); }
+
+/* ── PDF / Print ── */
+@media print {
+  @page { size: A4 landscape; margin: 0; }
+}
+
+/* One slide = one page, no overflow bleed */
+.reveal.print-pdf,
+.reveal.print-pdf .slides,
+.reveal.print-pdf .slides > section {
+  width: 100% !important;
+  height: 100% !important;
+}
+.reveal.print-pdf .slides > section {
+  overflow: hidden !important;
+  page-break-after: always !important;
+  break-after: page !important;
+  /* Tighten spacing so content fits at A4 scale */
+  padding: 36px 52px !important;
+  gap: 0 !important;
+}
+/* Tighten dense elements in print */
+.reveal.print-pdf .slide-header  { margin-bottom: 14px !important; }
+.reveal.print-pdf .sol-list      { gap: 12px !important; }
+.reveal.print-pdf .now-list      { gap: 10px !important; }
+.reveal.print-pdf .now-item      { padding: 14px 20px !important; }
+.reveal.print-pdf .step-grid     { gap: 12px !important; }
+.reveal.print-pdf .step-card     { padding: 18px 22px !important; gap: 7px !important; }
+.reveal.print-pdf .biz-grid      { gap: 12px !important; margin-bottom: 12px !important; }
+.reveal.print-pdf .biz-card      { padding: 18px 22px !important; }
+.reveal.print-pdf .market-grid   { gap: 12px !important; margin-bottom: 12px !important; }
+.reveal.print-pdf .market-card   { padding: 18px 22px !important; }
+.reveal.print-pdf .funds-grid    { gap: 10px !important; margin-bottom: 12px !important; }
+.reveal.print-pdf .fund-item     { padding: 14px 18px !important; }
+.reveal.print-pdf .comp-table td,
+.reveal.print-pdf .comp-table th { padding: 9px 14px !important; }
+.reveal.print-pdf .viral-box     { margin-top: 10px !important; padding: 14px 20px !important; }
+.reveal.print-pdf .cover-left    { padding: 48px 44px !important; }
+.reveal.print-pdf .cover-right   { padding: 36px 32px !important; }
+.reveal.print-pdf .ask-amount    { margin: 6px 0 14px !important; }
+.reveal.print-pdf .team-card     { padding: 28px 36px !important; }
 </style>
 </head>
 <body>
