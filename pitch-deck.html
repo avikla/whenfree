@@ -601,6 +601,10 @@
   break-after: page !important;
   box-sizing: border-box !important;
 }
+.reveal.print-pdf .pdf-page:last-child {
+  page-break-after: avoid !important;
+  break-after: avoid !important;
+}
 
 /* Non-cover slides */
 .reveal.print-pdf .pdf-page > section:not(.cover-slide) {
@@ -1073,9 +1077,17 @@ if (window.location.search.includes('print-pdf')) {
     var reveal = document.querySelector('.reveal');
     if (reveal) reveal.classList.add('print-pdf');
 
-    document.querySelectorAll('.pdf-page').forEach(function(p) {
+    var pages = document.querySelectorAll('.pdf-page');
+    pages.forEach(function(p, i) {
       p.style.setProperty('height', '720px', 'important');
       p.style.setProperty('overflow', 'hidden', 'important');
+      if (i < pages.length - 1) {
+        p.style.setProperty('page-break-after', 'always', 'important');
+        p.style.setProperty('break-after', 'page', 'important');
+      } else {
+        p.style.setProperty('page-break-after', 'avoid', 'important');
+        p.style.setProperty('break-after', 'avoid', 'important');
+      }
     });
 
     // Cover slide: force flex-row so left/right panels sit side by side
