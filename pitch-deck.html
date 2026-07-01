@@ -586,20 +586,27 @@
 }
 
 /* One slide = one page, no overflow bleed */
-.reveal.print-pdf,
-.reveal.print-pdf .slides,
-.reveal.print-pdf .slides > section {
-  width: 100% !important;
-  height: 100% !important;
-}
 .reveal.print-pdf .slides > section {
   overflow: hidden !important;
   page-break-after: always !important;
   break-after: page !important;
-  /* Tighten spacing so content fits at A4 scale */
+}
+
+/* Non-cover slides: tighten padding so content fits */
+.reveal.print-pdf .slides > section:not(.cover-slide) {
   padding: 36px 52px !important;
   gap: 0 !important;
 }
+
+/* Cover: keep two-column row layout, zero padding */
+.reveal.print-pdf section.cover-slide {
+  padding: 0 !important;
+  flex-direction: row !important;
+  justify-content: flex-start !important;
+}
+.reveal.print-pdf .cover-left  { width: 55% !important; height: 100% !important; padding: 44px 48px !important; }
+.reveal.print-pdf .cover-right { width: 45% !important; height: 100% !important; padding: 36px 32px !important; }
+
 /* Tighten dense elements in print */
 .reveal.print-pdf .slide-header  { margin-bottom: 14px !important; }
 .reveal.print-pdf .sol-list      { gap: 12px !important; }
@@ -616,8 +623,6 @@
 .reveal.print-pdf .comp-table td,
 .reveal.print-pdf .comp-table th { padding: 9px 14px !important; }
 .reveal.print-pdf .viral-box     { margin-top: 10px !important; padding: 14px 20px !important; }
-.reveal.print-pdf .cover-left    { padding: 48px 44px !important; }
-.reveal.print-pdf .cover-right   { padding: 36px 32px !important; }
 .reveal.print-pdf .ask-amount    { margin: 6px 0 14px !important; }
 .reveal.print-pdf .team-card     { padding: 28px 36px !important; }
 </style>
