@@ -12,215 +12,334 @@
 <style>
 /* ── Verde Design System ── */
 :root {
-  --bg:        #D6EDE4;
-  --surface:   #E9F6F0;
-  --surface2:  #D6EDE4;
-  --text:      #0B2018;
-  --muted:     #3E5750;
-  --muted2:    #7E988F;
-  --accent:    #00C281;
-  --accent-dk: #00A06A;
-  --on-primary:#04261B;
-  --primary-ctr:#C7F4E2;
-  --border:    rgba(10,70,52,0.15);
-  --r:         22px;
-  --r-sm:      14px;
-  --r-pill:    100px;
-  --font-display: 'Figtree', system-ui;
-  --font-body:    'DM Sans', system-ui;
+  --bg:         #D6EDE4;
+  --surface:    #E9F6F0;
+  --text:       #0B2018;
+  --muted:      #3E5750;
+  --muted2:     #7E988F;
+  --accent:     #00C281;
+  --accent-dk:  #009A65;
+  --on-primary: #04261B;
+  --ctr:        #C7F4E2;
+  --border:     rgba(10,70,52,0.14);
+  --dark-bg:    #00382A;
+  --dark-text:  #D6F0E6;
+  --r:          22px;
+  --r-sm:       14px;
+  --r-pill:     100px;
+  --ff-display: 'Figtree', system-ui;
+  --ff-body:    'DM Sans', system-ui;
 }
 
-/* ── Reveal overrides ── */
+/* ── Reveal base ── */
 .reveal-viewport { background: var(--bg); }
-
 .reveal {
-  font-family: var(--font-body);
-  font-size: 26px;
+  font-family: var(--ff-body);
+  font-size: 32px;        /* was 26 — everything scales from here */
   color: var(--text);
 }
-
-.reveal .slides { text-align: left; }
-
-.reveal .progress { color: var(--accent); height: 4px; }
-
-.reveal .controls { color: var(--accent); }
-
+.reveal .slides       { text-align: left; }
+.reveal .progress     { color: var(--accent); height: 5px; }
+.reveal .controls     { color: var(--accent); }
 .reveal .slide-number {
   background: transparent;
   color: var(--muted2);
-  font-family: var(--font-body);
-  font-size: 13px;
+  font-family: var(--ff-body);
+  font-size: 14px;
 }
 
-/* ── Typography ── */
+/* ── Global typography ── */
 .reveal h1, .reveal h2, .reveal h3 {
-  font-family: var(--font-display);
+  font-family: var(--ff-display);
   color: var(--text);
   text-transform: none;
-  letter-spacing: -0.02em;
-  margin: 0 0 0.4em;
+  letter-spacing: -0.025em;
+  margin: 0;
   line-height: 1.1;
 }
-
-.reveal h1 { font-size: 3.2em; font-weight: 800; }
-.reveal h2 { font-size: 2em;   font-weight: 700; }
-.reveal h3 { font-size: 1.3em; font-weight: 600; color: var(--muted); }
-
-.reveal p  { margin: 0 0 0.6em; color: var(--muted); line-height: 1.55; }
+.reveal h2 { font-size: 1.75em; font-weight: 800; }
+.reveal p  { margin: 0; color: var(--muted); line-height: 1.55; }
 .reveal ul { list-style: none; padding: 0; margin: 0; }
 .reveal li { padding: 0; margin: 0; }
 
-/* ── Slide layout ── */
+/* ── Slide shell ── */
 .reveal section {
-  padding: 56px 72px !important;
+  padding: 52px 68px !important;
   box-sizing: border-box;
   height: 100%;
   display: flex !important;
   flex-direction: column;
   justify-content: center;
+  gap: 0;
 }
 
 /* ── Pill label ── */
 .pill {
   display: inline-block;
-  background: var(--primary-ctr);
+  background: var(--ctr);
   color: var(--on-primary);
-  font-family: var(--font-display);
-  font-size: 0.52em;
+  font-family: var(--ff-display);
+  font-size: 0.56em;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
-  padding: 6px 16px;
+  padding: 7px 18px;
   border-radius: var(--r-pill);
-  margin-bottom: 18px;
+  margin-bottom: 14px;
 }
 
-/* ── Accent bar above headings ── */
-.accent-bar {
-  width: 48px; height: 5px;
+/* ── Slide header ── */
+.slide-header { margin-bottom: 24px; }
+
+/* ── Two-column layout ── */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+/* ══════════════════════════════
+   SLIDE 1 — COVER
+══════════════════════════════ */
+.reveal section.cover-slide {
+  background: var(--dark-bg) !important;
+  padding: 0 !important;
+  flex-direction: row !important;
+  justify-content: flex-start !important;
+  gap: 0 !important;
+}
+.cover-left {
+  width: 55%;
+  padding: 64px 56px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0;
+}
+.cover-right {
+  width: 45%;
+  background: rgba(0,194,129,0.12);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  padding: 48px 40px;
+  border-left: 1px solid rgba(0,194,129,0.2);
+}
+.cover-logo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 36px;
+}
+.cover-logo svg { width: 72px; height: 72px; }
+.cover-wordmark {
+  font-family: var(--ff-display);
+  font-size: 2.4em;
+  font-weight: 800;
+  color: #7FDBBA;
+  letter-spacing: -0.04em;
+}
+.cover-tagline {
+  font-family: var(--ff-display);
+  font-size: 2.0em;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.1;
+  margin-bottom: 16px;
+  letter-spacing: -0.03em;
+}
+.cover-sub {
+  font-size: 0.85em;
+  color: rgba(214,240,230,0.7);
+  margin-bottom: 40px;
+}
+.cover-divider {
+  width: 56px; height: 5px;
   background: var(--accent);
   border-radius: 3px;
-  margin-bottom: 20px;
+  margin-bottom: 32px;
+}
+.cover-meta {
+  font-size: 0.65em;
+  color: rgba(214,240,230,0.55);
+  line-height: 1.8;
+}
+.cover-meta strong { color: rgba(214,240,230,0.85); font-weight: 600; }
+.cover-stat {
+  text-align: center;
+}
+.cover-stat-num {
+  font-family: var(--ff-display);
+  font-size: 2.2em;
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.cover-stat-label {
+  font-size: 0.62em;
+  color: rgba(214,240,230,0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+}
+.cover-stat-divider {
+  width: 1px;
+  height: 48px;
+  background: rgba(0,194,129,0.25);
 }
 
-/* ── Cards ── */
-.card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  padding: 28px 32px;
-}
-
-.card-grid {
-  display: grid;
-  gap: 18px;
-}
-.card-grid-2 { grid-template-columns: 1fr 1fr; }
-.card-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
-.card-grid-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
-
-/* ── Pain point cards ── */
+/* ══════════════════════════════
+   SLIDE 2 — PROBLEM
+══════════════════════════════ */
 .pain-card {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--r);
-  padding: 24px 28px;
+  padding: 22px 26px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
+  height: 100%;
 }
-.pain-icon { font-size: 1.6em; }
+.pain-icon { font-size: 2.0em; line-height: 1; }
 .pain-title {
-  font-family: var(--font-display);
-  font-size: 0.78em;
+  font-family: var(--ff-display);
+  font-size: 0.82em;
   font-weight: 700;
   color: var(--text);
   line-height: 1.3;
 }
 .pain-body {
-  font-size: 0.65em;
+  font-size: 0.72em;
   color: var(--muted);
-  line-height: 1.5;
+  line-height: 1.55;
 }
 
-/* ── Solution bullets ── */
-.sol-list { display: flex; flex-direction: column; gap: 18px; margin-top: 8px; }
-.sol-item { display: flex; align-items: flex-start; gap: 16px; }
+.email-thread {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.email-msg {
+  background: white;
+  border-radius: 10px;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  line-height: 1.45;
+}
+.email-sender {
+  font-weight: 700;
+  color: var(--accent-dk);
+  margin-bottom: 3px;
+  font-size: 0.62em;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.email-body { color: var(--muted); font-size: 0.65em; }
+.email-dots {
+  text-align: center;
+  color: var(--muted2);
+  font-size: 1.2em;
+  letter-spacing: 5px;
+}
+
+/* ══════════════════════════════
+   SLIDE 3 — SOLUTION
+══════════════════════════════ */
+.sol-list { display: flex; flex-direction: column; gap: 20px; }
+.sol-item { display: flex; align-items: flex-start; gap: 20px; }
 .sol-check {
-  width: 32px; height: 32px; flex-shrink: 0;
+  width: 42px; height: 42px; flex-shrink: 0;
   background: var(--accent);
   border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   color: var(--on-primary);
-  font-size: 0.7em;
-  font-weight: 700;
+  font-size: 0.82em;
+  font-weight: 800;
   margin-top: 2px;
 }
-.sol-text { font-size: 0.75em; color: var(--muted); line-height: 1.5; }
-.sol-text strong { color: var(--text); font-weight: 600; }
-
+.sol-text { font-size: 0.82em; color: var(--muted); line-height: 1.55; }
+.sol-text strong { color: var(--text); font-weight: 700; display: block; margin-bottom: 3px; font-size: 1.05em; }
 .callout {
-  background: var(--primary-ctr);
+  background: var(--ctr);
   border-radius: var(--r-sm);
-  padding: 18px 24px;
+  padding: 20px 28px;
   margin-top: 28px;
-  font-family: var(--font-display);
-  font-size: 0.78em;
+  font-family: var(--ff-display);
+  font-size: 0.88em;
   font-weight: 700;
   color: var(--on-primary);
   text-align: center;
+  letter-spacing: -0.01em;
 }
 
-/* ── How it works steps ── */
-.step-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 12px; }
+/* ══════════════════════════════
+   SLIDE 4 — PRODUCT
+══════════════════════════════ */
+.step-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
 .step-card {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--r);
-  padding: 24px;
+  padding: 26px 28px;
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 .step-num {
-  font-family: var(--font-display);
-  font-size: 0.55em;
+  font-family: var(--ff-display);
+  font-size: 0.58em;
   font-weight: 700;
   color: var(--accent);
-  letter-spacing: 0.06em;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
 }
-.step-icon { font-size: 1.8em; }
+.step-icon { font-size: 2.2em; line-height: 1; }
 .step-title {
-  font-family: var(--font-display);
-  font-size: 0.75em;
+  font-family: var(--ff-display);
+  font-size: 0.85em;
   font-weight: 700;
   color: var(--text);
 }
-.step-body { font-size: 0.63em; color: var(--muted); line-height: 1.5; }
+.step-body { font-size: 0.72em; color: var(--muted); line-height: 1.5; }
 
-/* ── Comparison table ── */
+/* ══════════════════════════════
+   SLIDE 5 — DIFFERENTIATORS
+══════════════════════════════ */
 .comp-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.65em;
-  margin-top: 12px;
+  font-size: 0.75em;
+  margin-top: 4px;
 }
 .comp-table th {
-  font-family: var(--font-display);
+  font-family: var(--ff-display);
   font-weight: 700;
   color: var(--muted);
-  padding: 10px 14px;
+  padding: 12px 16px;
   text-align: center;
   border-bottom: 2px solid var(--border);
-  font-size: 0.95em;
 }
 .comp-table th:first-child { text-align: left; color: var(--text); }
+.comp-table th.wf-head { color: var(--accent); font-size: 1.05em; }
 .comp-table td {
-  padding: 11px 14px;
+  padding: 13px 16px;
   text-align: center;
   border-bottom: 1px solid var(--border);
   color: var(--muted);
+  font-size: 1em;
 }
 .comp-table td:first-child {
   text-align: left;
@@ -228,295 +347,238 @@
   font-weight: 500;
 }
 .comp-table tr:last-child td { border-bottom: none; }
-.comp-table .us { font-weight: 700; color: var(--text); }
-.check-yes { color: var(--accent); font-weight: 700; font-size: 1.1em; }
-.check-no  { color: #C5B8B8; font-size: 1.1em; }
-.check-partial { color: var(--muted2); font-size: 0.9em; }
-.col-wf { background: rgba(0,194,129,0.08); }
+.col-wf { background: rgba(0,194,129,0.07); }
+.check-yes     { color: var(--accent); font-weight: 800; font-size: 1.2em; }
+.check-no      { color: #BBBBB0; font-size: 1.15em; }
+.check-partial { color: var(--muted2); font-size: 0.85em; font-weight: 600; }
 
-/* ── Market slide ── */
-.market-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin: 16px 0; }
+/* ══════════════════════════════
+   SLIDE 6 — MARKET
+══════════════════════════════ */
+.market-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 18px;
+  margin-bottom: 18px;
+}
 .market-card {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--r);
-  padding: 22px 24px;
+  padding: 26px 28px;
 }
 .market-label {
-  font-family: var(--font-display);
-  font-size: 0.5em;
+  font-family: var(--ff-display);
+  font-size: 0.56em;
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--accent);
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 .market-num {
-  font-family: var(--font-display);
-  font-size: 1.5em;
+  font-family: var(--ff-display);
+  font-size: 2.0em;
   font-weight: 800;
   color: var(--text);
   line-height: 1;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
-.market-desc { font-size: 0.6em; color: var(--muted); line-height: 1.4; }
-
+.market-desc { font-size: 0.7em; color: var(--muted); line-height: 1.45; }
 .insight-box {
-  background: var(--primary-ctr);
+  background: var(--ctr);
   border-radius: var(--r-sm);
-  padding: 16px 22px;
-  font-size: 0.65em;
+  padding: 18px 24px;
+  font-size: 0.74em;
   color: var(--on-primary);
-  line-height: 1.5;
-  margin-top: 8px;
+  line-height: 1.55;
 }
 .insight-box strong { font-weight: 700; }
 
-/* ── Biz model ── */
-.biz-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin: 16px 0; }
+/* ══════════════════════════════
+   SLIDE 7 — BUSINESS MODEL
+══════════════════════════════ */
+.biz-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 18px;
+  margin-bottom: 18px;
+}
 .biz-card {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--r);
-  padding: 22px 24px;
-  display: flex; flex-direction: column; gap: 8px;
+  padding: 26px 28px;
+  display: flex; flex-direction: column; gap: 10px;
 }
 .biz-tier {
-  font-family: var(--font-display);
-  font-size: 0.5em;
+  font-family: var(--ff-display);
+  font-size: 0.56em;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
   color: var(--accent);
 }
 .biz-name {
-  font-family: var(--font-display);
-  font-size: 0.85em;
-  font-weight: 700;
+  font-family: var(--ff-display);
+  font-size: 1.05em;
+  font-weight: 800;
   color: var(--text);
 }
-.biz-desc { font-size: 0.6em; color: var(--muted); line-height: 1.45; }
+.biz-desc { font-size: 0.72em; color: var(--muted); line-height: 1.5; flex: 1; }
 .biz-price {
-  font-family: var(--font-display);
-  font-size: 0.65em;
+  font-family: var(--ff-display);
+  font-size: 0.78em;
   font-weight: 700;
   color: var(--accent-dk);
-  margin-top: auto;
-  padding-top: 10px;
+  padding-top: 12px;
   border-top: 1px solid var(--border);
 }
-
 .econ-bar {
-  background: var(--primary-ctr);
+  background: var(--ctr);
   border-radius: var(--r-sm);
-  padding: 14px 20px;
-  font-size: 0.6em;
+  padding: 16px 22px;
+  font-size: 0.74em;
   color: var(--on-primary);
-  display: flex; align-items: center; gap: 10px;
+  display: flex; align-items: center; gap: 12px;
 }
 .econ-bar strong { font-weight: 700; }
 
-/* ── Why now ── */
-.now-list { display: flex; flex-direction: column; gap: 16px; margin-top: 12px; }
+/* ══════════════════════════════
+   SLIDE 8 — WHY NOW
+══════════════════════════════ */
+.now-list { display: flex; flex-direction: column; gap: 14px; }
 .now-item {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--r-sm);
   padding: 20px 24px;
-  display: flex; gap: 18px; align-items: flex-start;
+  display: flex; gap: 20px; align-items: flex-start;
 }
-.now-icon { font-size: 1.4em; flex-shrink: 0; margin-top: 2px; }
-.now-text { font-size: 0.68em; color: var(--muted); line-height: 1.5; }
-.now-text strong { color: var(--text); font-weight: 600; display: block; margin-bottom: 2px; }
-
+.now-icon { font-size: 1.8em; flex-shrink: 0; line-height: 1; margin-top: 2px; }
+.now-text { font-size: 0.76em; color: var(--muted); line-height: 1.55; }
+.now-text strong {
+  color: var(--text);
+  font-weight: 700;
+  display: block;
+  margin-bottom: 3px;
+  font-size: 1.05em;
+}
 .viral-box {
   background: var(--accent);
   color: var(--on-primary);
   border-radius: var(--r-sm);
-  padding: 16px 22px;
-  font-size: 0.65em;
+  padding: 18px 24px;
+  font-size: 0.76em;
   font-weight: 600;
-  display: flex; align-items: center; gap: 12px;
+  display: flex; align-items: center; gap: 14px;
   margin-top: 14px;
 }
 
-/* ── Team slide ── */
+/* ══════════════════════════════
+   SLIDE 9 — TEAM
+══════════════════════════════ */
+.team-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: flex-start;
+}
 .team-card {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--r);
-  padding: 36px 40px;
-  display: flex; gap: 32px; align-items: flex-start;
-  max-width: 600px;
+  padding: 36px 42px;
+  display: flex; gap: 36px; align-items: flex-start;
+  width: 100%;
 }
 .team-avatar {
-  width: 72px; height: 72px; flex-shrink: 0;
+  width: 88px; height: 88px; flex-shrink: 0;
   background: var(--accent);
   border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  font-family: var(--font-display);
-  font-size: 1.6em;
-  font-weight: 700;
+  font-family: var(--ff-display);
+  font-size: 1.8em;
+  font-weight: 800;
   color: var(--on-primary);
 }
+.team-info { flex: 1; }
 .team-name {
-  font-family: var(--font-display);
-  font-size: 0.85em;
-  font-weight: 700;
+  font-family: var(--ff-display);
+  font-size: 1.1em;
+  font-weight: 800;
   color: var(--text);
   margin-bottom: 4px;
 }
 .team-role {
-  font-size: 0.6em;
-  font-weight: 600;
+  font-size: 0.66em;
+  font-weight: 700;
   color: var(--accent-dk);
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  margin-bottom: 14px;
+  letter-spacing: 0.07em;
+  margin-bottom: 18px;
 }
-.team-bullets { display: flex; flex-direction: column; gap: 6px; }
+.team-bullets { display: flex; flex-direction: column; gap: 10px; }
 .team-bullet {
-  font-size: 0.6em;
+  font-size: 0.74em;
   color: var(--muted);
-  line-height: 1.4;
-  display: flex; gap: 8px;
+  line-height: 1.5;
+  display: flex; gap: 10px; align-items: flex-start;
 }
-.team-bullet::before { content: "—"; color: var(--accent); flex-shrink: 0; }
-.team-todo {
-  font-size: 0.58em;
-  color: var(--muted2);
-  font-style: italic;
-  margin-top: 10px;
-  padding: 8px 12px;
-  border: 1px dashed var(--border);
-  border-radius: 8px;
-}
+.team-bullet::before { content: "—"; color: var(--accent); flex-shrink: 0; font-weight: 700; }
 .team-email {
-  font-size: 0.58em;
+  font-size: 0.68em;
   color: var(--accent-dk);
-  margin-top: 12px;
-  font-weight: 500;
+  margin-top: 16px;
+  font-weight: 600;
 }
 
-/* ── Ask slide ── */
+/* ══════════════════════════════
+   SLIDE 10 — ASK
+══════════════════════════════ */
 .ask-amount {
-  font-family: var(--font-display);
-  font-size: 3em;
+  font-family: var(--ff-display);
+  font-size: 3.6em;
   font-weight: 800;
   color: var(--accent);
   line-height: 1;
-  margin: 12px 0 20px;
+  margin: 10px 0 22px;
+  letter-spacing: -0.03em;
 }
-.funds-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+.funds-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 18px;
+}
 .fund-item {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--r-sm);
   padding: 18px 22px;
-  display: flex; gap: 14px; align-items: center;
+  display: flex; gap: 16px; align-items: center;
 }
 .fund-pct {
-  font-family: var(--font-display);
-  font-size: 1.1em;
+  font-family: var(--ff-display);
+  font-size: 1.35em;
   font-weight: 800;
   color: var(--accent);
   flex-shrink: 0;
-  min-width: 48px;
+  min-width: 54px;
 }
-.fund-desc { font-size: 0.6em; color: var(--muted); line-height: 1.4; }
-.fund-desc strong { color: var(--text); font-weight: 600; display: block; }
-
+.fund-desc { font-size: 0.72em; color: var(--muted); line-height: 1.45; }
+.fund-desc strong { color: var(--text); font-weight: 700; display: block; margin-bottom: 2px; }
 .milestones {
-  background: var(--primary-ctr);
+  background: var(--ctr);
   border-radius: var(--r-sm);
-  padding: 16px 22px;
-  font-size: 0.62em;
+  padding: 16px 24px;
+  font-size: 0.72em;
+  font-weight: 600;
   color: var(--on-primary);
-  display: flex; gap: 24px; flex-wrap: wrap;
+  display: flex; gap: 28px; flex-wrap: wrap; align-items: center;
 }
 .milestone { display: flex; align-items: center; gap: 8px; }
-.milestone::before {
-  content: "✓";
-  font-weight: 700;
-  color: var(--accent-dk);
-}
-
-/* ── Cover slide ── */
-.cover-logo {
-  display: flex; align-items: center; gap: 18px;
-  margin-bottom: 28px;
-}
-.cover-logo svg { width: 56px; height: 56px; }
-.cover-wordmark {
-  font-family: var(--font-display);
-  font-size: 1.6em;
-  font-weight: 800;
-  color: var(--text);
-  letter-spacing: -0.03em;
-}
-.cover-tagline {
-  font-family: var(--font-display);
-  font-size: 1.4em;
-  font-weight: 700;
-  color: var(--text);
-  margin: 0 0 12px;
-}
-.cover-sub {
-  font-size: 0.7em;
-  color: var(--muted);
-  margin: 0 0 0;
-}
-.cover-footer {
-  position: absolute;
-  bottom: 48px; right: 72px;
-  font-size: 0.52em;
-  color: var(--muted2);
-  text-align: right;
-  line-height: 1.6;
-}
-.cover-divider {
-  width: 64px; height: 5px;
-  background: var(--accent);
-  border-radius: 3px;
-  margin: 28px 0;
-}
-
-/* ── Slide header row ── */
-.slide-header {
-  margin-bottom: 28px;
-}
-
-/* ── Two-col layout ── */
-.two-col {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 32px;
-  align-items: start;
-}
-
-/* ── Mock email thread (Problem slide) ── */
-.email-thread {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  padding: 20px 24px;
-  display: flex; flex-direction: column; gap: 10px;
-  font-size: 0.55em;
-}
-.email-msg {
-  background: white;
-  border-radius: 10px;
-  padding: 10px 14px;
-  color: var(--text);
-  line-height: 1.4;
-  border: 1px solid var(--border);
-}
-.email-sender { font-weight: 600; color: var(--accent-dk); margin-bottom: 2px; font-size: 0.9em; }
-.email-body { color: var(--muted); }
-.email-dots {
-  text-align: center; color: var(--muted2);
-  font-size: 1.4em; letter-spacing: 4px;
-}
+.milestone::before { content: "✓"; font-weight: 800; color: var(--accent-dk); }
 </style>
 </head>
 <body>
@@ -526,27 +588,44 @@
 <!-- ══════════════════════════════════════════ -->
 <!-- SLIDE 1 — COVER                           -->
 <!-- ══════════════════════════════════════════ -->
-<section>
-  <div class="cover-logo">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-      <rect width="32" height="32" rx="7" fill="#7FDBBA"/>
-      <rect x="5" y="8.5" width="22" height="17" rx="3" fill="#00382A" fill-opacity="0.12" stroke="#00382A" stroke-width="1.4" stroke-opacity="0.5"/>
-      <rect x="5" y="8.5" width="22" height="5.5" rx="3" fill="#00382A" fill-opacity="0.22"/>
-      <rect x="5" y="11.5" width="22" height="2.5" fill="#00382A" fill-opacity="0.22"/>
-      <rect x="10.5" y="5.5" width="2" height="5" rx="1" fill="#00382A"/>
-      <rect x="19.5" y="5.5" width="2" height="5" rx="1" fill="#00382A"/>
-      <path d="M10.5 18.5 L14.5 22.5 L21.5 14" stroke="#00382A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-    </svg>
-    <span class="cover-wordmark">WhenFree</span>
+<section class="cover-slide">
+  <div class="cover-left">
+    <div class="cover-logo">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+        <rect width="32" height="32" rx="7" fill="#7FDBBA"/>
+        <rect x="5" y="8.5" width="22" height="17" rx="3" fill="#00382A" fill-opacity="0.12" stroke="#00382A" stroke-width="1.4" stroke-opacity="0.5"/>
+        <rect x="5" y="8.5" width="22" height="5.5" rx="3" fill="#00382A" fill-opacity="0.22"/>
+        <rect x="5" y="11.5" width="22" height="2.5" fill="#00382A" fill-opacity="0.22"/>
+        <rect x="10.5" y="5.5" width="2" height="5" rx="1" fill="#00382A"/>
+        <rect x="19.5" y="5.5" width="2" height="5" rx="1" fill="#00382A"/>
+        <path d="M10.5 18.5 L14.5 22.5 L21.5 14" stroke="#00382A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </svg>
+      <span class="cover-wordmark">WhenFree</span>
+    </div>
+    <div class="cover-tagline">Find the time.<br>Finally.</div>
+    <div class="cover-sub">Group scheduling for the modern world</div>
+    <div class="cover-divider"></div>
+    <div class="cover-meta">
+      <strong>Avi Klayman</strong> · Founder &amp; Engineer<br>
+      avi@whenfree.org · whenfree.org<br>
+      Seed Round · 2026
+    </div>
   </div>
-  <div class="cover-tagline">"Find the time. Finally."</div>
-  <div class="cover-sub">Group scheduling for the modern world</div>
-  <div class="cover-divider"></div>
-  <div class="cover-sub" style="color:var(--muted2);font-size:0.6em;">Seed Round · 2026</div>
-  <div class="cover-footer">
-    Avi Klayman<br>
-    Founder &amp; Engineer<br>
-    avi@whenfree.org
+  <div class="cover-right">
+    <div class="cover-stat">
+      <div class="cover-stat-num">0</div>
+      <div class="cover-stat-label">Logins required</div>
+    </div>
+    <div class="cover-stat-divider"></div>
+    <div class="cover-stat">
+      <div class="cover-stat-num">3</div>
+      <div class="cover-stat-label">Languages &amp; markets</div>
+    </div>
+    <div class="cover-stat-divider"></div>
+    <div class="cover-stat">
+      <div class="cover-stat-num">~$0</div>
+      <div class="cover-stat-label">Monthly infra cost</div>
+    </div>
   </div>
 </section>
 
@@ -559,21 +638,21 @@
     <h2>Scheduling a group meeting is broken</h2>
   </div>
   <div class="two-col">
-    <div class="card-grid" style="grid-template-columns:1fr;">
+    <div style="display:flex;flex-direction:column;gap:14px;">
       <div class="pain-card">
         <div class="pain-icon">📧</div>
         <div class="pain-title">"Does Tuesday work for anyone?"</div>
-        <div class="pain-body">47-message email threads. Someone always misses a reply. The meeting never gets scheduled.</div>
+        <div class="pain-body">47-message email threads with no resolution. Someone always misses a reply.</div>
       </div>
       <div class="pain-card">
         <div class="pain-icon">🔒</div>
         <div class="pain-title">Doodle requires an account. Calendly is overkill.</div>
-        <div class="pain-body">For a simple group meetup, no one wants to sign up. Friction kills coordination.</div>
+        <div class="pain-body">Friction kills coordination. No one wants to sign up for a simple meetup.</div>
       </div>
       <div class="pain-card">
         <div class="pain-icon">🦖</div>
         <div class="pain-title">When2Meet hasn't changed since 2004</div>
-        <div class="pain-body">No mobile support. No real-time updates. No dark mode. No one knows the best time without squinting at the grid.</div>
+        <div class="pain-body">No mobile. No real-time updates. No ranked best times. Built before the iPhone.</div>
       </div>
     </div>
     <div class="email-thread">
@@ -583,7 +662,7 @@
       </div>
       <div class="email-msg">
         <div class="email-sender">David</div>
-        <div class="email-body">Tuesday works for me, except morning</div>
+        <div class="email-body">Tuesday works for me, except the morning</div>
       </div>
       <div class="email-msg">
         <div class="email-sender">Maya</div>
@@ -613,15 +692,24 @@
   <div class="sol-list">
     <div class="sol-item">
       <div class="sol-check">✓</div>
-      <div class="sol-text"><strong>No accounts. No email confirmations. No friction.</strong><br>Anyone can join just by opening a link — no app download, no signup, no waiting.</div>
+      <div class="sol-text">
+        <strong>No accounts. No confirmations. No friction.</strong>
+        Anyone can join just by opening a link — no app, no signup, no waiting.
+      </div>
     </div>
     <div class="sol-item">
       <div class="sol-check">✓</div>
-      <div class="sol-text"><strong>Real-time sync — everyone's availability appears live.</strong><br>Powered by Firebase Firestore. As participants mark their times, everyone sees it update instantly.</div>
+      <div class="sol-text">
+        <strong>Real-time sync — everyone's availability appears live.</strong>
+        Powered by Firebase Firestore. As participants mark their times, everyone sees it update instantly.
+      </div>
     </div>
     <div class="sol-item">
       <div class="sol-check">✓</div>
-      <div class="sol-text"><strong>The app ranks best times automatically.</strong><br>No manual scanning. WhenFree surfaces the top slots ranked by how many people are free.</div>
+      <div class="sol-text">
+        <strong>The app ranks the best times automatically.</strong>
+        No manual scanning. WhenFree surfaces the top slots by how many people are free.
+      </div>
     </div>
   </div>
   <div class="callout">"No accounts, no 47-message threads. Just a link. Just answers."</div>
@@ -640,7 +728,7 @@
       <div class="step-num">Step 1</div>
       <div class="step-icon">📅</div>
       <div class="step-title">Create an event</div>
-      <div class="step-body">Name it, pick dates and a time range, then share the link. Takes 30 seconds.</div>
+      <div class="step-body">Name it, pick your dates and time range. Takes 30 seconds.</div>
     </div>
     <div class="step-card">
       <div class="step-num">Step 2</div>
@@ -658,10 +746,10 @@
       <div class="step-num">Step 4</div>
       <div class="step-icon">⭐</div>
       <div class="step-title">WhenFree finds the best time</div>
-      <div class="step-body">Best slots are ranked automatically by how many people are available. Add to Google Calendar or download .ics.</div>
+      <div class="step-body">Best slots ranked by availability count. Add to Google Calendar or download .ics.</div>
     </div>
   </div>
-  <p style="font-size:0.55em;color:var(--muted2);margin-top:14px;margin-bottom:0;">Works on mobile • No app download • No login</p>
+  <p style="font-size:0.62em;color:var(--muted2);margin-top:14px;">Works on mobile &nbsp;·&nbsp; No app download &nbsp;·&nbsp; No login</p>
 </section>
 
 <!-- ══════════════════════════════════════════ -->
@@ -676,7 +764,7 @@
     <thead>
       <tr>
         <th></th>
-        <th style="color:var(--accent);">WhenFree</th>
+        <th class="wf-head col-wf">WhenFree</th>
         <th>When2Meet</th>
         <th>Doodle</th>
         <th>Calendly</th>
@@ -757,7 +845,7 @@
     </div>
     <div class="market-card">
       <div class="market-label">Beachhead</div>
-      <div class="market-num">🇮🇱 Israel</div>
+      <div class="market-num">🇮🇱 IL</div>
       <div class="market-desc">Hebrew-first market — completely underserved by all major tools</div>
     </div>
   </div>
@@ -778,13 +866,13 @@
     <div class="biz-card">
       <div class="biz-tier">Phase 1 — Now</div>
       <div class="biz-name">Free</div>
-      <div class="biz-desc">100% free — zero monetization. Focus: grow the user base, establish brand, dominate the Israeli market.</div>
+      <div class="biz-desc">100% free — user acquisition phase. Grow the base, establish brand, dominate the Israeli market.</div>
       <div class="biz-price">$0 / month</div>
     </div>
     <div class="biz-card">
       <div class="biz-tier">Phase 2 — Teams</div>
       <div class="biz-name">Freemium</div>
-      <div class="biz-desc">Teams tier: recurring meetings, admin dashboard, usage analytics, Slack &amp; Google Workspace integration.</div>
+      <div class="biz-desc">Recurring meetings, admin dashboard, usage analytics, Slack &amp; Google Workspace integration.</div>
       <div class="biz-price">$9 / team / month</div>
     </div>
     <div class="biz-card">
@@ -796,7 +884,7 @@
   </div>
   <div class="econ-bar">
     <span>💡</span>
-    <span><strong>Unit economics:</strong> Current infrastructure cost ≈ $0/month (Firebase + GAS under free tier). Sub-penny cost per event at scale.</span>
+    <span><strong>Unit economics:</strong> Current infra cost ≈ $0/month (Firebase + GAS under free tier). Sub-penny cost per event at scale.</span>
   </div>
 </section>
 
@@ -813,21 +901,21 @@
       <div class="now-icon">🌍</div>
       <div class="now-text">
         <strong>Remote &amp; hybrid work made this a daily problem for everyone</strong>
-        Group scheduling across timezones is no longer just a once-a-month pain — it's every week, for every team.
+        Group scheduling across timezones is no longer a once-a-month pain — it's every week, for every team.
       </div>
     </div>
     <div class="now-item">
       <div class="now-icon">🔗</div>
       <div class="now-text">
         <strong>Link-based sharing has proven product-market fit</strong>
-        Calendly's $3B valuation showed the world loves scheduling tools with zero-friction sharing. WhenFree brings that model to group coordination.
+        Calendly's $3B valuation showed the world loves zero-friction scheduling. WhenFree brings that model to group coordination.
       </div>
     </div>
     <div class="now-item">
       <div class="now-icon">🇮🇱</div>
       <div class="now-text">
         <strong>Israel's tech ecosystem has no Hebrew-first scheduling tool</strong>
-        Every Israeli team today uses English tools with poor UX and zero RTL support. WhenFree is built for them from the ground up.
+        Every Israeli team today uses English tools with poor UX and zero RTL support. WhenFree is built for them.
       </div>
     </div>
   </div>
@@ -846,15 +934,15 @@
   </div>
   <div class="team-card">
     <div class="team-avatar">AK</div>
-    <div>
+    <div class="team-info">
       <div class="team-name">Avi Klayman</div>
       <div class="team-role">Founder &amp; Engineer</div>
       <div class="team-bullets">
+        <div class="team-bullet">Experienced businessman with a track record of innovative ideas and strong management skills</div>
         <div class="team-bullet">Built WhenFree from zero — solo: full-stack, real-time Firestore backend, i18n engine, transactional email system</div>
         <div class="team-bullet">Shipped Hebrew/RTL support and accessibility suite that no competitor has tackled</div>
-        <div class="team-bullet">Experienced businessman with a track record of innovative ideas and strong management skills</div>
       </div>
-      <div class="team-email">avi@whenfree.org · whenfree.org</div>
+      <div class="team-email">avi@whenfree.org &nbsp;·&nbsp; whenfree.org</div>
     </div>
   </div>
 </section>
@@ -892,9 +980,7 @@
     <div class="milestone">3 enterprise pilots</div>
     <div class="milestone">18-month runway</div>
   </div>
-  <p style="font-size:0.55em;color:var(--muted2);margin-top:16px;margin-bottom:0;">
-    avi@whenfree.org · <strong style="color:var(--accent);">whenfree.org</strong>
-  </p>
+  <p style="font-size:0.62em;color:var(--muted2);margin-top:14px;">avi@whenfree.org &nbsp;·&nbsp; <strong style="color:var(--accent);">whenfree.org</strong></p>
 </section>
 
 </div>
