@@ -64,7 +64,7 @@
 
 /* ── Slide shell ── */
 .reveal section {
-  padding: 52px 68px !important;
+  padding: 44px 60px !important;
   box-sizing: border-box;
   height: 100%;
   display: flex !important;
@@ -89,12 +89,12 @@
 }
 
 /* ── Slide header ── */
-.slide-header { margin-bottom: 24px; }
+.slide-header { margin-bottom: 18px; }
 
 /* ── Two-column layout ── */
 .two-col {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 3fr 2fr;
   gap: 28px;
   align-items: start;
 }
@@ -199,13 +199,15 @@
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--r);
-  padding: 22px 26px;
+  padding: 14px 20px;
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 16px;
   height: 100%;
 }
-.pain-icon { font-size: 2.0em; line-height: 1; }
+.pain-icon { font-size: 1.4em; line-height: 1; flex-shrink: 0; margin-top: 3px; }
+.pain-text  { flex: 1; display: flex; flex-direction: column; gap: 6px; }
 .pain-title {
   font-family: var(--ff-display);
   font-size: 0.82em;
@@ -231,7 +233,7 @@
 .email-msg {
   background: white;
   border-radius: 10px;
-  padding: 10px 14px;
+  padding: 8px 14px;
   border: 1px solid var(--border);
   line-height: 1.45;
 }
@@ -287,16 +289,16 @@
 .step-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 18px;
+  gap: 14px;
 }
 .step-card {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--r);
-  padding: 26px 28px;
+  padding: 18px 22px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 .step-num {
   font-family: var(--ff-display);
@@ -306,7 +308,7 @@
   letter-spacing: 0.07em;
   text-transform: uppercase;
 }
-.step-icon { font-size: 2.2em; line-height: 1; }
+.step-icon { font-size: 1.8em; line-height: 1; }
 .step-title {
   font-family: var(--ff-display);
   font-size: 0.85em;
@@ -447,12 +449,12 @@
 /* ══════════════════════════════
    SLIDE 8 — WHY NOW
 ══════════════════════════════ */
-.now-list { display: flex; flex-direction: column; gap: 14px; }
+.now-list { display: flex; flex-direction: column; gap: 10px; }
 .now-item {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--r-sm);
-  padding: 20px 24px;
+  padding: 14px 20px;
   display: flex; gap: 20px; align-items: flex-start;
 }
 .now-icon { font-size: 1.8em; flex-shrink: 0; line-height: 1; margin-top: 2px; width: 1.4em; text-align: center; }
@@ -468,11 +470,11 @@
   background: var(--accent);
   color: var(--on-primary);
   border-radius: var(--r-sm);
-  padding: 18px 24px;
+  padding: 12px 20px;
   font-size: 0.76em;
   font-weight: 600;
   display: flex; align-items: center; gap: 14px;
-  margin-top: 14px;
+  margin-top: 8px;
 }
 
 /* ══════════════════════════════
@@ -581,51 +583,60 @@
 .milestone::before { content: "✓"; font-weight: 800; color: var(--accent-dk); }
 
 /* ── PDF / Print ── */
+/* Page size = exact slide dimensions (1280×720 CSS px = 338.67mm × 190.5mm) */
 @media print {
-  @page { size: A4 landscape; margin: 0; }
+  @page { size: 338.67mm 190.5mm; margin: 0; }
 }
 
-/* One slide = one page, no overflow bleed */
-.reveal.print-pdf .slides > section {
+/*
+ * Reveal.js 5.x print-pdf DOM structure:
+ *   .reveal > .pdf-page > section   (NOT .reveal > .slides > section)
+ * Each .pdf-page must be exactly 720px tall so Chrome paginates 1 slide = 1 page.
+ */
+.reveal.print-pdf .pdf-page {
+  height: 720px !important;
+  width: 1280px !important;
   overflow: hidden !important;
   page-break-after: always !important;
   break-after: page !important;
+  box-sizing: border-box !important;
 }
 
-/* Non-cover slides: tighten padding so content fits */
-.reveal.print-pdf .slides > section:not(.cover-slide) {
-  padding: 36px 52px !important;
-  gap: 0 !important;
+/* Non-cover slides */
+.reveal.print-pdf .pdf-page > section:not(.cover-slide) {
+  height: 720px !important;
+  box-sizing: border-box !important;
 }
 
-/* Cover: keep two-column row layout, zero padding */
-.reveal.print-pdf section.cover-slide {
+/* Cover: restore two-column row layout */
+.reveal.print-pdf .pdf-page > section.cover-slide {
   display: flex !important;
   flex-direction: row !important;
   justify-content: flex-start !important;
   padding: 0 !important;
+  height: 720px !important;
 }
-.reveal.print-pdf .cover-left  { width: 55% !important; height: 100% !important; padding: 44px 48px !important; }
-.reveal.print-pdf .cover-right { width: 45% !important; height: 100% !important; padding: 36px 32px !important; }
+.reveal.print-pdf .cover-left  { width: 55% !important; height: 720px !important; padding: 44px 48px !important; }
+.reveal.print-pdf .cover-right { width: 45% !important; height: 720px !important; padding: 36px 32px !important; }
 
-/* Tighten dense elements in print */
+/* Tighten dense elements */
 .reveal.print-pdf .slide-header  { margin-bottom: 14px !important; }
 .reveal.print-pdf .sol-list      { gap: 12px !important; }
-.reveal.print-pdf .now-list      { gap: 10px !important; }
-.reveal.print-pdf .now-item      { padding: 14px 20px !important; }
+.reveal.print-pdf .now-list      { gap: 8px !important; }
+.reveal.print-pdf .now-item      { padding: 12px 18px !important; }
 .reveal.print-pdf .step-grid     { gap: 12px !important; }
-.reveal.print-pdf .step-card     { padding: 18px 22px !important; gap: 7px !important; }
+.reveal.print-pdf .step-card     { padding: 16px 20px !important; gap: 6px !important; }
 .reveal.print-pdf .biz-grid      { gap: 12px !important; margin-bottom: 12px !important; }
-.reveal.print-pdf .biz-card      { padding: 18px 22px !important; }
+.reveal.print-pdf .biz-card      { padding: 16px 20px !important; }
 .reveal.print-pdf .market-grid   { gap: 12px !important; margin-bottom: 12px !important; }
-.reveal.print-pdf .market-card   { padding: 18px 22px !important; }
+.reveal.print-pdf .market-card   { padding: 16px 20px !important; }
 .reveal.print-pdf .funds-grid    { gap: 10px !important; margin-bottom: 12px !important; }
-.reveal.print-pdf .fund-item     { padding: 14px 18px !important; }
+.reveal.print-pdf .fund-item     { padding: 12px 16px !important; }
 .reveal.print-pdf .comp-table td,
 .reveal.print-pdf .comp-table th { padding: 9px 14px !important; }
-.reveal.print-pdf .viral-box     { margin-top: 10px !important; padding: 14px 20px !important; }
+.reveal.print-pdf .viral-box     { margin-top: 8px !important; padding: 10px 18px !important; }
 .reveal.print-pdf .ask-amount    { margin: 6px 0 14px !important; }
-.reveal.print-pdf .team-card     { padding: 28px 36px !important; }
+.reveal.print-pdf .team-card     { padding: 24px 32px !important; }
 </style>
 </head>
 <body>
@@ -685,21 +696,27 @@
     <h2>Scheduling a group meeting is broken</h2>
   </div>
   <div class="two-col">
-    <div style="display:flex;flex-direction:column;gap:14px;">
+    <div style="display:flex;flex-direction:column;gap:10px;">
       <div class="pain-card">
         <div class="pain-icon">📧</div>
-        <div class="pain-title">"Does Tuesday work for anyone?"</div>
-        <div class="pain-body">47-message email threads with no resolution. Someone always misses a reply.</div>
+        <div class="pain-text">
+          <div class="pain-title">"Does Tuesday work for anyone?"</div>
+          <div class="pain-body">47-message email threads with no resolution. Someone always misses a reply.</div>
+        </div>
       </div>
       <div class="pain-card">
         <div class="pain-icon">🔒</div>
-        <div class="pain-title">Doodle requires an account. Calendly is overkill.</div>
-        <div class="pain-body">Friction kills coordination. No one wants to sign up for a simple meetup.</div>
+        <div class="pain-text">
+          <div class="pain-title">Doodle requires an account. Calendly is overkill.</div>
+          <div class="pain-body">Friction kills coordination. No one wants to sign up for a simple meetup.</div>
+        </div>
       </div>
       <div class="pain-card">
         <div class="pain-icon">🦖</div>
-        <div class="pain-title">When2Meet hasn't changed since 2004</div>
-        <div class="pain-body">No mobile. No real-time updates. No ranked best times. Built before the iPhone.</div>
+        <div class="pain-text">
+          <div class="pain-title">When2Meet hasn't changed since 2004</div>
+          <div class="pain-body">No mobile. No real-time updates. No ranked best times. Built before the iPhone.</div>
+        </div>
       </div>
     </div>
     <div class="email-thread">
@@ -719,10 +736,9 @@
         <div class="email-sender">Tom</div>
         <div class="email-body">Wednesday afternoon only, I have a call in the morning</div>
       </div>
-      <div class="email-dots">• • •</div>
       <div class="email-msg">
         <div class="email-sender">Sarah</div>
-        <div class="email-body">Never mind, let's just do a quick Zoom — does Thursday 3pm work? 🙃</div>
+        <div class="email-body">Ugh. Anyone free Thursday? 🙃</div>
       </div>
     </div>
   </div>
@@ -967,7 +983,7 @@
     </div>
   </div>
   <div class="viral-box">
-    ⚡ <span><strong>Built-in viral loop:</strong> Every event link shared to participants<br>drives organic growth — zero paid acquisition cost.</span>
+    ⚡ <span><strong>Built-in viral loop:</strong> Every event link shared to participants drives organic growth - zero paid acquisition cost.</span>
   </div>
 </section>
 
@@ -1048,6 +1064,36 @@ Reveal.initialize({
   minScale: 0.2,
   maxScale: 2.0,
 });
+
+// Fix ?print-pdf mode: Reveal.js 5.x sets .pdf-page heights to content height
+// (not configured height), and only adds 'print-pdf' class during the print event.
+// Force both on load so the layout is correct before Chrome opens the print dialog.
+if (window.location.search.includes('print-pdf')) {
+  function applyPrintFixes() {
+    var reveal = document.querySelector('.reveal');
+    if (reveal) reveal.classList.add('print-pdf');
+
+    document.querySelectorAll('.pdf-page').forEach(function(p) {
+      p.style.setProperty('height', '720px', 'important');
+      p.style.setProperty('overflow', 'hidden', 'important');
+    });
+
+    // Cover slide: force flex-row so left/right panels sit side by side
+    var cover = document.querySelector('section.cover-slide');
+    if (cover) {
+      cover.style.setProperty('display', 'flex', 'important');
+      cover.style.setProperty('flex-direction', 'row', 'important');
+      cover.style.setProperty('height', '720px', 'important');
+    }
+    var cl = document.querySelector('.cover-left');
+    var cr = document.querySelector('.cover-right');
+    if (cl) cl.style.setProperty('height', '720px', 'important');
+    if (cr) cr.style.setProperty('height', '720px', 'important');
+  }
+
+  Reveal.on('ready', applyPrintFixes);
+  window.addEventListener('beforeprint', applyPrintFixes);
+}
 </script>
 </body>
 </html>
