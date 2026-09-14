@@ -1,7 +1,7 @@
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { checkAuth, buildZeptoPayload, parseRequestBody, EMAIL_RE } = require('./index.js');
+const { checkAuth, buildZeptoPayload, parseRequestBody, EMAIL_RE, getYesterdayWindow_, fmtNum_, fmtBytes_ } = require('./index.js');
 
 test('parseRequestBody parses a raw JSON string body (text/plain content-type)', () => {
   const req = { body: '{"to_email":"a@example.com","event_name":"Test"}' };
@@ -74,4 +74,30 @@ test('EMAIL_RE rejects a pasted "Name <email>" blob', () => {
 test('EMAIL_RE rejects strings with no valid email shape', () => {
   assert.equal(EMAIL_RE.test('not an email'), false);
   assert.equal(EMAIL_RE.test(''), false);
+});
+
+test('getYesterdayWindow_ produces a ~24h UTC window ending at IST midnight', () => {
+  const { start, end, dateLabel } = getYesterdayWindow_();
+  const startMs = new Date(start).getTime();
+  const endMs = new Date(end).getTime();
+  assert.ok(endMs > startMs, 'end must be after start');
+  assert.equal(endMs - startMs, 86400000, 'window must span exactly 24h (no DST edge in Asia/Jerusalem this test can hit)');
+  // "end" is IST midnight for today, expressed in UTC: either 21:00 or 22:00 the previous UTC day.
+  const endUtcHour = new Date(end).getUTCHours();
+  assert.ok(endUtcHour === 21 || endUtcHour === 22, `expected IST midnight to land on UTC hour 21 or 22, got ${endUtcHour}`);
+  assert.match(dateLabel, /^\w{3}, \d{1,2} \w{3} \d{4}$/, 'dateLabel should read like "Sun, 14 Sep 2026"');
+});
+
+test('fmtNum_ inserts thousands separators', () => {
+  assert.equal(fmtNum_(0), '0');
+  assert.equal(fmtNum_(999), '999');
+  assert.equal(fmtNum_(1000), '1,000');
+  assert.equal(fmtNum_(1234567), '1,234,567');
+});
+
+test('fmtBytes_ picks the right unit at each boundary', () => {
+  assert.equal(fmtBytes_(500), '500 B');
+  assert.equal(fmtBytes_(2048), '2 KB');
+  assert.equal(fmtBytes_(5 * 1024 * 1024), '5.0 MB');
+  assert.equal(fmtBytes_(1.5 * 1024 * 1024 * 1024), '1.50 GB');
 });
