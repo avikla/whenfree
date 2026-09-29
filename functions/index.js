@@ -13,7 +13,7 @@ function getDb() {
 }
 
 const FROM = { address: 'no-reply@whenfree.org', name: 'WhenFree' };
-const EMAIL_RE = /^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/;
+const EMAIL_RE = /^[^\s@<>]+@[^\s@<>]+\.[^\s@<>.]+$/; // TLD excludes '.' so the domain split is unambiguous (no ReDoS)
 
 function checkAuth(req) {
   return req.get('X-WhenFree-Key') === process.env.WHENFREE_MAIL_KEY;

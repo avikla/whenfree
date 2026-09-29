@@ -76,6 +76,17 @@ test('EMAIL_RE rejects strings with no valid email shape', () => {
   assert.equal(EMAIL_RE.test(''), false);
 });
 
+test('EMAIL_RE accepts multi-dot domains', () => {
+  assert.equal(EMAIL_RE.test('a.b@mail.example.co.uk'), true);
+});
+
+test('EMAIL_RE runs in linear time on the CodeQL ReDoS input', () => {
+  const evil = '!@!.' + '!.'.repeat(50000) + ' ';
+  const t = Date.now();
+  assert.equal(EMAIL_RE.test(evil), false);
+  assert.ok(Date.now() - t < 100, `took ${Date.now() - t}ms`);
+});
+
 test('getYesterdayWindow_ produces a ~24h UTC window ending at IST midnight', () => {
   const { start, end, dateLabel } = getYesterdayWindow_();
   const startMs = new Date(start).getTime();

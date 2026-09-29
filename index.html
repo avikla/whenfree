@@ -3886,12 +3886,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     email = email.trim().toLowerCase();
     const bracketed = email.match(/<([^<>]+)>/);
     if (bracketed) email = bracketed[1].trim();
-    if (!/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(email)) return false;
+    if (!/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>.]+$/.test(email)) return false;
     if (getChipEmails(chipsId).includes(email)) { document.getElementById(inputId).value = ''; return false; }
     const chip = document.createElement('div');
     chip.className = 'email-chip';
     chip.dataset.email = email;
-    chip.innerHTML = `<span title="${email}">${email}</span><button type="button" aria-label="Remove">&times;</button>`;
+    chip.innerHTML = `<span title="${escHtml(email)}">${escHtml(email)}</span><button type="button" aria-label="Remove">&times;</button>`;
     chip.querySelector('button').onclick = () => chip.remove();
     document.getElementById(chipsId).appendChild(chip);
     document.getElementById(inputId).value = '';
