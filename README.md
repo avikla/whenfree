@@ -37,9 +37,9 @@ A lightweight meeting scheduler — no accounts, no back-and-forth, just a share
 |---|---|
 | Frontend | Vanilla JS, HTML, CSS — single file (`index.html`), no build step |
 | Database | Firebase Firestore (`meteor-meet` project) |
-| Email | Google Apps Script (`mailer.gs`) via `no-reply@meteor.co.il` |
+| Email | Firebase Cloud Functions (`functions/index.js`) → ZeptoMail API, sent from `no-reply@whenfree.org` |
 | Hosting | GitHub Pages (`main` branch → `whenfree.org`) |
-| Domain | `whenfree.org` via ImprovMX + CNAME |
+| Domain | `whenfree.org` via Cloudflare DNS + CNAME |
 
 ---
 
@@ -47,9 +47,9 @@ A lightweight meeting scheduler — no accounts, no back-and-forth, just a share
 
 ```
 index.html              # Full app — HTML, CSS, JS all inline
-mailer.gs               # Google Apps Script — sends all transactional emails
-daily-report.gs         # GAS — midnight DB usage report to avi@whenfree.org
-appsscript.json         # GAS manifest (OAuth scopes, timezone, runtime)
+functions/index.js      # Cloud Functions: sendMail, storeCreatorEmail, notifyOrganizer, dailyReport
+functions/index.test.js # Unit tests (npm test in functions/)
+gas-cleanup/cleanup.gs  # Google Apps Script — private admin page to delete expired events (own GAS project)
 icons/                  # SVG icon set (favicon, wordmark, sizes 16–512px)
 help.html               # Help & FAQ page
 terms.html              # Terms & Privacy page
@@ -70,9 +70,12 @@ git commit -m "..."
 git push
 ```
 
-For Google Apps Script changes:
+For Cloud Functions changes, redeploy all four functions with `gcloud` (they share `functions/index.js`). See `CLAUDE.md` → Cloud Functions Deployment.
+
+For the admin cleanup page (`gas-cleanup/`):
 
 ```powershell
+cd gas-cleanup
 clasp push --force
 ```
 
@@ -82,10 +85,10 @@ clasp push --force
 
 | Purpose | Config |
 |---|---|
-| Live site | `whenfree.org` → GitHub Pages via ImprovMX MX records |
+| Live site | `whenfree.org` → GitHub Pages (Cloudflare DNS) |
 | Legacy redirect | `meet.meteor.co.il` → `whenfree.org` via Cloudflare Dynamic Redirect Rule |
-| Email forwarding | `*@whenfree.org` → `avi@meteor.co.il` via ImprovMX catch-all |
-| Transactional email | Sent from `no-reply@meteor.co.il` (verified SMTP alias, display name "WhenFree") |
+| Email forwarding (incoming) | `*@whenfree.org` → `avi.klayman@gmail.com` via Cloudflare Email Routing catch-all |
+| Transactional email (outgoing) | ZeptoMail API, sent from `no-reply@whenfree.org` (via the `sendMail` Cloud Function) |
 | Contact | [avi@whenfree.org](mailto:avi@whenfree.org) |
 
 ---
