@@ -28,6 +28,10 @@ service cloud.firestore {
         resource.data.earlierThan   == request.resource.data.earlierThan &&
         resource.data.laterThan     == request.resource.data.laterThan &&
         resource.data.timezone      == request.resource.data.timezone &&
+        // Only participants and name may change. Anything else (creatorName,
+        // lang, notifyOnResponse, lastDate, new fields) is rejected.
+        request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['participants', 'name']) &&
         request.resource.data.name is string &&
         request.resource.data.name.size() <= 200;
 
