@@ -125,7 +125,7 @@ Use in i18n strings (template literals) rather than Unicode entities.
 - **No backend** — all logic in `index.html` (Firebase rules handle authorization)
 - **Firebase plan:** Blaze (pay-as-you-go) — needed for Cloud Monitoring API. Actual cost: ~$0.
 - **Firebase project ID:** `meteor-meet` — **permanent, cannot be renamed.** The ID is hardcoded in the SDK config (`projectId:"meteor-meet"`), all Firestore URLs, and the Cloud Functions' console links. Only the display name in Firebase Console can be changed cosmetically. Creating a new project would require full data migration — do not suggest it.
-- **`.gitignore`:** `.claude/` is ignored — never commit it
+- **`.gitignore`:** `.claude/*` is ignored except shared config (`settings.json`, `hooks/`, `skills/`, `agents/`), which is committed. `.claude/settings.local.json` stays ignored — never commit it (personal permissions).
 
 ## Firestore Event Fields
 

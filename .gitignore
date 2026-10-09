@@ -1,4 +1,8 @@
 .superpowers/
-.claude/
+.claude/*
+!.claude/settings.json
+!.claude/hooks/
+!.claude/skills/
+!.claude/agents/
 .playwright-mcp/
 functions/node_modules/
