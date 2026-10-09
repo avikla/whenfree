@@ -1,0 +1,46 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /events/{eventSlug} {
+
+      allow read: if true;
+
+      allow create: if
+        request.resource.data.keys().hasAll([
+          'name', 'mode', 'selectedDates', 'selectedDays',
+          'earlierThan', 'laterThan', 'timezone',
+          'creatorToken', 'creatorName',
+          'notifyOnResponse', 'lang', 'participants',
+          'createdAt', 'lastDate'
+        ]) &&
+        request.resource.data.participants == {} &&
+        request.resource.data.creatorToken is string &&
+        request.resource.data.creatorToken.size() >= 48 &&
+        request.resource.data.name is string &&
+        request.resource.data.name.size() <= 200;
+
+      allow update: if
+        resource.data.creatorToken  == request.resource.data.creatorToken &&
+        resource.data.createdAt     == request.resource.data.createdAt &&
+        resource.data.mode          == request.resource.data.mode &&
+        resource.data.selectedDates == request.resource.data.selectedDates &&
+        resource.data.selectedDays  == request.resource.data.selectedDays &&
+        resource.data.earlierThan   == request.resource.data.earlierThan &&
+        resource.data.laterThan     == request.resource.data.laterThan &&
+        resource.data.timezone      == request.resource.data.timezone &&
+        request.resource.data.name is string &&
+        request.resource.data.name.size() <= 200;
+
+      allow delete: if false;
+
+    }
+
+    match /eventSecrets/{eventSlug} {
+      allow read, write: if false;
+    }
+
+    match /mailCounts/{eventSlug} {
+      allow read, write: if false;
+    }
+  }
+}
