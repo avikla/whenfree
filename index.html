@@ -507,6 +507,18 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
 .rejoin-prompt p{font-size:12px;color:var(--muted);margin-bottom:8px}
 .rejoin-confirm-btn{font-family:var(--font-body);font-size:12px;font-weight:500;background:transparent;border:1px solid var(--accent-dim);border-radius:var(--r-sm);padding:6px 14px;color:var(--accent);cursor:pointer;transition:background 0.15s}
 .rejoin-confirm-btn:hover{background:var(--accent-glow)}
+.known-names{margin-bottom:14px}
+.known-names p{font-size:12px;color:var(--muted);margin-bottom:8px}
+.known-names-list{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;max-height:132px;overflow-y:auto}
+.known-name-chip{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:var(--font-body);font-size:13px;font-weight:500;color:var(--text);
+  background:var(--surface2);border:1px solid var(--border2);border-radius:var(--r-pill);
+  padding:6px 12px;cursor:pointer;transition:background 0.15s,transform 0.12s ease-out;
+}
+.known-name-chip:active{transform:scale(0.97)}
+@media (hover:hover) and (pointer:fine){.known-name-chip:hover{background:var(--accent-glow)}}
+.known-name-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .sidebar-hint{
   font-size:13px;font-weight:400;
   color:var(--muted);line-height:1.6;
@@ -1571,6 +1583,10 @@ body.a11y-adhd .a11y-panel{opacity:1 !important;pointer-events:auto !important}
       <div class="name-panel-logo"><span data-i18n="appName">Meet Scheduler</span><span class="logo-mark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="30" height="30" style="display:block"><rect x="5" y="8.5" width="22" height="17" rx="3" fill="currentColor" fill-opacity="0.15" stroke="currentColor" stroke-width="1.4" stroke-opacity="0.5"/><rect x="5" y="8.5" width="22" height="5.5" rx="3" fill="currentColor" fill-opacity="0.22"/><rect x="5" y="11.5" width="22" height="2.5" fill="currentColor" fill-opacity="0.22"/><rect x="10.5" y="5.5" width="2" height="5" rx="1" fill="currentColor"/><rect x="19.5" y="5.5" width="2" height="5" rx="1" fill="currentColor"/><path d="M10.5 18.5 L14.5 22.5 L21.5 14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span></div>
       <h2 class="name-panel-title" data-i18n="markAvail">Mark your availability</h2>
       <p class="name-panel-sub" data-i18n="markSub">Enter your name, then drag across the grid<br>to show when you're free.</p>
+      <div id="known-names" class="known-names" hidden>
+        <p data-i18n="alreadyJoined">Already joined? Choose your name</p>
+        <div class="known-names-list"></div>
+      </div>
       <input type="text" id="participant-name" class="text-input"
         placeholder="Your name" data-i18n-ph="namePH" autocomplete="off" spellcheck="false">
       <div id="name-error" style="display:none;font-size:12px;color:#f87171;margin-top:8px;text-align:left"></div>
@@ -1823,6 +1839,7 @@ const LANGS = {
     allPeople:(n)=>n===1?'1 participant':`All ${n} participants`,
     ofPeople:(x,n)=>n===1?`${x} of 1 participant`:`${x} of ${n} participants`,
     rejoinPrompt:(name)=>`"${name}" already joined this meeting. Continue as them?`,
+    alreadyJoined:'Already joined? Choose your name',
     dateCount:(n)=>n===1?'1 date':`${n} dates`,
     emailSubject:(name)=>`You're invited - ${name}`,
     emailBody:(name,url)=>`Hi,\n\nI'd like to find a time for: ${name}\n\nMark your availability:\n${url}\n\nThanks!`,
@@ -1918,6 +1935,7 @@ const LANGS = {
     allPeople:(n)=>n===1?'משתתף יחיד':`כל ${n} המשתתפים`,
     ofPeople:(x,n)=>`${x} מתוך ${n}`,
     rejoinPrompt:(name)=>`"${name}" כבר הצטרף לפגישה. להמשיך בתור אותו משתמש?`,
+    alreadyJoined:'כבר הצטרפתם? בחרו את השם שלכם',
     dateCount:(n)=>n===1?'תאריך אחד':`${n} תאריכים`,
     emailSubject:(name)=>`${name} - הזמנה לתיאום פגישה`,
     emailBody:(name,url)=>`שלום,\n\nאני מחפש זמן שמתאים לכולם עבור: ${name}\n\nלחץ כאן לסימון זמינות:\n${url}\n\nתודה!`,
@@ -2013,6 +2031,7 @@ const LANGS = {
     allPeople:(n)=>n===1?'1 personne au total':`${n} personnes au total`,
     ofPeople:(x,n)=>n===1?`${x} sur 1 personne`:`${x} sur ${n} personnes`,
     rejoinPrompt:(name)=>`"${name}" a déjà rejoint cette réunion. Continuer en tant que cette personne ?`,
+    alreadyJoined:'Vous avez déjà rejoint ? Choisissez votre nom',
     dateCount:(n)=>n===1?'1 date':`${n} dates`,
     emailSubject:(name)=>`Invitation : ${name}`,
     emailBody:(name,url)=>`Bonjour,\n\nJe cherche un créneau pour : ${name}\n\nIndiquez vos disponibilités :\n${url}\n\nCordialement !`,
@@ -2656,7 +2675,7 @@ async function createEvent() {
   S.creatorEmail = creatorEmail;
   S.creatorName = creatorName;
   const creatorToken = Array.from(crypto.getRandomValues(new Uint8Array(24))).map(b => b.toString(16).padStart(2,'0')).join('');
-  sessionStorage.setItem('meteor-creator-' + S.eventSlug, creatorToken);
+  rememberSet('meteor-creator-' + S.eventSlug, creatorToken);
   S.isCreator = true;
 
   const btn = document.getElementById('create-btn');
@@ -2776,6 +2795,12 @@ function showScreenB() {
     document.getElementById('name-overlay').style.display = 'none';
   } else {
     document.getElementById('name-overlay').style.display = 'flex';
+    if (S.rememberedName) {
+      const inp = document.getElementById('participant-name');
+      inp.value = S.rememberedName;
+      inp.focus();
+      inp.select(); // easy to overwrite if this isn't you
+    }
   }
   subscribeToEvent();
 }
@@ -2804,6 +2829,7 @@ function subscribeToEvent() {
       }));
     renderParticipants();
     renderHeatmap();
+    renderKnownNames();
     liveSeeded = true;
   });
 }
@@ -3454,6 +3480,7 @@ function hideTooltip() { tooltip.style.display = 'none'; }
 // ══════════════════════════════════════
 // SCREEN B: NAME OVERLAY
 // ══════════════════════════════════════
+let joinWaitTimer = null;
 async function joinEvent() {
   const nameEl = document.getElementById('participant-name');
   const nameErr = document.getElementById('name-error');
@@ -3467,8 +3494,21 @@ async function joinEvent() {
     nameEl.focus(); return;
   }
 
+  // Wait for the first live snapshot: before it S.participants is empty, so a returning
+  // participant would look new and the write below would wipe their saved availability.
+  // ponytail: polls every 150ms; if the snapshot never arrives (offline) the write would fail anyway
+  if (!liveSeeded) {
+    if (!joinWaitTimer) joinWaitTimer = setTimeout(() => { joinWaitTimer = null; joinEvent(); }, 150);
+    return;
+  }
+
   // Check for duplicate name — offer rejoin if the name already exists
   const existing = S.participants.find(p => p.name.toLowerCase() === name.toLowerCase());
+  // Confirming the name this device remembered = one click, no "continue as them?" step
+  if (existing && S.rememberedName && S.rememberedName.toLowerCase() === name.toLowerCase()) {
+    resumeAsExisting(existing.name);
+    return;
+  }
   if (existing) {
     document.getElementById('rejoin-msg').textContent = t().rejoinPrompt(existing.name);
     document.getElementById('rejoin-prompt').style.display = 'block';
@@ -3481,7 +3521,7 @@ async function joinEvent() {
   joinBtn.disabled = true;
 
   S.currentUser = { name, color: nameToColor(name), availability: new Set() };
-  sessionStorage.setItem('meteor-user-' + S.eventSlug, name);
+  rememberSet('meteor-user-' + S.eventSlug, name);
 
   try {
     await db.collection('events').doc(S.eventSlug).update({
@@ -3508,7 +3548,7 @@ function resumeAsExisting(name) {
   if (!existing) return;
   S.currentUser = existing;
   S.participants = S.participants.filter(p => p.name.toLowerCase() !== name.toLowerCase());
-  sessionStorage.setItem('meteor-user-' + S.eventSlug, existing.name);
+  rememberSet('meteor-user-' + S.eventSlug, existing.name);
   const overlay = document.getElementById('name-overlay');
   overlay.style.transition = 'opacity 0.4s ease';
   overlay.style.opacity = '0';
@@ -3553,6 +3593,35 @@ function renderParticipants() {
   const mobileCount = document.getElementById('mobile-people-count');
   if (mobileCount) mobileCount.textContent = all.length;
   syncActionStates();
+}
+
+// ── Who you are in each meeting ──
+// sessionStorage = this tab (silent restore on refresh); localStorage = this device (survives
+// closing the tab / reopening the link). Reads prefer the device copy, then the tab copy.
+function rememberGet(k) { try { return localStorage.getItem(k) ?? sessionStorage.getItem(k); } catch { return null; } }
+function rememberSet(k, v) {
+  try { sessionStorage.setItem(k, v); } catch {}
+  try { localStorage.setItem(k, v); } catch {}
+}
+
+// Join dialog: "Already joined? Choose your name" - one chip per existing participant
+function renderKnownNames() {
+  const box = document.getElementById('known-names');
+  if (!box) return;
+  const people = S.currentUser ? [] : (S.participants || []);
+  box.hidden = !people.length;
+  const list = box.querySelector('.known-names-list');
+  list.replaceChildren(...people.map(p => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'known-name-chip';
+    const dot = document.createElement('span');
+    dot.className = 'known-name-dot';
+    dot.style.background = p.color;
+    b.append(dot, document.createTextNode(p.name)); // textContent only - no escaping needed
+    b.addEventListener('click', () => resumeAsExisting(p.name));
+    return b;
+  }));
 }
 
 // ── HTML escaping helper (prevents XSS when injecting user content into innerHTML) ──
@@ -4355,7 +4424,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         S.eventSlug     = hashId;
         S.notifyOnResponse = data.notifyOnResponse || false;
         S.creatorName   = data.creatorName || '';
-        const storedToken = sessionStorage.getItem('meteor-creator-' + hashId);
+        const storedToken = rememberGet('meteor-creator-' + hashId);
         S.isCreator = !!(storedToken && storedToken === data.creatorToken);
         // Apply meeting language as default if user has no stored preference
         if (!localStorage.getItem('lang') && data.lang && LANGS[data.lang]) {
@@ -4363,8 +4432,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         applyLang();
 
-        // Restore participant from sessionStorage if they already joined
+        // Same tab (refresh): restore silently. New tab on a device that joined before:
+        // prefill the name in the join dialog and let them confirm with one click (shared devices).
         const savedName = sessionStorage.getItem('meteor-user-' + hashId);
+        S.rememberedName = savedName ? null : rememberGet('meteor-user-' + hashId);
         if (savedName && data.participants?.[savedName]) {
           S.currentUser = {
             name: savedName,
