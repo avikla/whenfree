@@ -292,6 +292,13 @@ The function must also grant that same service account `roles/run.invoker`: `gcl
 
 **Heatmap:** `--heat-1` through `--heat-5` (light → dark variants per mode)
 
+### Motion
+- When adding animation or visual effects, follow the files in `docs/motion/source/`. Start with `docs/motion/source/README.md`.
+- Reduced motion: OS `prefers-reduced-motion: reduce` and the in-app `body.a11y-reduced-motion` toggle share one rule (near the a11y CSS). Hover effects are gated behind `@media (hover:hover) and (pointer:fine)` so they don't stick after a tap on touch screens; press feedback is `:active{transform:scale(0.97)}`.
+- Best-times cards are rebuilt on every cell mark and snapshot - only slots new since the last render get `.bt-enter` (`prevBtKeys` in `renderBestTimes()`). Don't put an entrance animation back on `.bt-card` itself, or the cards blink on every update.
+- "Live arrival" motion (new participant row `.p-enter`, the one-time "everyone is free" glow on the #1 card via `glowTopCard()`) is gated by `liveSeeded`, which turns true only after the first Firestore snapshot has rendered - so data already there on page load never animates. The glow is WAAPI (not affected by the CSS reduced-motion rule), so it checks reduced motion itself; it uses an inset shadow because `.bt-cards` (`overflow-x:auto`) clips outer shadows.
+- An element with an `animation` using `fill-mode: both` ignores `:hover`/`:active` transforms (animations override normal declarations). Use `backwards` for one-shot entrances on interactive elements (e.g. `.create-btn`).
+
 ### Typography
 - **Display:** `'Figtree', system-ui` — headings, 600–700 weight
 - **Body:** `'DM Sans', system-ui` — content, 400–500 weight

@@ -382,15 +382,17 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
   cursor:pointer;position:relative;overflow:hidden;
   display:flex;align-items:center;justify-content:center;gap:8px;
   transition:transform 0.15s,box-shadow 0.15s;
-  animation:fadeUp 0.55s cubic-bezier(.16,1,.3,1) 0.4s both;
+  /* backwards, not both: a held fill would override :hover/:active transforms */
+  animation:fadeUp 0.55s cubic-bezier(.16,1,.3,1) 0.4s backwards;
 }
 .create-btn::before{
   content:'';position:absolute;inset:0;
   background:rgba(10,70,52,0.08);opacity:0;transition:opacity 0.2s;
 }
-.create-btn:hover::before{opacity:1}
-.create-btn:hover{transform:translateY(-1px);box-shadow:0 8px 28px rgba(0,214,143,0.28)}
-.create-btn:active{transform:translateY(0)}
+@media (hover:hover) and (pointer:fine){
+  .create-btn:hover::before{opacity:1}
+  .create-btn:hover{transform:translateY(-1px);box-shadow:0 8px 28px rgba(0,214,143,0.28)}
+}
 
 /* ═══════════════════════════════════════
    SCREEN B — AVAILABILITY GRID
@@ -443,7 +445,9 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
   cursor:pointer;margin-top:14px;
   transition:transform 0.15s,box-shadow 0.15s,opacity 0.15s;
 }
-.join-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,214,143,0.28)}
+@media (hover:hover) and (pointer:fine){
+  .join-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,214,143,0.28)}
+}
 
 /* Sidebar */
 .sidebar{
@@ -484,6 +488,8 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
 }
 .participant-list{display:flex;flex-direction:column;gap:12px}
 .participant-item{display:flex;align-items:center;gap:12px;font-size:14px;font-weight:400;position:relative}
+.participant-item.p-enter{animation:p-in 0.25s cubic-bezier(.16,1,.3,1) backwards}
+@keyframes p-in{from{opacity:0;transform:translateY(4px)}}
 .p-remove-btn{background:none;border:none;cursor:pointer;color:var(--muted2);padding:4px 6px;border-radius:var(--r-xs);font-size:20px;line-height:1;opacity:0;transition:opacity 0.15s;flex-shrink:0;min-width:32px;min-height:32px;display:flex;align-items:center;justify-content:center}
 .participant-item:hover .p-remove-btn{opacity:1}
 .p-remove-btn:hover{color:#DC2626}
@@ -538,14 +544,18 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
   font:inherit;font-size:0.85rem;cursor:pointer;
   background:var(--accent);color:var(--on-primary);border:0;
   border-radius:var(--r-pill);padding:6px 12px;white-space:nowrap;
+  transition:transform 0.12s ease-out;
 }
 .nudge-act-btn svg[fill="#128C7E"]{fill:currentColor}
 [data-theme="dark"] svg[fill="#128C7E"]{fill:#25D366}
 [data-theme="dark"] .nudge-act-btn svg[fill="#128C7E"]{fill:currentColor}
-.nudge-act-btn:hover{filter:brightness(1.06)}
+@media (hover:hover) and (pointer:fine){
+  .nudge-act-btn:hover{filter:brightness(1.06)}
+}
 @media (prefers-reduced-motion: no-preference){
-  .creator-nudge:not(.nudge-out){animation:nudge-pulse 2s ease-in-out infinite}
-  .creator-nudge:not(.nudge-out) .nudge-icon{animation:nudge-bounce 1.2s ease-in-out infinite}
+  /* finite: draw the eye a few times, then rest */
+  .creator-nudge:not(.nudge-out){animation:nudge-pulse 2s ease-in-out 3}
+  .creator-nudge:not(.nudge-out) .nudge-icon{animation:nudge-bounce 1.2s ease-in-out 3}
 }
 @keyframes nudge-pulse{
   0%,100%{box-shadow:0 0 0 0 rgba(0,194,129,0.25)}
@@ -570,9 +580,8 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
   border-radius:var(--r-sm);
   padding:12px 14px;
   display:flex;flex-direction:column;gap:3px;
-  animation:fadeUp 0.3s cubic-bezier(.16,1,.3,1) both;
-  will-change:opacity,transform;
 }
+.bt-card.bt-enter{animation:fadeUp 0.3s cubic-bezier(.16,1,.3,1) both}
 .bt-card-top{
   background:var(--primary-ctr);
   border-color:var(--accent-dim);
@@ -595,13 +604,17 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
   font-family:var(--font-body);font-size:12px;font-weight:500;
   color:var(--accent-text);
   padding:7px 10px;cursor:pointer;
-  transition:background 0.15s,border-color 0.15s;
+  transition:background 0.15s,border-color 0.15s,transform 0.12s ease-out;
   line-height:1;
 }
-.bt-cal-btn:hover{background:var(--accent-glow)}
+@media (hover:hover) and (pointer:fine){
+  .bt-cal-btn:hover{background:var(--accent-glow)}
+}
 .bt-cal-btn svg{width:12px;height:12px;flex-shrink:0}
 .bt-card-top .bt-cal-btn{border-color:var(--accent-dim);color:var(--on-primary-ctr)}
-.bt-card-top .bt-cal-btn:hover{background:rgba(0,194,129,0.18)}
+@media (hover:hover) and (pointer:fine){
+  .bt-card-top .bt-cal-btn:hover{background:rgba(0,194,129,0.18)}
+}
 
 /* Confirm dialog */
 .confirm-overlay{
@@ -717,9 +730,11 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
   width:100%;padding:12px 20px;
   border:none;border-radius:var(--r-pill);
   font-family:var(--font-body);font-size:14px;font-weight:600;
-  cursor:pointer;transition:opacity 0.15s;
+  cursor:pointer;transition:opacity 0.15s,transform 0.12s ease-out;
 }
-.cal-action-btn:hover{opacity:0.88}
+@media (hover:hover) and (pointer:fine){
+  .cal-action-btn:hover{opacity:0.88}
+}
 .cal-action-btn--primary{background:var(--accent);color:var(--on-primary)}
 .cal-action-btn--secondary{
   background:var(--surface2);color:var(--text);
@@ -905,11 +920,18 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
   font-size:14px;font-weight:600;
   cursor:pointer;white-space:nowrap;
   display:flex;align-items:center;justify-content:center;gap:7px;
-  transition:color 0.15s,border-color 0.15s,background 0.15s;
+  transition:color 0.15s,border-color 0.15s,background 0.15s,transform 0.12s ease-out;
 }
-.sidebar-btn:hover{color:var(--accent);border-color:var(--accent-dim);background:var(--accent-glow)}
+@media (hover:hover) and (pointer:fine){
+  .sidebar-btn:hover{color:var(--accent);border-color:var(--accent-dim);background:var(--accent-glow)}
+}
+/* Press feedback (touch + mouse) */
+.create-btn:active,.join-btn:active,.sidebar-btn:active,.nudge-act-btn:active,
+.cal-action-btn:active,.bt-cal-btn:active{transform:scale(0.97)}
 .sidebar-btn-outline{background:transparent;border:1.5px solid var(--border2);color:var(--text)}
-.sidebar-btn-outline:hover{background:var(--accent-glow);border-color:var(--accent-dim);color:var(--accent)}
+@media (hover:hover) and (pointer:fine){
+  .sidebar-btn-outline:hover{background:var(--accent-glow);border-color:var(--accent-dim);color:var(--accent)}
+}
 .share-confirm{
   font-size:11px;font-weight:500;
   color:var(--accent);letter-spacing:0.04em;
@@ -963,7 +985,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
     border-radius:var(--r-pill);padding:5px 14px;
     font-size:11.5px;font-weight:500;color:var(--muted);
     box-shadow:0 2px 8px rgba(0,0,0,0.08);white-space:nowrap;
-    animation:scrollBounce 1.6s ease-in-out infinite;
+    animation:scrollBounce 1.6s ease-in-out 3;
   }
 
 }
@@ -1107,7 +1129,11 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
 .skip-link:focus{top:0}
 
 /* Feature-specific CSS */
-body.a11y-reduced-motion *{transition-duration:0.01ms !important;animation-duration:0.01ms !important}
+/* Reduced motion: in-app toggle and OS setting share one rule - jump to the end state */
+body.a11y-reduced-motion *,body.a11y-reduced-motion *::before,body.a11y-reduced-motion *::after{transition-duration:0.01ms !important;transition-delay:0s !important;animation-duration:0.01ms !important;animation-delay:0s !important;animation-iteration-count:1 !important}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{transition-duration:0.01ms !important;transition-delay:0s !important;animation-duration:0.01ms !important;animation-delay:0s !important;animation-iteration-count:1 !important}
+}
 
 body.a11y-high-contrast{filter:contrast(1.5) saturate(1.2)}
 
@@ -2682,7 +2708,8 @@ function transitionToB() {
   const B = document.getElementById('screen-event');
 
   document.body.classList.add('on-screen-b');
-  A.style.transition = 'opacity 0.45s ease';
+  // ~0.45s total (was ~0.9s of mostly blank screen): quick exit, slightly longer entrance
+  A.style.transition = 'opacity 0.2s ease';
   A.style.opacity = '0';
   if (window.innerWidth <= 640) document.getElementById('top-controls').style.display = 'none';
 
@@ -2691,11 +2718,11 @@ function transitionToB() {
     B.style.display = 'flex';
     initScreenB();
     requestAnimationFrame(() => requestAnimationFrame(() => {
-      B.style.transition = 'opacity 0.45s ease';
+      B.style.transition = 'opacity 0.25s cubic-bezier(.16,1,.3,1)';
       B.style.opacity = '1';
       updateActionBarHeight();
     }));
-  }, 450);
+  }, 200);
 }
 
 // ══════════════════════════════════════
@@ -2757,9 +2784,13 @@ function showScreenB() {
 // FIREBASE: REAL-TIME LISTENER
 // ══════════════════════════════════════
 let unsubscribe = null;
+// false until the first snapshot has rendered - "live arrival" motion (new participant,
+// everyone-free glow) must not fire for data that was already there on page load
+let liveSeeded = false;
 
 function subscribeToEvent() {
   if (unsubscribe) unsubscribe();
+  liveSeeded = false;
   unsubscribe = db.collection('events').doc(S.eventSlug).onSnapshot(doc => {
     if (!doc.exists) return;
     const data = doc.data();
@@ -2773,6 +2804,7 @@ function subscribeToEvent() {
       }));
     renderParticipants();
     renderHeatmap();
+    liveSeeded = true;
   });
 }
 
@@ -3011,6 +3043,25 @@ function syncCreatorNudge() {
   el.classList.remove('nudge-out');
 }
 
+let prevBtKeys = new Set(); // "c:r" keys of the best-time cards from the previous render
+// One-time "everyone is free" glow on the #1 card (docs/motion/source/07-pulse-and-glow.md).
+// Cards are rebuilt on every render, so the glow resumes on each new card at its elapsed time.
+// Inset shadow, not the kit's outward one: .bt-cards has overflow-x:auto, which clips outside shadows.
+let topGlow = null; // {key, start} once fired - never fires again this page session
+function glowTopCard(card, key, everyone) {
+  if (!topGlow && everyone && liveSeeded &&
+      !matchMedia('(prefers-reduced-motion: reduce)').matches &&
+      !document.body.classList.contains('a11y-reduced-motion')) {
+    topGlow = { key, start: performance.now() };
+  }
+  if (!topGlow || topGlow.key !== key) return;
+  const t = performance.now() - topGlow.start;
+  if (t >= 1200) return;
+  card.animate([
+    { boxShadow: 'inset 0 0 0 2px rgba(0,194,129,.9), inset 0 0 24px rgba(0,194,129,.35)' },
+    { boxShadow: 'inset 0 0 0 2px rgba(0,194,129,0), inset 0 0 24px rgba(0,194,129,0)' }
+  ], { duration: 1200, easing: 'ease-out' }).currentTime = t;
+}
 function renderBestTimes() {
   const all   = allParticipants();
   const total = all.length;
@@ -3055,6 +3106,9 @@ function renderBestTimes() {
 
   container.innerHTML = '';
   S.bestSlots = [];
+  // Cards are rebuilt on every cell mark / snapshot - only slots new since the last render animate in
+  const prev = prevBtKeys;
+  prevBtKeys = new Set(top.map(s => `${s.c}:${s.r}`));
 
   if (!top.length) {
     if (emptyEl) emptyEl.style.display = '';
@@ -3091,7 +3145,11 @@ function renderBestTimes() {
 
     const card = document.createElement('div');
     card.className = i === 0 ? 'bt-card bt-card-top' : 'bt-card';
-    card.style.animationDelay = `${i * 0.07}s`;
+    if (!prev.has(`${slot.c}:${slot.r}`)) {
+      card.classList.add('bt-enter');
+      card.style.animationDelay = `${i * 0.07}s`;
+    }
+    if (i === 0) glowTopCard(card, `${slot.c}:${slot.r}`, total >= 2 && slot.count === total);
     card.innerHTML = `
       <div class="bt-rank">#${i+1}${i === 0 ? ' ★' : ''}</div>
       <div class="bt-card-date">${dateLabel}</div>
@@ -3462,10 +3520,14 @@ function resumeAsExisting(name) {
 // ══════════════════════════════════════
 // SCREEN B: PARTICIPANT LIST
 // ══════════════════════════════════════
+let prevPNames = new Set(); // names shown in the previous render - only live arrivals animate in
 function renderParticipants() {
   const container = document.getElementById('participant-list');
   const all = allParticipants();
+  const prev = prevPNames;
+  prevPNames = new Set(all.map(p => p.name));
   container.innerHTML = all.map(p => {
+    const enter = liveSeeded && !prev.has(p.name);
     const isYou = p.name === S.currentUser?.name;
     const parts = p.name.trim().split(/\s+/);
     const first = parts[0] ? parts[0].charAt(0).toUpperCase() + parts[0].slice(1).toLowerCase() : '';
@@ -3475,7 +3537,7 @@ function renderParticipants() {
     const initials = (parts[0]?.charAt(0) || '') + (parts[1]?.charAt(0) || '');
     const showRemove = S.isCreator && !isYou;
     const safeName = p.name.replace(/"/g, '&quot;');
-    return `<div class="participant-item">
+    return `<div class="participant-item${enter ? ' p-enter' : ''}">
       <span class="p-dot" style="background:${p.color}">${escHtml(initials.toUpperCase())}</span>
       <span style="line-height:1.2">${displayName}</span>
       ${showRemove ? `<button class="p-remove-btn" data-name="${safeName}" aria-label="${t().removeParticipant}" title="${t().removeParticipant}">&times;</button>` : ''}
