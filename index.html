@@ -983,6 +983,9 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflo
   }
   .on-screen-b #sidebar-actions .sidebar-btn{width:calc(50% - 3px);font-size:13px;padding:10px 6px;height:40px}
   .on-screen-b #new-event-btn,.on-screen-b .clear-inline-btn{height:40px}
+  /* Accessibility button + panel sit above the fixed action bar instead of covering its buttons */
+  .on-screen-b .a11y-widget-btn{bottom:calc(var(--action-bar-h, 160px) + 12px)}
+  .on-screen-b .a11y-panel{bottom:calc(var(--action-bar-h, 160px) + 72px)}
   .on-screen-b #screen-event{padding-bottom:calc(var(--action-bar-h, 100px) + 16px)}
   .on-screen-b .new-event-wrap{border-top:none;padding-top:0;margin-top:0;width:100%}
 }
