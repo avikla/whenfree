@@ -118,7 +118,9 @@ const _X  = `<svg ...× close...>`;      // dismiss / clear
 const _LINK = `<svg ...link icon...>`;  // copy link
 ```
 
-Use in i18n strings (template literals) rather than Unicode entities.
+Use in i18n strings (template literals) rather than Unicode entities. Also `_EMAIL`, `_WA`, `_PLUS`, `_CHART` (bar chart, "Send best times"). Use these outline SVGs for button icons, not colour emoji: emoji font metrics change button height.
+
+**Gotcha:** the generic `data-i18n` loop in `applyLang()` sets `textContent`, so a string containing an SVG constant shows as raw markup. Any element whose label holds an icon needs an explicit `el.innerHTML = lang.key` in `applyLang()` (see `email-btn`, `best-times-email-btn`). Only do this for strings built from constants, never for user input.
 
 ## Key Details
 
